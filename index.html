@@ -26,7 +26,7 @@ input[type=time]{color-scheme:dark;}
 .nav-btn{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:transparent;border:none;cursor:pointer;color:#6b7280;font-size:14px;font-weight:500;width:100%;text-align:left;font-family:'DM Sans',sans-serif;}
 .nav-btn.active{background:#4f46e522;color:#818cf8;border:1px solid #4f46e533;}
 .sidebar-user{margin-top:auto;padding:14px 12px;border-top:1px solid #1e2130;}
-principal{flex:1;overflow-y:auto;min-height:100vh;padding:28px 32px;}
+main{flex:1;overflow-y:auto;min-height:100vh;padding:28px 32px;}
 .page{display:none;}
 .page.active{display:block;}
 .card{background:#141620;border:1px solid #1e2130;border-radius:14px;padding:20px 22px;}
@@ -100,7 +100,7 @@ label.lbl{display:block;font-size:11px;color:#6b7280;font-weight:600;text-transf
     </div>
   </aside>
 
-  <principal>
+  <main>
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="page-header"><div class="page-header-icon">◈</div><div><h1 style="font-size:22px;font-weight:700;">Dashboard en Tiempo Real</h1><div style="font-size:13px;color:#4b5563;margin-top:2px" id="dash-sub">Sincronizando…</div></div></div>
@@ -146,35 +146,26 @@ label.lbl{display:block;font-size:11px;color:#6b7280;font-weight:600;text-transf
     <div class="page" id="page-resultados">
       <div class="page-header"><div class="page-header-icon">◉</div><div><h1 style="font-size:22px;">Resultados & Reportes</h1><div style="font-size:13px;color:#4b5563;">Exportación PDF/CSV</div></div></div>
       <div id="res-detalle" style="display:none"><button class="btn-secondary" style="margin-bottom:16px" onclick="closeDetalleEq()">← Volver</button><div class="card" id="res-detalle-content"></div></div>
-      <div id="res-principal"><div class="gap-flex" id="res-filtros"></div><div class="card"><div class="section-title">Ranking — <span id="res-count">0</span> equipos</div><div class="overflow-x"><table class="tbl" id="res-tabla"><thead id="res-thead"></thead><tbody id="res-tbody"></tbody></table></div></div></div>
+      <div id="res-main"><div class="gap-flex" id="res-filtros"></div><div class="card"><div class="section-title">Ranking — <span id="res-count">0</span> equipos</div><div class="overflow-x"><table class="tbl" id="res-tabla"><thead id="res-thead"></thead><tbody id="res-tbody"></tbody></table></div></div></div>
     </div>
 
     <!-- AUDITORÍA -->
     <div class="page" id="page-auditoria"><div class="page-header"><div class="page-header-icon">≡</div><div><h1 style="font-size:22px;">Auditoría</h1><div style="font-size:13px;color:#4b5563;">Historial de acciones global</div></div></div><div class="card"><div class="section-title">Bitácora (<span id="aud-count">0</span>)</div><div id="aud-list"></div></div></div>
-  </principal>
+  </main>
 </div>
 
 <script>
 // ================= ⚠️ CONFIGURACIÓN - CAMBIA ESTOS 3 VALORES =================
-// 1. Ve a GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
-// 2. Genera un token con permisos "repo"
-// 3. Copia el token y pégalo aquí:
-const GITHUB_TOKEN = ' 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';  
-
-// 4. Tu usuario de GitHub (el que ves en la URL: github.com/TU_USUARIO)
-const GITHUB_REPO_OWNER = ' ezamarripa-creator';        // Ej: 'juanperez'
-
-// 5. El nombre de tu repositorio (ej: 'rally-academico')
-const GITHUB_REPO_NAME = ' Eventos_Academicos2026';     // Ej: 'rally-academico'
-
+const GITHUB_TOKEN = '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';
+const GITHUB_REPO_OWNER = 'ezamarripa-creator';
+const GITHUB_REPO_NAME = 'Eventos_Academicos2026';
 // ============================================================================
 
-// URLs construidas automáticamente
-const GITHUB_CSV_URL = `https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/principal/datos.csv`;
+// ✅ CORREGIDO: /main/datos.csv (NO /principal/datos.csv)
+const GITHUB_CSV_URL = `https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/main/datos.csv`;
 const API_DB_URL = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/db.json`;
 
-// Mostrar la URL que estamos usando para depuración
-document.getElementById('csv-url-preview').innerHTML = `📁 CSV: ${GITHUB_CSV_URL.substring(0, 50)}...`;
+document.getElementById('csv-url-preview').innerHTML = `📁 CSV: ${GITHUB_CSV_URL.substring(0, 60)}...`;
 
 // ================= DATA GLOBAL =================
 let db = { equipos: [], resultados: [], auditoria: [] };
@@ -183,7 +174,6 @@ let editandoId = null;
 let filtroArea = 0;
 let currentSha = null;
 
-// Constantes
 const AREAS = [
   {id:1,nombre:"Matemáticas",color:"#a78bfa",emoji:"📐"},{id:2,nombre:"Inglés",color:"#60a5fa",emoji:"🌐"},
   {id:3,nombre:"Informática",color:"#34d399",emoji:"💻"},{id:4,nombre:"Ciencias Naturales",color:"#2dd4bf",emoji:"🔬"},
@@ -212,7 +202,6 @@ const timeToMin = t => { if(!t) return 0; const [h,m]=t.split(':').map(Number); 
 const minToStr = m => { if(!m||isNaN(m)) return '—'; const h=Math.floor(m/60),mn=m%60; return `${h}h ${mn.toString().padStart(2,'0')}m`; };
 const nowStr = () => new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
 
-// ================= CARGAR CSV DESDE GITHUB =================
 async function cargarEquiposDesdeCSV() {
   try {
     document.getElementById('status-badge').innerHTML = '<span class="loading-spinner"></span> CARGANDO CSV';
@@ -270,14 +259,7 @@ async function cargarEquiposDesdeCSV() {
   }
 }
 
-// ================= DB.JSON OPERACIONES =================
 async function leerDBGitHub() {
-  if (GITHUB_TOKEN === 'tu_personal_access_token_aqui') {
-    console.warn('⚠️ No has configurado el GITHUB_TOKEN');
-    document.getElementById('gh-status').innerHTML = '⚠️ Configura GITHUB_TOKEN';
-    return;
-  }
-  
   try {
     const respuesta = await fetch(API_DB_URL, { 
       headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' } 
@@ -309,11 +291,6 @@ async function leerDBGitHub() {
 }
 
 async function guardarDBGitHub() {
-  if (GITHUB_TOKEN === 'tu_personal_access_token_aqui') {
-    showToast('❌ Configura GITHUB_TOKEN primero', 'err');
-    return false;
-  }
-  
   const contenido = JSON.stringify({ resultados: db.resultados, auditoria: db.auditoria }, null, 2);
   const contentBase64 = btoa(unescape(encodeURIComponent(contenido)));
   const payload = { message: `Update ${new Date().toISOString()}`, content: contentBase64, sha: currentSha || undefined };
@@ -354,7 +331,6 @@ function calcularRanking() {
   }).sort((a, b) => b.puntajeTotal - a.puntajeTotal || a.tiempoTotal - b.tiempoTotal);
 }
 
-// ================= RENDERIZADO =================
 function renderDashboard() {
   const rk = rankingCache;
   const promedio = rk.length ? (rk.reduce((s,e)=>s+e.puntajeTotal,0)/rk.length).toFixed(1) : 0;
@@ -384,7 +360,7 @@ function renderEquipos() {
   const rk = rankingCache;
   
   if (db.equipos.length === 0) {
-    document.getElementById('eq-tabla').innerHTML = `<tr><td colspan="8" style="text-align:center;color:#f87171;padding:40px"><div class="error-box">⚠️ No se cargaron equipos.<br><br>Verifica:<br>1️⃣ Que datos.csv exista en tu repositorio de GitHub<br>2️⃣ Las credenciales GITHUB_REPO_OWNER y GITHUB_REPO_NAME sean correctas<br>3️⃣ El archivo tenga el formato: id,nombre,plantel,turno,estatus</div></td></tr>`;
+    document.getElementById('eq-tabla').innerHTML = `<tr><td colspan="8" style="text-align:center;color:#f87171;padding:40px"><div class="error-box">⚠️ No se cargaron equipos.<br><br>Verifica:<br>1️⃣ Que datos.csv exista en la raíz de tu repositorio de GitHub<br>2️⃣ Las credenciales GITHUB_REPO_OWNER y GITHUB_REPO_NAME sean correctas<br>3️⃣ El archivo tenga el formato: id,nombre,plantel,turno,estatus</div></td></tr>`;
     return;
   }
   
@@ -494,7 +470,7 @@ function renderResultados() {
   filtros.innerHTML = `<button class="btn-small" onclick="setFiltro(0)" style="background:${filtroArea===0?'#4f46e5':'#1a1d2e'}">Todas</button>${AREAS.map(a => `<button class="btn-small" onclick="setFiltro(${a.id})" style="background:${filtroArea===a.id?a.color+'33':'#1a1d2e'};color:${filtroArea===a.id?a.color:'#9ca3af'}">${a.emoji} ${a.nombre}</button>`).join('')}<div class="ml-auto"><button class="btn-small" onclick="exportCSV()" style="background:#064e3b;color:#34d399">↓ CSV</button><button onclick="alert('PDF en desarrollo')" style="background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:none;border-radius:8px;padding:8px 20px;cursor:pointer">📄 Exportar PDF</button></div>`;
   const estacionesFiltradas = ESTACIONES.filter(e => filtroArea === 0 || e.areaId === filtroArea);
   document.getElementById('res-thead').innerHTML = `<tr><th>#</th><th>Equipo</th><th>Plantel</th><th>Turno</th><th>Total</th><th>Tiempo</th>${estacionesFiltradas.map(e => { const a = AREAS.find(x=>x.id===e.areaId); return `<th>${a.emoji}</th>`; }).join('')}<th></th></tr>`;
-  document.getElementById('res-tbody').innerHTML = rk.map((eq,i) => `<tr style="opacity:${eq.activo?1:0.4}"><td style="font-weight:700;color:${i<3?['#fbbf24','#9ca3af','#cd7c2f'][i]:'#4b5563'}">${i+1}</td><td style="font-weight:600">${eq.nombre}</td><td style="font-size:11px">${eq.plantel}</td><td style="font-size:11px">${eq.turno}</td><td style="font-weight:700;color:#34d399">${eq.puntajeTotal}</td><td style="font-size:12px">${minToStr(eq.tiempoTotal)}</td>${estacionesFiltradas.map(est => { const r = db.resultados.find(r => r.equipoId === eq.id && r.estacionId === est.id); const ar = AREAS.find(a=>a.id===est.areaId); return `<td style="text-align:center">${r ? `<span style="font-weight:700;color:${ar.color}">${r.puntaje}</span>` : `<span style="color:#2d3148">–</span>`}</td>`; }).join('')}<td><button class="btn-small" onclick="alert('Detalle equipo')">Ver →</button></td></tr>`).join('');
+  document.getElementById('res-tbody').innerHTML = rk.map((eq,i) => `<tr style="opacity:${eq.activo?1:0.4}"><td style="font-weight:700;color:${i<3?['#fbbf24','#9ca3af','#cd7c2f'][i]:'#4b5563'}">${i+1}</td><td style="font-weight:600">${eq.nombre}</td><td style="font-size:11px">${eq.plantel}</td><td style="font-size:11px">${eq.turno}</td><td style="font-weight:700;color:#34d399">${eq.puntajeTotal}</td><td style="font-size:12px">${minToStr(eq.tiempoTotal)}</td>${estacionesFiltradas.map(est => { const r = db.resultados.find(r => r.equipoId === eq.id && r.estacionId === est.id); const ar = AREAS.find(a=>a.id===est.areaId); return `<td style="text-align:center">${r ? `<span style="font-weight:700;color:${ar.color}">${r.puntaje}</span>` : `<span style="color:#2d3148">–</span>`}</td>`; }).join('')}<td><button class="btn-small" onclick="alert('Detalle equipo')">Ver →</button></td>`);
 }
 
 function renderAuditoria() {
@@ -548,7 +524,6 @@ function updateClock() { document.getElementById('sidebar-clock').textContent = 
 setInterval(updateClock, 30000);
 updateClock();
 
-// ================= INICIALIZACIÓN =================
 async function inicializar() {
   await cargarEquiposDesdeCSV();
   await leerDBGitHub();
