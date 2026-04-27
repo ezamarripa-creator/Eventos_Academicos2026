@@ -1,0 +1,34 @@
+id,nombre,plantel,turno,estacion,estatus
+1,ALQUIMISTAS ,01 La Forestal,Matutino,,activo
+2,Guardianes del Jardín ,02 Lerdo,Vespertino,,activo
+3,COBAED MADERO,03 Fco. I. Madero,Matutino,,activo
+4,En proceso,05 Bermejillo,Matutino,,activo
+5,ELITE DEL INTELECTO,06 Peñón Blanco,Matutino,,activo
+6,Campobellos en movimiento,07 Villa Ocampo,Matutino,,activo
+7,Escuadron respeto y victoria,08 Nazas,Matutino,,activo
+8,Pumas 09,09 Lomas,Matutino,,activo
+9,CORCELES DEL SABER  ,09 Lomas,Vespertino,,activo
+10,Guerreros Pinioleros,10 Santiago Papasquiaro,Matutino,,activo
+11,Papas Kiali Papali,10 Santiago Papasquiaro,Vespertino,,activo
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,,activo
+13,Apex Ducks,12 Nuevo Ideal,Matutino,,activo
+14,Impacto 13 ,13 Tamazula,Matutino,,activo
+15,LOS GUARDIANES DEL DESIERTO,14 San Juan De Guadalupe,Matutino,,activo
+16,MENTES NOCTURNAS ,15 San Miguel De Cruces,Matutino,,activo
+17,"Coba 16, Mente y Talento ",16 Tayoltita,Matutino,,activo
+18,"""Tribu Invencible Mezquital""",17 Mezquital,Matutino,,activo
+19,O’dam Tasai,18 Antonio Amaro,Matutino,,activo
+20,JILGUEROS DEL ARROYO,19 Santa Clara,Matutino,,activo
+21,Guerreros ,20 Guadalupe Victoria,Matutino,,activo
+22,Corceles de fuego ,22 Santa Ma. Del Oro,Matutino,,activo
+23,Tusas mineras,23 Coneto de Comonfort,Matutino,,activo
+24,Coyotes,24 Simón Bolívar,Matutino,,activo
+25,ESCUADRÓN 27,27 Vicente Guerrero,Matutino,,activo
+26,TUKURA,28 El Salto,Matutino,,activo
+27,Furia Manzanera ,29 Canatlán,Matutino,,activo
+28,VIGIAS DEL SABER ,31 La Ciudad,Matutino,,activo
+29,LOBOS,32 Juana Villalobos,Matutino,,activo
+30,Halcones,32 Juana Villalobos,Vespertino,,activo
+31,Titanes,33 Pino Suárez,vespertino,,activo
+32,SOMOS GIGANTES VILLAS,34 Villas Del Guadiana,Matutino,,activo
+33,la variable rebelde ,35 Gómez Palacio,Vespertino,,activo
