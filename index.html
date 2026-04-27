@@ -26,7 +26,7 @@ input[type=time]{color-scheme:dark;}
 .nav-btn{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:transparent;border:none;cursor:pointer;color:#6b7280;font-size:14px;font-weight:500;width:100%;text-align:left;font-family:'DM Sans',sans-serif;}
 .nav-btn.active{background:#4f46e522;color:#818cf8;border:1px solid #4f46e533;}
 .sidebar-user{margin-top:auto;padding:14px 12px;border-top:1px solid #1e2130;}
-main{flex:1;overflow-y:auto;min-height:100vh;padding:28px 32px;}
+principal{flex:1;overflow-y:auto;min-height:100vh;padding:28px 32px;}
 .page{display:none;}
 .page.active{display:block;}
 .card{background:#141620;border:1px solid #1e2130;border-radius:14px;padding:20px 22px;}
@@ -100,7 +100,7 @@ label.lbl{display:block;font-size:11px;color:#6b7280;font-weight:600;text-transf
     </div>
   </aside>
 
-  <main>
+  <principal>
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="page-header"><div class="page-header-icon">◈</div><div><h1 style="font-size:22px;font-weight:700;">Dashboard en Tiempo Real</h1><div style="font-size:13px;color:#4b5563;margin-top:2px" id="dash-sub">Sincronizando…</div></div></div>
@@ -146,12 +146,12 @@ label.lbl{display:block;font-size:11px;color:#6b7280;font-weight:600;text-transf
     <div class="page" id="page-resultados">
       <div class="page-header"><div class="page-header-icon">◉</div><div><h1 style="font-size:22px;">Resultados & Reportes</h1><div style="font-size:13px;color:#4b5563;">Exportación PDF/CSV</div></div></div>
       <div id="res-detalle" style="display:none"><button class="btn-secondary" style="margin-bottom:16px" onclick="closeDetalleEq()">← Volver</button><div class="card" id="res-detalle-content"></div></div>
-      <div id="res-main"><div class="gap-flex" id="res-filtros"></div><div class="card"><div class="section-title">Ranking — <span id="res-count">0</span> equipos</div><div class="overflow-x"><table class="tbl" id="res-tabla"><thead id="res-thead"></thead><tbody id="res-tbody"></tbody></table></div></div></div>
+      <div id="res-principal"><div class="gap-flex" id="res-filtros"></div><div class="card"><div class="section-title">Ranking — <span id="res-count">0</span> equipos</div><div class="overflow-x"><table class="tbl" id="res-tabla"><thead id="res-thead"></thead><tbody id="res-tbody"></tbody></table></div></div></div>
     </div>
 
     <!-- AUDITORÍA -->
     <div class="page" id="page-auditoria"><div class="page-header"><div class="page-header-icon">≡</div><div><h1 style="font-size:22px;">Auditoría</h1><div style="font-size:13px;color:#4b5563;">Historial de acciones global</div></div></div><div class="card"><div class="section-title">Bitácora (<span id="aud-count">0</span>)</div><div id="aud-list"></div></div></div>
-  </main>
+  </principal>
 </div>
 
 <script>
@@ -166,10 +166,11 @@ const GITHUB_REPO_OWNER = ' ezamarripa-creator';        // Ej: 'juanperez'
 
 // 5. El nombre de tu repositorio (ej: 'rally-academico')
 const GITHUB_REPO_NAME = ' Eventos_Academicos2026';     // Ej: 'rally-academico'
+
 // ============================================================================
 
 // URLs construidas automáticamente
-const GITHUB_CSV_URL = `https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/main/datos.csv`;
+const GITHUB_CSV_URL = `https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/principal/datos.csv`;
 const API_DB_URL = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/db.json`;
 
 // Mostrar la URL que estamos usando para depuración
