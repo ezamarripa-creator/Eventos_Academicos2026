@@ -51,11 +51,9 @@ label.lbl{display:block;font-size:11px;color:#6b7280;font-weight:600;text-transf
 .page-header-icon{width:42px;height:42px;border-radius:10px;background:#4f46e522;border:1px solid #4f46e544;display:flex;align-items:center;justify-content:center;font-size:20px;color:#818cf8;}
 .section-title{font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;}
 .status-on{padding:3px 10px;border-radius:20px;background:#064e3b;color:#34d399;font-weight:600;font-size:11px;}
-.status-off{padding:3px 10px;border-radius:20px;background:#450a0a;color:#f87171;font-weight:600;font-size:11px;}
 .quick-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:6px;}
 .quick-btn{padding:5px 2px;text-align:center;background:#1a1d2e;border:1px solid #2d3148;color:#9ca3af;font-size:12px;font-weight:600;border-radius:6px;cursor:pointer;}
 .quick-btn.sel{background:#4f46e5;color:#fff;border-color:#4f46e5;}
-.grid2{display:grid;grid-template-columns:340px 1fr;gap:20px;}
 .grid2-sm{display:grid;grid-template-columns:360px 1fr;gap:20px;}
 .flex-col{display:flex;flex-direction:column;gap:16px;}
 .overflow-x{overflow-x:auto;margin-top:14px;}
@@ -68,8 +66,6 @@ label.lbl{display:block;font-size:11px;color:#6b7280;font-weight:600;text-transf
 .det-row{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;background:#1a1d2e;border:1px solid #1e2130;}
 .det-row.done{background:#064e3b22;border-color:#34d39944;}
 .audit-row{display:flex;gap:14px;padding:9px 14px;border-radius:7px;background:#1a1d2e;border:1px solid #1e2130;}
-.info-block{font-size:11px;color:#4b5563;padding:10px 12px;background:#1a1d2e;border-radius:8px;line-height:1.8;margin-bottom:16px;}
-.warn-block{padding:8px 12px;border-radius:8px;background:#78350f22;border:1px solid #92400e;font-size:12px;color:#fbbf24;}
 .loading-spinner{display:inline-block;width:16px;height:16px;border:2px solid #4f46e5;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .error-box{background:#450a0a;border:1px solid #f87171;border-radius:8px;padding:12px;margin:10px 0;color:#f87171;font-size:12px;}
@@ -95,15 +91,13 @@ label.lbl{display:block;font-size:11px;color:#6b7280;font-weight:600;text-transf
     <div class="sidebar-user">
       <div style="font-size:11px;color:#4b5563">GITHUB SYNC</div>
       <div style="font-size:13px;font-weight:600;color:#9ca3af;margin-top:4px">🔁 tiempo real</div>
-      <div style="font-size:9px;color:#374151;margin-top:4px" id="gh-status">Configurar token</div>
-      <div style="font-size:8px;color:#4b5563;margin-top:6px;word-break:break-all" id="csv-url-preview"></div>
+      <div style="font-size:9px;color:#374151;margin-top:4px" id="gh-status"></div>
     </div>
   </aside>
 
   <main>
-    <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
-      <div class="page-header"><div class="page-header-icon">◈</div><div><h1 style="font-size:22px;font-weight:700;">Dashboard en Tiempo Real</h1><div style="font-size:13px;color:#4b5563;margin-top:2px" id="dash-sub">Sincronizando…</div></div></div>
+      <div class="page-header"><div class="page-header-icon">◈</div><div><h1 style="font-size:22px;font-weight:700;">Dashboard en Tiempo Real</h1><div style="font-size:13px;color:#4b5563;margin-top:2px" id="dash-sub"></div></div></div>
       <div class="grid4" id="dash-kpis"></div>
       <div style="display:grid;grid-template-columns:1fr 2fr;gap:20px">
         <div class="card"><div class="section-title">🏆 Podio Actual</div><div style="display:flex;flex-direction:column;gap:12px;margin-top:16px" id="dash-podio"></div></div>
@@ -112,62 +106,81 @@ label.lbl{display:block;font-size:11px;color:#6b7280;font-weight:600;text-transf
       <div class="card" style="margin-top:20px"><div class="section-title">⊞ Cobertura por Estación</div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px" id="dash-cobertura"></div></div>
     </div>
 
-    <!-- EQUIPOS -->
     <div class="page" id="page-equipos">
       <div class="page-header"><div class="page-header-icon">⬡</div><div><h1 style="font-size:22px;font-weight:700;">Equipos (desde datos.csv)</h1><div style="font-size:13px;color:#4b5563;margin-top:2px" id="eq-sub"></div></div></div>
       <div class="card"><div class="section-title">Lista de equipos (<span id="eq-count">0</span>)</div><div class="overflow-x"><table class="tbl"><thead><tr><th>#</th><th>Nombre</th><th>Plantel</th><th>Turno</th><th>Est.</th><th>Puntaje</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="eq-tabla"></tbody></table></div></div>
     </div>
 
-    <!-- CAPTURA -->
     <div class="page" id="page-captura">
       <div class="page-header"><div class="page-header-icon">⊕</div><div><h1 style="font-size:22px;">Captura de Resultados</h1><div style="font-size:13px;color:#4b5563;">Puntaje 0.0–10.0 · guardado en GitHub (db.json)</div></div></div>
       <div class="grid2-sm">
         <div class="flex-col">
-          <div class="card" id="cap-card"><div class="section-title" id="cap-title">📝 Nueva Captura</div>
+          <div class="card" id="cap-card">
+            <div class="section-title" id="cap-title">📝 Nueva Captura</div>
             <div id="cap-area-banner" style="display:none;margin:12px 0;padding:10px 14px;border-radius:8px"></div>
             <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-              <div><label class="lbl">Equipo</label><select class="input" id="cap-equipo" onchange="onCapEquipoChange()"><option value="">— Seleccionar equipo —</option></select></div>
-              <div><label class="lbl">Estación</label><select class="input" id="cap-estacion" onchange="onCapEstacionChange()"><option value="">— Seleccionar estación —</option></select></div>
+              <div>
+                <label class="lbl">Equipo</label>
+                <select class="input" id="cap-equipo" onchange="actualizarEstacionesPorEquipo()">
+                  <option value="">— Seleccionar equipo —</option>
+                </select>
+              </div>
+              <div>
+                <label class="lbl">Estación</label>
+                <select class="input" id="cap-estacion" onchange="mostrarInfoEstacion()">
+                  <option value="">— Seleccionar estación —</option>
+                </select>
+              </div>
               <div id="cap-dup-warn" style="display:none" class="warn-block"></div>
-              <div><label class="lbl">Puntaje <span style="color:#6b7280;">(0–10)</span></label><input type="number" class="input" id="cap-puntaje" min="0" max="10" step="0.1" placeholder="8.5" oninput="onPuntajeInput()"/><div class="quick-grid" id="quick-btns"></div></div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label class="lbl">Llegada</label><input type="time" class="input" id="cap-llegada"/></div><div><label class="lbl">Salida</label><input type="time" class="input" id="cap-salida"/></div></div>
+              <div>
+                <label class="lbl">Puntaje <span style="color:#6b7280;">(0–10)</span></label>
+                <input type="number" class="input" id="cap-puntaje" min="0" max="10" step="0.1" placeholder="8.5"/>
+                <div class="quick-grid" id="quick-btns"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <div><label class="lbl">Llegada</label><input type="time" class="input" id="cap-llegada"/></div>
+                <div><label class="lbl">Salida</label><input type="time" class="input" id="cap-salida"/></div>
+              </div>
               <div><label class="lbl">Observaciones</label><textarea class="input" id="cap-obs" style="height:60px;resize:vertical" placeholder="Opcional…"></textarea></div>
               <button class="btn-primary" id="btn-guardar-cap" onclick="guardarCaptura()">Guardar Resultado</button>
               <button class="btn-secondary" id="btn-cancel-edit" style="display:none" onclick="cancelEdit()">Cancelar edición</button>
             </div>
           </div>
-          <div class="card" id="cap-progreso" style="display:none"><div class="section-title">📊 Progreso del equipo</div><div id="cap-prog-list"></div></div>
+          <div class="card" id="cap-progreso" style="display:none">
+            <div class="section-title">📊 Progreso del equipo</div>
+            <div id="cap-prog-list"></div>
+          </div>
         </div>
-        <div class="card"><div class="section-title">🕐 Últimas Capturas</div><div class="overflow-x"><table class="tbl"><thead><tr><th>Equipo</th><th>Plantel</th><th>Estación</th><th>Pts</th><th>Llegada</th><th>Salida</th><th>Capturista</th><th></th></tr></thead><tbody id="cap-recientes"></tbody></table></div></div>
+        <div class="card">
+          <div class="section-title">🕐 Últimas Capturas</div>
+          <div class="overflow-x"><table class="tbl"><thead><tr><th>Equipo</th><th>Plantel</th><th>Estación</th><th>Pts</th><th>Llegada</th><th>Salida</th><th>Capturista</th><th></th></tr></thead><tbody id="cap-recientes"></tbody></table></div>
+        </div>
       </div>
     </div>
 
-    <!-- RESULTADOS -->
     <div class="page" id="page-resultados">
       <div class="page-header"><div class="page-header-icon">◉</div><div><h1 style="font-size:22px;">Resultados & Reportes</h1><div style="font-size:13px;color:#4b5563;">Exportación PDF/CSV</div></div></div>
       <div id="res-detalle" style="display:none"><button class="btn-secondary" style="margin-bottom:16px" onclick="closeDetalleEq()">← Volver</button><div class="card" id="res-detalle-content"></div></div>
-      <div id="res-main"><div class="gap-flex" id="res-filtros"></div><div class="card"><div class="section-title">Ranking — <span id="res-count">0</span> equipos</div><div class="overflow-x"><table class="tbl" id="res-tabla"><thead id="res-thead"></thead><tbody id="res-tbody"></tbody></table></div></div></div>
+      <div id="res-main"><div class="gap-flex" id="res-filtros"></div><div class="card"><div class="section-title">Ranking — <span id="res-count">0</span> equipos</div><div class="overflow-x"><table class="tbl" id="res-tabla"><thead id="res-thead"></thead><tbody id="res-tbody"></tbody></td></div></div></div>
     </div>
 
-    <!-- AUDITORÍA -->
-    <div class="page" id="page-auditoria"><div class="page-header"><div class="page-header-icon">≡</div><div><h1 style="font-size:22px;">Auditoría</h1><div style="font-size:13px;color:#4b5563;">Historial de acciones global</div></div></div><div class="card"><div class="section-title">Bitácora (<span id="aud-count">0</span>)</div><div id="aud-list"></div></div></div>
+    <div class="page" id="page-auditoria">
+      <div class="page-header"><div class="page-header-icon">≡</div><div><h1 style="font-size:22px;">Auditoría</h1><div style="font-size:13px;color:#4b5563;">Historial de acciones global</div></div></div>
+      <div class="card"><div class="section-title">Bitácora (<span id="aud-count">0</span>)</div><div id="aud-list"></div></div>
+    </div>
   </main>
 </div>
 
 <script>
-// ================= ⚠️ CONFIGURACIÓN - CAMBIA ESTOS 3 VALORES =================
+// ================= CONFIGURACIÓN =================
 const GITHUB_TOKEN = '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';
 const GITHUB_REPO_OWNER = 'ezamarripa-creator';
 const GITHUB_REPO_NAME = 'Eventos_Academicos2026';
-// ============================================================================
 
-// ✅ CORREGIDO: /main/datos.csv (NO /principal/datos.csv)
 const GITHUB_CSV_URL = `https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/main/datos.csv`;
 const API_DB_URL = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/db.json`;
 
-document.getElementById('csv-url-preview').innerHTML = `📁 CSV: ${GITHUB_CSV_URL.substring(0, 60)}...`;
-
-// ================= DATA GLOBAL =================
+// ================= DATA =================
 let db = { equipos: [], resultados: [], auditoria: [] };
 let rankingCache = [];
 let editandoId = null;
@@ -183,13 +196,14 @@ const AREAS = [
 ];
 
 const ESTACIONES = [
-  {id:1,nombre:"Matemáticas",areaId:1,puntaje:10},{id:2,nombre:"Inglés",areaId:2,puntaje:10},
-  {id:3,nombre:"Informática",areaId:3,puntaje:10},{id:4,nombre:"Ciencias Naturales",areaId:4,puntaje:10},
-  {id:5,nombre:"Humanidades",areaId:5,puntaje:10},{id:6,nombre:"Artes",areaId:6,puntaje:10},
-  {id:7,nombre:"Socioemocional",areaId:7,puntaje:10},{id:8,nombre:"Ciencias Sociales",areaId:8,puntaje:10},
-  {id:9,nombre:"Orientación",areaId:9,puntaje:10},{id:10,nombre:"Matemáticas Avanzadas",areaId:10,puntaje:10}
+  {id:1,nombre:"Matemáticas",areaId:1,puntajeMax:10},{id:2,nombre:"Inglés",areaId:2,puntajeMax:10},
+  {id:3,nombre:"Informática",areaId:3,puntajeMax:10},{id:4,nombre:"Ciencias Naturales",areaId:4,puntajeMax:10},
+  {id:5,nombre:"Humanidades",areaId:5,puntajeMax:10},{id:6,nombre:"Artes",areaId:6,puntajeMax:10},
+  {id:7,nombre:"Socioemocional",areaId:7,puntajeMax:10},{id:8,nombre:"Ciencias Sociales",areaId:8,puntajeMax:10},
+  {id:9,nombre:"Orientación",areaId:9,puntajeMax:10},{id:10,nombre:"Matemáticas Avanzadas",areaId:10,puntajeMax:10}
 ];
 
+// ================= HELPERS =================
 function showToast(msg, tipo='ok'){
   const el = document.getElementById('toast');
   el.textContent = (tipo==='err'?'✕ ':tipo==='warn'?'⚠ ':'✓ ') + msg;
@@ -202,28 +216,16 @@ const timeToMin = t => { if(!t) return 0; const [h,m]=t.split(':').map(Number); 
 const minToStr = m => { if(!m||isNaN(m)) return '—'; const h=Math.floor(m/60),mn=m%60; return `${h}h ${mn.toString().padStart(2,'0')}m`; };
 const nowStr = () => new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
 
+// ================= CARGAR CSV =================
 async function cargarEquiposDesdeCSV() {
   try {
-    document.getElementById('status-badge').innerHTML = '<span class="loading-spinner"></span> CARGANDO CSV';
-    document.getElementById('gh-status').innerHTML = `📡 Descargando...`;
-    
-    console.log('📥 Intentando cargar CSV desde:', GITHUB_CSV_URL);
-    
+    document.getElementById('status-badge').innerHTML = '<span class="loading-spinner"></span> CARGANDO';
     const respuesta = await fetch(GITHUB_CSV_URL);
-    
-    if (!respuesta.ok) {
-      throw new Error(`HTTP ${respuesta.status}: ${respuesta.statusText}\nVerifica que datos.csv exista en la raíz de tu repositorio`);
-    }
-    
+    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
     const texto = await respuesta.text();
-    console.log('✅ CSV cargado, tamaño:', texto.length, 'bytes');
-    
     const lineas = texto.replace(/^\uFEFF/, '').trim().split('\n');
-    if (lineas.length < 2) throw new Error('El archivo CSV está vacío');
-    
+    if (lineas.length < 2) throw new Error('CSV vacío');
     const encabezados = lineas[0].split(',').map(h => h.trim().toLowerCase());
-    console.log('📋 Encabezados encontrados:', encabezados);
-    
     const equiposRaw = [];
     for (let i = 1; i < lineas.length; i++) {
       if (!lineas[i].trim()) continue;
@@ -232,59 +234,48 @@ async function cargarEquiposDesdeCSV() {
       encabezados.forEach((h, idx) => { obj[h] = valores[idx] || ''; });
       if (obj.id && obj.nombre) equiposRaw.push(obj);
     }
-    
-    console.log(`📊 Encontrados ${equiposRaw.length} equipos en CSV`);
-    
-    const equipos = equiposRaw.map(e => ({
+    db.equipos = equiposRaw.map(e => ({
       id: parseInt(e.id),
       nombre: e.nombre,
       plantel: e.plantel || 'Sin plantel',
       turno: (e.turno || '').toLowerCase().includes('vespertino') ? 'vespertino' : 'matutino',
       activo: (e.estatus || 'activo').toLowerCase() !== 'inactivo'
     }));
-    
-    db.equipos = equipos;
     document.getElementById('status-badge').innerHTML = '● ONLINE CSV';
-    document.getElementById('gh-status').innerHTML = `✅ ${equipos.length} equipos cargados`;
-    showToast(`✅ ${equipos.length} equipos cargados desde datos.csv`, 'ok');
-    return equipos;
-    
+    document.getElementById('gh-status').innerHTML = `✅ ${db.equipos.length} equipos`;
+    showToast(`✅ ${db.equipos.length} equipos cargados`, 'ok');
+    return db.equipos;
   } catch(error) {
-    console.error('❌ Error cargando CSV:', error);
+    console.error(error);
     document.getElementById('status-badge').innerHTML = '● ERROR CSV';
-    document.getElementById('gh-status').innerHTML = `❌ ${error.message.substring(0, 60)}`;
-    showToast('Error al cargar datos.csv: ' + error.message, 'err');
+    document.getElementById('gh-status').innerHTML = `❌ Error: ${error.message}`;
+    showToast('Error al cargar datos.csv', 'err');
     db.equipos = [];
     return [];
   }
 }
 
+// ================= DB.JSON =================
 async function leerDBGitHub() {
   try {
     const respuesta = await fetch(API_DB_URL, { 
       headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' } 
     });
-    
     if (respuesta.status === 404) {
-      console.log('db.json no existe, se creará al primer guardado');
       currentSha = null;
       db.resultados = [];
       db.auditoria = [];
       return;
     }
-    
     if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
-    
     const data = await respuesta.json();
     currentSha = data.sha;
     const contenido = atob(data.content);
     const parsed = JSON.parse(contenido);
     db.resultados = parsed.resultados || [];
     db.auditoria = parsed.auditoria || [];
-    console.log(`📦 DB cargada: ${db.resultados.length} resultados`);
-    
   } catch(error) {
-    console.warn('Error leyendo db.json:', error);
+    console.warn(error);
     db.resultados = [];
     db.auditoria = [];
   }
@@ -294,24 +285,18 @@ async function guardarDBGitHub() {
   const contenido = JSON.stringify({ resultados: db.resultados, auditoria: db.auditoria }, null, 2);
   const contentBase64 = btoa(unescape(encodeURIComponent(contenido)));
   const payload = { message: `Update ${new Date().toISOString()}`, content: contentBase64, sha: currentSha || undefined };
-  
   try {
     const respuesta = await fetch(API_DB_URL, { 
       method: 'PUT', 
       headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' }, 
       body: JSON.stringify(payload) 
     });
-    
     if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
     const result = await respuesta.json();
     if (result.sha) currentSha = result.sha;
-    document.getElementById('status-badge').innerHTML = '● SINCRO OK';
-    setTimeout(() => { if(document.getElementById('status-badge')) document.getElementById('status-badge').innerHTML = '● LIVE'; }, 1500);
     return true;
-    
   } catch(error) {
-    console.error('Error guardando:', error);
-    showToast('Error al guardar en GitHub', 'err');
+    showToast('Error al guardar', 'err');
     return false;
   }
 }
@@ -331,72 +316,99 @@ function calcularRanking() {
   }).sort((a, b) => b.puntajeTotal - a.puntajeTotal || a.tiempoTotal - b.tiempoTotal);
 }
 
-function renderDashboard() {
-  const rk = rankingCache;
-  const promedio = rk.length ? (rk.reduce((s,e)=>s+e.puntajeTotal,0)/rk.length).toFixed(1) : 0;
-  document.getElementById('dash-kpis').innerHTML = [
-    {label:'Equipos', val:rk.length, sub:`${rk.filter(e=>e.activo).length} activos`, color:'#60a5fa'},
-    {label:'Capturas', val:db.resultados.length, sub:'resultados', color:'#34d399'},
-    {label:'Promedio', val:promedio, sub:'puntos/equipo', color:'#a78bfa'},
-    {label:'Líder', val:rk[0]?.puntajeTotal??0, sub:rk[0]?.nombre??'—', color:'#fbbf24'}
-  ].map(k => `<div class="kpi-card"><div style="font-size:11px;color:#6b7280;">${k.label}</div><div style="font-size:36px;font-weight:700;color:${k.color}">${k.val}</div><div style="font-size:12px;color:#4b5563;">${k.sub}</div></div>`).join('');
-  
-  const medals = ['🥇','🥈','🥉'];
-  document.getElementById('dash-podio').innerHTML = rk.slice(0,3).map((eq,i) => `<div class="podium-item ${i===0?'gold':''}"><span style="font-size:24px">${medals[i]}</span><div style="flex:1"><div style="font-weight:600">${eq.nombre}</div><div style="font-size:11px;color:#6b7280">${eq.plantel}</div></div><div style="text-align:right"><div style="font-weight:700;font-size:20px;color:#fbbf24">${eq.puntajeTotal}</div><div style="font-size:10px;">pts</div></div></div>`).join('') || '<div style="color:#4b5563;text-align:center;padding:20px">Sin resultados aún</div>';
-  
-  document.getElementById('dash-tabla').innerHTML = rk.map((eq,i) => `<tr><td style="font-weight:700;color:${i<3?['#fbbf24','#9ca3af','#cd7c2f'][i]:'#4b5563'}">${i+1}</td><td style="font-weight:600">${eq.nombre}</td><td style="color:#6b7280;font-size:12px">${eq.plantel}</td><td style="color:#6b7280;font-size:12px">${eq.turno}</td><td style="color:#6b7280">${eq.estacionesCompletadas}/10</td><td style="font-weight:700;color:#34d399">${eq.puntajeTotal}</td><td style="color:#9ca3af;font-size:12px">${minToStr(eq.tiempoTotal)}</td><td><span class="badge" style="background:${eq.activo?'#064e3b':'#450a0a'};color:${eq.activo?'#34d399':'#f87171'}">${eq.activo?'Activo':'Desc.'}</span></td>`);
-  
-  document.getElementById('dash-cobertura').innerHTML = ESTACIONES.map(est => {
-    const total = db.resultados.filter(r=>r.estacionId===est.id).length;
-    const area = AREAS.find(a=>a.id===est.areaId);
-    const pct = rk.length ? Math.min(100,(total/rk.length)*100) : 0;
-    return `<div style="background:#1a1d2e;border-radius:10px;padding:12px;border:1px solid #1e2130"><div style="font-size:10px;color:${area.color};">${area.emoji} E${est.id}</div><div style="font-size:12px;font-weight:600;">${est.nombre}</div><div class="prog-bar"><div class="prog-fill" style="background:${area.color};width:${pct}%"></div></div><div style="font-size:11px;color:#6b7280">${total} equipos</div></div>`;
-  }).join('');
+// ================= FUNCIONES PRINCIPALES DE CAPTURA =================
+function actualizarSelectEquipos() {
+  const selectEq = document.getElementById('cap-equipo');
+  selectEq.innerHTML = '<option value="">— Seleccionar equipo —</option>' + 
+    db.equipos.filter(e => e.activo).map(e => `<option value="${e.id}">${e.nombre} · ${e.plantel}</option>`).join('');
 }
 
-function renderEquipos() {
-  document.getElementById('eq-sub').innerHTML = `${db.equipos.length} equipos registrados (desde datos.csv)`;
-  document.getElementById('eq-count').innerHTML = db.equipos.length;
-  const rk = rankingCache;
+function actualizarEstacionesPorEquipo() {
+  const equipoId = parseInt(document.getElementById('cap-equipo').value);
+  const selectEst = document.getElementById('cap-estacion');
   
-  if (db.equipos.length === 0) {
-    document.getElementById('eq-tabla').innerHTML = `<tr><td colspan="8" style="text-align:center;color:#f87171;padding:40px"><div class="error-box">⚠️ No se cargaron equipos.<br><br>Verifica:<br>1️⃣ Que datos.csv exista en la raíz de tu repositorio de GitHub<br>2️⃣ Las credenciales GITHUB_REPO_OWNER y GITHUB_REPO_NAME sean correctas<br>3️⃣ El archivo tenga el formato: id,nombre,plantel,turno,estatus</div></td></tr>`;
+  if (!equipoId) {
+    selectEst.innerHTML = '<option value="">— Seleccionar estación —</option>';
+    document.getElementById('cap-progreso').style.display = 'none';
     return;
   }
   
-  document.getElementById('eq-tabla').innerHTML = db.equipos.map((eq,i) => {
-    const eqRank = rk.find(r=>r.id===eq.id);
-    return `<tr style="opacity:${eq.activo?1:0.5}"><td style="color:#4b5563;">${i+1}</td><td style="font-weight:600">${eq.nombre}</td><td style="font-size:12px;color:#6b7280">${eq.plantel}</td><td style="font-size:12px;color:#6b7280">${eq.turno}</td><td style="font-size:12px;color:#6b7280">${eqRank?.estacionesCompletadas||0}/10</td><td style="font-weight:700;color:#34d399">${eqRank?.puntajeTotal||0}</td><td><span class="badge" style="background:${eq.activo?'#064e3b':'#450a0a'};color:${eq.activo?'#34d399':'#f87171'}">${eq.activo?'Activo':'Desc.'}</span></td><td><button class="btn-small" style="background:${eq.activo?'#450a0a':'#064e3b'};color:${eq.activo?'#f87171':'#34d399'}" onclick="openDescalif(${eq.id})">${eq.activo?'Descalif.':'Rehabilitar'}</button></td></tr>`;
+  // Obtener estaciones ya capturadas por este equipo
+  const resultadosEquipo = db.resultados.filter(r => r.equipoId === equipoId);
+  const estacionesCompletadas = new Set(resultadosEquipo.map(r => r.estacionId));
+  
+  // Construir select de estaciones
+  let options = '<option value="">— Seleccionar estación —</option>';
+  ESTACIONES.forEach(est => {
+    const area = AREAS.find(a => a.id === est.areaId);
+    const yaCapturada = estacionesCompletadas.has(est.id);
+    options += `<option value="${est.id}" ${yaCapturada ? 'disabled style="opacity:0.5"' : ''}>
+      ${area.emoji} ${est.nombre} ${yaCapturada ? '✓ (completada)' : ''}
+    </option>`;
+  });
+  selectEst.innerHTML = options;
+  
+  // Mostrar progreso del equipo
+  mostrarProgresoEquipo(equipoId);
+  document.getElementById('cap-progreso').style.display = 'block';
+}
+
+function mostrarProgresoEquipo(equipoId) {
+  const resultadosEq = db.resultados.filter(r => r.equipoId === equipoId);
+  const contenedor = document.getElementById('cap-prog-list');
+  
+  contenedor.innerHTML = ESTACIONES.map(est => {
+    const resultado = resultadosEq.find(r => r.estacionId === est.id);
+    const area = AREAS.find(a => a.id === est.areaId);
+    return `<div class="det-row ${resultado ? 'done' : ''}">
+      <span style="font-size:14px">${area.emoji}</span>
+      <span style="font-size:12px;flex:1;color:${resultado ? '#e8eaf0' : '#6b7280'}">${est.nombre}</span>
+      ${resultado ? `<span style="font-size:13px;font-weight:700;color:#34d399">${resultado.puntaje}</span>` : `<span style="font-size:11px;color:#4b5563">pendiente</span>`}
+    </div>`;
   }).join('');
 }
 
-function renderCaptura() {
-  const selEq = document.getElementById('cap-equipo');
-  selEq.innerHTML = '<option value="">— Seleccionar equipo —</option>' + db.equipos.filter(e=>e.activo).map(e=>`<option value="${e.id}">${e.nombre} · ${e.plantel}</option>`).join('');
-  document.getElementById('quick-btns').innerHTML = [0,5,6,7,8,9,10].map(v => `<button class="quick-btn" onclick="setQuick(${v})">${v}</button>`).join('');
-  renderRecientes();
+function mostrarInfoEstacion() {
+  const equipoId = parseInt(document.getElementById('cap-equipo').value);
+  const estacionId = parseInt(document.getElementById('cap-estacion').value);
+  const banner = document.getElementById('cap-area-banner');
+  const warnDiv = document.getElementById('cap-dup-warn');
+  
+  if (!equipoId || !estacionId) {
+    banner.style.display = 'none';
+    warnDiv.style.display = 'none';
+    return;
+  }
+  
+  const estacion = ESTACIONES.find(e => e.id === estacionId);
+  const area = AREAS.find(a => a.id === estacion?.areaId);
+  
+  if (area) {
+    banner.style.display = 'flex';
+    banner.style.alignItems = 'center';
+    banner.style.gap = '10px';
+    banner.style.background = `${area.color}15`;
+    banner.style.border = `1px solid ${area.color}44`;
+    banner.innerHTML = `<span style="font-size:22px">${area.emoji}</span><div><div style="font-size:13px;font-weight:700;color:${area.color}">${area.nombre}</div><div style="font-size:11px;color:#6b7280">Máx: ${estacion.puntajeMax} pts</div></div>`;
+  }
+  
+  // Verificar si ya existe resultado (por si acaso)
+  const existe = db.resultados.find(r => r.equipoId === equipoId && r.estacionId === estacionId);
+  if (existe && !editandoId) {
+    warnDiv.style.display = 'block';
+    warnDiv.innerHTML = `⚠️ Ya hay resultado (${existe.puntaje} pts). <button onclick="cargarEdicion(${existe.id})" style="background:none;border:none;color:#fbbf24;text-decoration:underline;cursor:pointer">Editar</button>`;
+  } else {
+    warnDiv.style.display = 'none';
+  }
 }
 
-function renderRecientes() {
-  const recientes = [...db.resultados].sort((a,b)=>b.ts - a.ts).slice(0,10);
-  const tbody = document.getElementById('cap-recientes');
-  if (recientes.length === 0) { tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#4b5563;padding:30px">Sin capturas aún</td></tr>`; return; }
-  tbody.innerHTML = recientes.map(r => {
-    const eq = db.equipos.find(e=>e.id===r.equipoId);
-    const est = ESTACIONES.find(e=>e.id===r.estacionId);
-    const ar = AREAS.find(a=>a.id===est?.areaId);
-    return `<tr><td style="font-weight:600">${eq?.nombre || `Eq.${r.equipoId}`}</td><td style="font-size:11px;color:#6b7280">${eq?.plantel || ''}</td><td><span class="badge" style="background:${ar?.color}22;color:${ar?.color}">${ar?.emoji} ${est?.nombre}</span></td><td style="font-weight:700;color:#34d399">${r.puntaje}</td><td style="font-size:12px">${r.llegada||'—'}</td><td style="font-size:12px">${r.salida||'—'}</td><td style="font-size:11px">${r.capturista||'Admin'}</td><td><button class="btn-small" onclick="cargarEdicion(${r.id})">✏️</button></td></tr>`;
-  }).join('');
+function setQuick(v) {
+  document.getElementById('cap-puntaje').value = v;
 }
-
-function setQuick(v) { document.getElementById('cap-puntaje').value = v; }
-function onPuntajeInput() {}
-function onCapEquipoChange() {}
-function onCapEstacionChange() {}
 
 async function guardarCaptura() {
-  const equipoId = Number(document.getElementById('cap-equipo').value);
-  const estacionId = Number(document.getElementById('cap-estacion').value);
+  const equipoId = parseInt(document.getElementById('cap-equipo').value);
+  const estacionId = parseInt(document.getElementById('cap-estacion').value);
   const puntaje = parseFloat(parseFloat(document.getElementById('cap-puntaje').value).toFixed(1));
   const llegada = document.getElementById('cap-llegada').value;
   const salida = document.getElementById('cap-salida').value;
@@ -405,19 +417,26 @@ async function guardarCaptura() {
   if (!equipoId || !estacionId) { showToast('Selecciona equipo y estación', 'err'); return; }
   if (isNaN(puntaje) || puntaje < 0 || puntaje > 10) { showToast('Puntaje inválido (0–10)', 'err'); return; }
   
+  // Verificar si ya existe (doble check)
+  const existe = db.resultados.find(r => r.equipoId === equipoId && r.estacionId === estacionId);
+  if (existe && !editandoId) { showToast('Ya existe un resultado para esta estación', 'err'); return; }
+  
   if (editandoId) {
     const idx = db.resultados.findIndex(r => r.id === editandoId);
-    if (idx >= 0) db.resultados[idx] = { ...db.resultados[idx], equipoId, estacionId, puntaje, llegada, salida, obs, ts: Date.now(), capturista: 'Admin' };
-    await agregarAuditoria(`Resultado editado: ${puntaje}pts`);
-    showToast('Resultado actualizado ✓');
+    if (idx >= 0) {
+      db.resultados[idx] = { ...db.resultados[idx], equipoId, estacionId, puntaje, llegada, salida, obs, ts: Date.now(), capturista: 'Admin' };
+      await agregarAuditoria(`Resultado editado: ${puntaje}pts`);
+      showToast('Resultado actualizado ✓');
+    }
     cancelEdit();
   } else {
-    if (db.resultados.find(r => r.equipoId === equipoId && r.estacionId === estacionId)) { showToast('Ya existe resultado', 'err'); return; }
     db.resultados.push({ id: Date.now(), equipoId, estacionId, puntaje, llegada, salida, obs, ts: Date.now(), capturista: 'Admin' });
     const equipo = db.equipos.find(e => e.id === equipoId);
     const estacion = ESTACIONES.find(e => e.id === estacionId);
     await agregarAuditoria(`Captura: ${equipo?.nombre} / ${estacion?.nombre} = ${puntaje}pts`);
     showToast('Resultado guardado en GitHub ✓');
+    
+    // Resetear campos
     document.getElementById('cap-puntaje').value = '';
     document.getElementById('cap-llegada').value = '';
     document.getElementById('cap-salida').value = '';
@@ -426,9 +445,37 @@ async function guardarCaptura() {
   
   await guardarDBGitHub();
   rankingCache = calcularRanking();
-  renderCaptura();
+  
+  // Refrescar todo
+  actualizarEstacionesPorEquipo();
+  renderRecientes();
   renderDashboard();
+  renderEquipos();
   renderResultados();
+}
+
+function renderRecientes() {
+  const recientes = [...db.resultados].sort((a,b)=>b.ts - a.ts).slice(0,10);
+  const tbody = document.getElementById('cap-recientes');
+  if (recientes.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#4b5563;padding:30px">Sin capturas aún</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = recientes.map(r => {
+    const eq = db.equipos.find(e=>e.id===r.equipoId);
+    const est = ESTACIONES.find(e=>e.id===r.estacionId);
+    const ar = AREAS.find(a=>a.id===est?.areaId);
+    return `<tr>
+      <td style="font-weight:600">${eq?.nombre || `Eq.${r.equipoId}`}</td>
+      <td style="font-size:11px;color:#6b7280">${eq?.plantel || ''}</td>
+      <td><span class="badge" style="background:${ar?.color}22;color:${ar?.color}">${ar?.emoji} ${est?.nombre}</span></td>
+      <td style="font-weight:700;color:#34d399">${r.puntaje}</td>
+      <td style="font-size:12px">${r.llegada||'—'}</td>
+      <td style="font-size:12px">${r.salida||'—'}</td>
+      <td style="font-size:11px">${r.capturista||'Admin'}</td>
+      <td><button class="btn-small" onclick="cargarEdicion(${r.id})">✏️</button></td>
+    </tr>`;
+  }).join('');
 }
 
 function cargarEdicion(id) {
@@ -436,7 +483,11 @@ function cargarEdicion(id) {
   if (!r) return;
   editandoId = id;
   document.getElementById('cap-equipo').value = r.equipoId;
-  document.getElementById('cap-estacion').value = r.estacionId;
+  actualizarEstacionesPorEquipo();
+  setTimeout(() => {
+    document.getElementById('cap-estacion').value = r.estacionId;
+    mostrarInfoEstacion();
+  }, 100);
   document.getElementById('cap-puntaje').value = r.puntaje;
   document.getElementById('cap-llegada').value = r.llegada || '';
   document.getElementById('cap-salida').value = r.salida || '';
@@ -450,7 +501,7 @@ function cargarEdicion(id) {
 function cancelEdit() {
   editandoId = null;
   document.getElementById('cap-equipo').value = '';
-  document.getElementById('cap-estacion').value = '';
+  document.getElementById('cap-estacion').innerHTML = '<option value="">— Seleccionar estación —</option>';
   document.getElementById('cap-puntaje').value = '';
   document.getElementById('cap-llegada').value = '';
   document.getElementById('cap-salida').value = '';
@@ -459,18 +510,91 @@ function cancelEdit() {
   document.getElementById('btn-guardar-cap').innerHTML = 'Guardar Resultado';
   document.getElementById('btn-cancel-edit').style.display = 'none';
   document.getElementById('cap-dup-warn').style.display = 'none';
+  document.getElementById('cap-area-banner').style.display = 'none';
   document.getElementById('cap-progreso').style.display = 'none';
   renderRecientes();
+}
+
+// ================= RENDERIZADO GENERAL =================
+function renderDashboard() {
+  const rk = rankingCache;
+  const promedio = rk.length ? (rk.reduce((s,e)=>s+e.puntajeTotal,0)/rk.length).toFixed(1) : 0;
+  document.getElementById('dash-kpis').innerHTML = [
+    {label:'Equipos', val:rk.length, sub:`${rk.filter(e=>e.activo).length} activos`, color:'#60a5fa'},
+    {label:'Capturas', val:db.resultados.length, sub:'resultados', color:'#34d399'},
+    {label:'Promedio', val:promedio, sub:'puntos/equipo', color:'#a78bfa'},
+    {label:'Líder', val:rk[0]?.puntajeTotal??0, sub:rk[0]?.nombre??'—', color:'#fbbf24'}
+  ].map(k => `<div class="kpi-card"><div style="font-size:11px;color:#6b7280;">${k.label}</div><div style="font-size:36px;font-weight:700;color:${k.color}">${k.val}</div><div style="font-size:12px;color:#4b5563;">${k.sub}</div></div>`).join('');
+  
+  const medals = ['🥇','🥈','🥉'];
+  document.getElementById('dash-podio').innerHTML = rk.slice(0,3).map((eq,i) => `<div class="podium-item ${i===0?'gold':''}"><span style="font-size:24px">${medals[i]}</span><div style="flex:1"><div style="font-weight:600">${eq.nombre}</div><div style="font-size:11px;color:#6b7280">${eq.plantel}</div></div><div style="text-align:right"><div style="font-weight:700;font-size:20px;color:#fbbf24">${eq.puntajeTotal}</div><div style="font-size:10px;">pts</div></div></div>`).join('') || '<div style="color:#4b5563;text-align:center;padding:20px">Sin resultados</div>';
+  
+  document.getElementById('dash-tabla').innerHTML = rk.map((eq,i) => `<tr>
+    <td style="font-weight:700;color:${i<3?['#fbbf24','#9ca3af','#cd7c2f'][i]:'#4b5563'}">${i+1}</td>
+    <td style="font-weight:600">${eq.nombre}</td>
+    <td style="color:#6b7280;font-size:12px">${eq.plantel}</td>
+    <td style="color:#6b7280;font-size:12px">${eq.turno}</td>
+    <td style="color:#6b7280">${eq.estacionesCompletadas}/10</td>
+    <td style="font-weight:700;color:#34d399">${eq.puntajeTotal}</td>
+    <td style="color:#9ca3af;font-size:12px">${minToStr(eq.tiempoTotal)}</td>
+    <td><span class="badge" style="background:${eq.activo?'#064e3b':'#450a0a'};color:${eq.activo?'#34d399':'#f87171'}">${eq.activo?'Activo':'Desc.'}</span></td>
+  </tr>`).join('');
+  
+  document.getElementById('dash-cobertura').innerHTML = ESTACIONES.map(est => {
+    const total = db.resultados.filter(r=>r.estacionId===est.id).length;
+    const area = AREAS.find(a=>a.id===est.areaId);
+    const pct = rk.length ? Math.min(100,(total/rk.length)*100) : 0;
+    return `<div style="background:#1a1d2e;border-radius:10px;padding:12px;border:1px solid #1e2130">
+      <div style="font-size:10px;color:${area.color};">${area.emoji} E${est.id}</div>
+      <div style="font-size:12px;font-weight:600;">${est.nombre}</div>
+      <div class="prog-bar"><div class="prog-fill" style="background:${area.color};width:${pct}%"></div></div>
+      <div style="font-size:11px;color:#6b7280">${total} equipos</div>
+    </div>`;
+  }).join('');
+}
+
+function renderEquipos() {
+  document.getElementById('eq-sub').innerHTML = `${db.equipos.length} equipos registrados`;
+  document.getElementById('eq-count').innerHTML = db.equipos.length;
+  const rk = rankingCache;
+  
+  if (db.equipos.length === 0) {
+    document.getElementById('eq-tabla').innerHTML = `<tr><td colspan="8" style="text-align:center;color:#f87171;padding:40px">⚠️ No se cargaron equipos. Verifica datos.csv</td></tr>`;
+    return;
+  }
+  
+  document.getElementById('eq-tabla').innerHTML = db.equipos.map((eq,i) => {
+    const eqRank = rk.find(r=>r.id===eq.id);
+    return `<tr style="opacity:${eq.activo?1:0.5}">
+      <td style="color:#4b5563;">${i+1}</td>
+      <td style="font-weight:600">${eq.nombre}</td>
+      <td style="font-size:12px;color:#6b7280">${eq.plantel}</td>
+      <td style="font-size:12px;color:#6b7280">${eq.turno}</td>
+      <td style="font-size:12px;color:#6b7280">${eqRank?.estacionesCompletadas||0}/10</td>
+      <td style="font-weight:700;color:#34d399">${eqRank?.puntajeTotal||0}</td>
+      <td><span class="badge" style="background:${eq.activo?'#064e3b':'#450a0a'};color:${eq.activo?'#34d399':'#f87171'}">${eq.activo?'Activo':'Desc.'}</span></td>
+      <td><button class="btn-small" style="background:${eq.activo?'#450a0a':'#064e3b'};color:${eq.activo?'#f87171':'#34d399'}" onclick="openDescalif(${eq.id})">${eq.activo?'Descalif.':'Rehabilitar'}</button></td>
+    </tr>`;
+  }).join('');
 }
 
 function renderResultados() {
   const rk = rankingCache;
   document.getElementById('res-count').innerHTML = rk.length;
-  const filtros = document.getElementById('res-filtros');
-  filtros.innerHTML = `<button class="btn-small" onclick="setFiltro(0)" style="background:${filtroArea===0?'#4f46e5':'#1a1d2e'}">Todas</button>${AREAS.map(a => `<button class="btn-small" onclick="setFiltro(${a.id})" style="background:${filtroArea===a.id?a.color+'33':'#1a1d2e'};color:${filtroArea===a.id?a.color:'#9ca3af'}">${a.emoji} ${a.nombre}</button>`).join('')}<div class="ml-auto"><button class="btn-small" onclick="exportCSV()" style="background:#064e3b;color:#34d399">↓ CSV</button><button onclick="alert('PDF en desarrollo')" style="background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:none;border-radius:8px;padding:8px 20px;cursor:pointer">📄 Exportar PDF</button></div>`;
+  document.getElementById('res-filtros').innerHTML = `<button class="btn-small" onclick="setFiltro(0)" style="background:${filtroArea===0?'#4f46e5':'#1a1d2e'}">Todas</button>${AREAS.map(a => `<button class="btn-small" onclick="setFiltro(${a.id})" style="background:${filtroArea===a.id?a.color+'33':'#1a1d2e'};color:${filtroArea===a.id?a.color:'#9ca3af'}">${a.emoji} ${a.nombre}</button>`).join('')}<div class="ml-auto"><button class="btn-small" onclick="alert('CSV exportado')" style="background:#064e3b;color:#34d399">↓ CSV</button><button onclick="alert('PDF en desarrollo')" style="background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:none;border-radius:8px;padding:8px 20px;cursor:pointer">📄 Exportar PDF</button></div>`;
+  
   const estacionesFiltradas = ESTACIONES.filter(e => filtroArea === 0 || e.areaId === filtroArea);
   document.getElementById('res-thead').innerHTML = `<tr><th>#</th><th>Equipo</th><th>Plantel</th><th>Turno</th><th>Total</th><th>Tiempo</th>${estacionesFiltradas.map(e => { const a = AREAS.find(x=>x.id===e.areaId); return `<th>${a.emoji}</th>`; }).join('')}<th></th></tr>`;
-  document.getElementById('res-tbody').innerHTML = rk.map((eq,i) => `<tr style="opacity:${eq.activo?1:0.4}"><td style="font-weight:700;color:${i<3?['#fbbf24','#9ca3af','#cd7c2f'][i]:'#4b5563'}">${i+1}</td><td style="font-weight:600">${eq.nombre}</td><td style="font-size:11px">${eq.plantel}</td><td style="font-size:11px">${eq.turno}</td><td style="font-weight:700;color:#34d399">${eq.puntajeTotal}</td><td style="font-size:12px">${minToStr(eq.tiempoTotal)}</td>${estacionesFiltradas.map(est => { const r = db.resultados.find(r => r.equipoId === eq.id && r.estacionId === est.id); const ar = AREAS.find(a=>a.id===est.areaId); return `<td style="text-align:center">${r ? `<span style="font-weight:700;color:${ar.color}">${r.puntaje}</span>` : `<span style="color:#2d3148">–</span>`}</td>`; }).join('')}<td><button class="btn-small" onclick="alert('Detalle equipo')">Ver →</button></td>`);
+  document.getElementById('res-tbody').innerHTML = rk.map((eq,i) => `<tr style="opacity:${eq.activo?1:0.4}">
+    <td style="font-weight:700;color:${i<3?['#fbbf24','#9ca3af','#cd7c2f'][i]:'#4b5563'}">${i+1}</td>
+    <td style="font-weight:600">${eq.nombre}</td>
+    <td style="font-size:11px">${eq.plantel}</td>
+    <td style="font-size:11px">${eq.turno}</td>
+    <td style="font-weight:700;color:#34d399">${eq.puntajeTotal}</td>
+    <td style="font-size:12px">${minToStr(eq.tiempoTotal)}</td>
+    ${estacionesFiltradas.map(est => { const r = db.resultados.find(r => r.equipoId === eq.id && r.estacionId === est.id); const ar = AREAS.find(a=>a.id===est.areaId); return `<td style="text-align:center">${r ? `<span style="font-weight:700;color:${ar.color}">${r.puntaje}</span>` : `<span style="color:#2d3148">–</span>`}</td>`; }).join('')}
+    <td><button class="btn-small" onclick="alert('Detalle equipo')">Ver →</button></td>
+  </tr>`).join('');
 }
 
 function renderAuditoria() {
@@ -480,8 +604,20 @@ function renderAuditoria() {
   list.innerHTML = [...db.auditoria].reverse().slice(0,100).map(a => `<div class="audit-row"><div style="font-size:11px;color:#4b5563;min-width:150px">${new Date(a.ts).toLocaleString('es-MX')}</div><div style="font-size:12px;color:#60a5fa;min-width:70px">${a.usuario}</div><div style="font-size:12px;color:#9ca3af">${a.accion}</div></div>`).join('');
 }
 
+// ================= NAVEGACIÓN =================
+function goPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`page-${id}`).classList.add('active');
+  document.getElementById(`nav-${id}`).classList.add('active');
+  if (id === 'dashboard') renderDashboard();
+  else if (id === 'equipos') renderEquipos();
+  else if (id === 'captura') { actualizarSelectEquipos(); renderRecientes(); }
+  else if (id === 'resultados') renderResultados();
+  else if (id === 'auditoria') renderAuditoria();
+}
+
 function setFiltro(id) { filtroArea = id; renderResultados(); }
-function exportCSV() { alert('CSV exportado'); }
 function closeDetalleEq() {}
 
 async function openDescalif(id) {
@@ -508,32 +644,23 @@ function openReset() { document.getElementById('modal-reset').classList.add('sho
 function closeReset() { document.getElementById('modal-reset').classList.remove('show'); }
 async function doReset() { db.resultados = []; db.auditoria = []; await guardarDBGitHub(); await agregarAuditoria('BASE DE DATOS REINICIADA'); rankingCache = calcularRanking(); closeReset(); renderDashboard(); renderEquipos(); renderResultados(); renderAuditoria(); showToast('Base de datos remota reiniciada', 'warn'); }
 
-function goPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(`page-${id}`).classList.add('active');
-  document.getElementById(`nav-${id}`).classList.add('active');
-  if (id === 'dashboard') renderDashboard();
-  else if (id === 'equipos') renderEquipos();
-  else if (id === 'captura') renderCaptura();
-  else if (id === 'resultados') renderResultados();
-  else if (id === 'auditoria') renderAuditoria();
-}
-
 function updateClock() { document.getElementById('sidebar-clock').textContent = nowStr(); }
 setInterval(updateClock, 30000);
 updateClock();
 
+// ================= INICIALIZACIÓN =================
 async function inicializar() {
   await cargarEquiposDesdeCSV();
   await leerDBGitHub();
   rankingCache = calcularRanking();
+  actualizarSelectEquipos();
   renderDashboard();
   renderEquipos();
-  renderCaptura();
+  renderRecientes();
   renderResultados();
   renderAuditoria();
   document.getElementById('dash-sub').innerHTML = `Actualizado ${nowStr()} · GitHub Sync`;
+  document.getElementById('quick-btns').innerHTML = [0,5,6,7,8,9,10].map(v => `<button class="quick-btn" onclick="setQuick(${v})">${v}</button>`).join('');
 }
 
 inicializar();
