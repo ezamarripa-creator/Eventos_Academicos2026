@@ -1,278 +1,70 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Rally Académico 2025 · Live GitHub</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;min-height:100vh;background:#0f1117;color:#e8eaf0;}
-::-webkit-scrollbar{width:6px;height:6px;}
-::-webkit-scrollbar-track{background:#0f1117;}
-::-webkit-scrollbar-thumb{background:#2d3148;border-radius:3px;}
-tr:hover td{background:#1a1d2e44;}
-button:hover{filter:brightness(1.15);}
-select option{background:#1a1d2e;}
-.layout{display:flex;min-height:100vh;}
-.sidebar{width:210px;min-height:100vh;background:#0b0d14;border-right:1px solid #1e2130;display:flex;flex-direction:column;padding:20px 10px;position:sticky;top:0;height:100vh;overflow:hidden;gap:4px;}
-.sidebar-logo{display:flex;align-items:center;gap:10px;padding:0 8px 20px;border-bottom:1px solid #1e2130;margin-bottom:12px;}
-.logo-icon{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:18px;}
-.sidebar-clock{text-align:center;font-size:22px;font-weight:700;font-family:'Space Grotesk',sans-serif;color:#4f46e5;letter-spacing:0.05em;padding:8px 0 14px;border-bottom:1px solid #1e2130;margin-bottom:10px;}
-.nav-btn{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:transparent;border:none;cursor:pointer;color:#6b7280;font-size:14px;font-weight:500;width:100%;text-align:left;font-family:'DM Sans',sans-serif;}
-.nav-btn.active{background:#4f46e522;color:#818cf8;border:1px solid #4f46e533;}
-main{flex:1;overflow-y:auto;min-height:100vh;padding:28px 32px;}
-.page{display:none;}
-.page.active{display:block;}
-.card{background:#141620;border:1px solid #1e2130;border-radius:14px;padding:20px 22px;}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
-.tbl{width:100%;border-collapse:collapse;font-size:13px;}
-.tbl th{padding:10px 12px;text-align:left;font-size:11px;font-weight:600;color:#4b5563;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid #1e2130;background:#0f1117;}
-.tbl td{padding:10px 12px;vertical-align:middle;border-bottom:1px solid #1a1d2e;}
-.badge{display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;}
-.input{width:100%;background:#1a1d2e;border:1px solid #2d3148;border-radius:8px;padding:9px 12px;color:#e8eaf0;font-size:13px;outline:none;}
-.btn-primary{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:8px;padding:11px 20px;cursor:pointer;font-size:13px;font-weight:600;width:100%;}
-.status-on{padding:3px 10px;border-radius:20px;background:#064e3b;color:#34d399;font-weight:600;font-size:11px;}
-.toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;color:#fff;font-weight:600;display:none;z-index:9999;}
-.toast.show{display:block;}
-</style>
-</head>
-<body>
-
-<div class="toast" id="toast" style="background:#4f46e5"></div>
-
-<div class="layout">
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-icon">🏆</div>
-      <div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px">Rally</div>
-        <div style="font-size:11px;color:#6b7280;font-weight:500">ACADÉMICO 2025</div>
-      </div>
-    </div>
-    <div class="sidebar-clock" id="sidebar-clock">00:00</div>
-    <div style="text-align:center;margin-bottom:8px"><span class="status-on" id="status-badge">● CONECTANDO</span></div>
-    <button class="nav-btn active" onclick="goPage('dashboard')" id="nav-dashboard">◈ Dashboard</button>
-    <button class="nav-btn" onclick="goPage('equipos')" id="nav-equipos">⬡ Equipos</button>
-    <button class="nav-btn" onclick="goPage('captura')" id="nav-captura">⊕ Captura</button>
-    <button class="nav-btn" onclick="goPage('resultados')" id="nav-resultados">◉ Resultados</button>
-    <button class="nav-btn" onclick="goPage('auditoria')" id="nav-auditoria">≡ Auditoría</button>
-  </aside>
-
-  <main>
-    <div class="page active" id="page-dashboard">
-      <div class="card">
-        <h2 style="margin-bottom:15px">Dashboard General</h2>
-        <div class="grid4" id="dash-kpis"></div>
-        <table class="tbl">
-          <thead><tr><th>#</th><th>Equipo</th><th>Plantel</th><th>Pts</th></tr></thead>
-          <tbody id="dash-tabla"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="page" id="page-equipos">
-      <div class="card">
-        <h2>Equipos Registrados (<span id="eq-count">0</span>)</h2>
-        <table class="tbl">
-          <thead><tr><th>ID</th><th>Nombre</th><th>Plantel</th><th>Estado</th></tr></thead>
-          <tbody id="eq-tabla"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="page" id="page-captura">
-      <div class="card" style="max-width:500px">
-        <h2>Captura de Resultados</h2>
-        <div style="margin-top:15px">
-          <label style="font-size:12px; color:#6b7280">EQUIPO</label>
-          <select class="input" id="cap-equipo" style="margin-bottom:10px"></select>
-          <label style="font-size:12px; color:#6b7280">PUNTAJE (0-10)</label>
-          <input type="number" class="input" id="cap-puntaje" min="0" max="10" step="0.1" style="margin-bottom:20px">
-          <button class="btn-primary" onclick="guardarCaptura()">Guardar Resultado</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="page" id="page-resultados">
-      <div class="card">
-        <h2>Tabla de Resultados</h2>
-        <div id="res-main"></div>
-      </div>
-    </div>
-
-    <div class="page" id="page-auditoria">
-      <div class="card">
-        <h2>Historial de Cambios</h2>
-        <div id="aud-list"></div>
-      </div>
-    </div>
-  </main>
-</div>
-
-<script>
-// =====================================================
-// CONFIGURACIÓN (PAT INTEGRADO)
-// =====================================================
-const GH = {
-  owner: 'ezamarripa-creator',
-  repo: 'Eventos_Academicos2026',
-  branch: 'main',
-  folder: 'principal',
-  token: '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'
-};
-
-const HEADERS = {
-  'Authorization': `token ${GH.token}`,
-  'Accept': 'application/vnd.github.v3+json'
-};
-
-// URLs corregidas para API
-const API_BASE = `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.folder}`;
-const DB_JSON_URL = `${API_BASE}/db.json`;
-const DATOS_CSV_URL = `${API_BASE}/datos.csv`;
-
-let db = { equipos: [], resultados: [], auditoria: [] };
-let currentSha = null;
-
-// =====================================================
-// FUNCIONES DE DATOS
-// =====================================================
 async function cargarEquiposDesdeCSV() {
   try {
-    const resp = await fetch(DATOS_CSV_URL, { headers: HEADERS });
-    if (!resp.ok) throw new Error('No se pudo acceder a datos.csv');
-    const data = await resp.json();
-    
-    // Decodificar Base64 de GitHub
-    const contenido = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
-    const lineas = contenido.trim().split('\n');
-    
-    db.equipos = lineas.slice(1).map(linea => {
-      const c = linea.split(',');
-      return { id: parseInt(c[0]), nombre: c[1]?.trim(), plantel: c[2]?.trim(), activo: true };
-    }).filter(e => !isNaN(e.id));
-    
-    return true;
-  } catch (e) {
-    console.error("Error CSV:", e);
-    return false;
+    setBadge('<span class="loading-spinner"></span> CARGANDO');
+
+    const url = GITHUB_CSV_URL() + '?t=' + Date.now();
+    console.log("Cargando CSV desde:", url);
+
+    const respuesta = await fetch(url);
+
+    if (!respuesta.ok) {
+      throw new Error(`HTTP ${respuesta.status} - ${respuesta.statusText}`);
+    }
+
+    const texto = await respuesta.text();
+
+    if (!texto || texto.length < 10) {
+      throw new Error('CSV vacío o inválido');
+    }
+
+    const lineas = texto.replace(/^\uFEFF/, '').trim().split('\n');
+
+    if (lineas.length < 2) {
+      throw new Error('CSV sin datos');
+    }
+
+    const encabezados = lineas[0]
+      .split(',')
+      .map(h => h.trim().toLowerCase().replace(/\r/g, ''));
+
+    const equiposRaw = [];
+
+    for (let i = 1; i < lineas.length; i++) {
+      const linea = lineas[i].replace(/\r/g,'');
+      if (!linea.trim()) continue;
+
+      const valores = parseCsvLine(linea);
+      const obj = {};
+
+      encabezados.forEach((h, idx) => {
+        obj[h] = (valores[idx] || '').trim();
+      });
+
+      if (obj.id && obj.nombre) equiposRaw.push(obj);
+    }
+
+    db.equipos = equiposRaw.map(e => ({
+      id: parseInt(e.id),
+      nombre: e.nombre,
+      plantel: e.plantel || 'Sin plantel',
+      turno: (e.turno || '').toLowerCase().includes('vespertino')
+        ? 'vespertino'
+        : 'matutino',
+      activo: (e.estatus || 'activo').toLowerCase() !== 'inactivo'
+    }));
+
+    setBadge('● ONLINE', '#064e3b');
+    document.getElementById('gh-status').innerHTML = `✅ ${db.equipos.length} equipos`;
+
+    return db.equipos;
+
+  } catch(err) {
+    console.error('Error CSV DETALLADO:', err);
+
+    setBadge('● ERROR CSV', '#7f1d1d');
+    document.getElementById('gh-status').innerHTML =
+      `❌ CSV: ${err.message}`;
+
+    return [];
   }
 }
-
-async function cargarDB() {
-  try {
-    const resp = await fetch(DB_JSON_URL, { headers: HEADERS });
-    if (resp.status === 404) return;
-    const data = await resp.json();
-    currentSha = data.sha;
-    const contenido = JSON.parse(decodeURIComponent(escape(atob(data.content.replace(/\n/g, '')))));
-    db.resultados = contenido.resultados || [];
-    db.auditoria = contenido.auditoria || [];
-  } catch (e) { console.error("Error DB:", e); }
-}
-
-async function sincronizarGitHub() {
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify({
-    resultados: db.resultados,
-    auditoria: db.auditoria
-  }, null, 2))));
-
-  const payload = {
-    message: "Update Rally Data",
-    content: content,
-    sha: currentSha,
-    branch: GH.branch
-  };
-
-  const resp = await fetch(DB_JSON_URL, {
-    method: 'PUT',
-    headers: HEADERS,
-    body: JSON.stringify(payload)
-  });
-
-  if(resp.ok) {
-    const data = await resp.json();
-    currentSha = data.content.sha;
-    showToast("✓ Sincronizado");
-  }
-}
-
-// =====================================================
-// INTERFAZ Y NAVEGACIÓN
-// =====================================================
-function showToast(m) {
-  const t = document.getElementById('toast');
-  t.textContent = m; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
-}
-
-function goPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(`page-${id}`).classList.add('active');
-  document.getElementById(`nav-${id}`).classList.add('active');
-  render(id);
-}
-
-function render(id) {
-  if (id === 'dashboard') {
-    const tabla = document.getElementById('dash-tabla');
-    const rk = [...db.equipos].map(eq => {
-      const pts = db.resultados.filter(r => r.equipoId === eq.id).reduce((s, r) => s + r.pts, 0);
-      return {...eq, pts};
-    }).sort((a,b) => b.pts - a.pts);
-    
-    tabla.innerHTML = rk.map((e, i) => `<tr><td>${i+1}</td><td>${e.nombre}</td><td>${e.plantel}</td><td>${e.pts}</td></tr>`).join('');
-  }
-  
-  if (id === 'equipos') {
-    document.getElementById('eq-count').textContent = db.equipos.length;
-    document.getElementById('eq-tabla').innerHTML = db.equipos.map(e => 
-      `<tr><td>${e.id}</td><td>${e.nombre}</td><td>${e.plantel}</td><td><span class="badge" style="background:#064e3b">Activo</span></td></tr>`).join('');
-  }
-
-  if (id === 'captura') {
-    document.getElementById('cap-equipo').innerHTML = db.equipos.map(e => `<option value="${e.id}">${e.nombre}</option>`).join('');
-  }
-}
-
-async function guardarCaptura() {
-  const eqId = parseInt(document.getElementById('cap-equipo').value);
-  const pts = parseFloat(document.getElementById('cap-puntaje').value);
-  
-  if (isNaN(pts)) return;
-
-  db.resultados.push({ equipoId: eqId, pts: pts, ts: new Date().toISOString() });
-  db.auditoria.unshift({ ts: new Date().toISOString(), msj: `Captura Equipo ${eqId}: ${pts} pts` });
-  
-  await sincronizarGitHub();
-  document.getElementById('cap-puntaje').value = '';
-  showToast("Guardado correctamente");
-}
-
-// =====================================================
-// INICIO
-// =====================================================
-async function init() {
-  const csvOk = await cargarEquiposDesdeCSV();
-  if (csvOk) {
-    await cargarDB();
-    document.getElementById('status-badge').textContent = '● ONLINE';
-    goPage('dashboard');
-  } else {
-    document.getElementById('status-badge').textContent = '● ERROR CSV';
-    document.getElementById('status-badge').style.background = '#7f1d1d';
-  }
-}
-
-setInterval(() => {
-  document.getElementById('sidebar-clock').textContent = new Date().toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
-}, 1000);
-
-init();
-</script>
-</body>
-</html>
