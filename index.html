@@ -161,7 +161,7 @@ label.lbl{display:block;font-size:11px;color:#6b7280;font-weight:600;text-transf
     <div class="page" id="page-resultados">
       <div class="page-header"><div class="page-header-icon">◉</div><div><h1 style="font-size:22px;">Resultados & Reportes</h1><div style="font-size:13px;color:#4b5563;">Exportación PDF/CSV</div></div></div>
       <div id="res-detalle" style="display:none"><button class="btn-secondary" style="margin-bottom:16px" onclick="closeDetalleEq()">← Volver</button><div class="card" id="res-detalle-content"></div></div>
-      <div id="res-main"><div class="gap-flex" id="res-filtros"></div><div class="card"><div class="section-title">Ranking — <span id="res-count">0</span> equipos</div><div class="overflow-x"><table class="tbl" id="res-tabla"><thead id="res-thead"></thead><tbody id="res-tbody"></tbody></td></div></div></div>
+      <div id="res-main"><div class="gap-flex" id="res-filtros"></div><div class="card"><div class="section-title">Ranking — <span id="res-count">0</span> equipos</div><div class="overflow-x"><table class="tbl" id="res-tabla"><thead id="res-thead"></thead><tbody id="res-tbody"></tbody><table></div></div></div>
     </div>
 
     <div class="page" id="page-auditoria">
@@ -243,39 +243,43 @@ async function cargarEquiposDesdeCSV() {
     }));
     document.getElementById('status-badge').innerHTML = '● ONLINE CSV';
     document.getElementById('gh-status').innerHTML = `✅ ${db.equipos.length} equipos`;
-    showToast(`✅ ${db.equipos.length} equipos cargados`, 'ok');
     return db.equipos;
   } catch(error) {
     console.error(error);
     document.getElementById('status-badge').innerHTML = '● ERROR CSV';
-    document.getElementById('gh-status').innerHTML = `❌ Error: ${error.message}`;
-    showToast('Error al cargar datos.csv', 'err');
+    document.getElementById('gh-status').innerHTML = `❌ Error`;
     db.equipos = [];
     return [];
   }
 }
 
-// ================= DB.JSON =================
+// ================= DB.JSON - FUNCIONES CORREGIDAS =================
 async function leerDBGitHub() {
   try {
     const respuesta = await fetch(API_DB_URL, { 
       headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' } 
     });
+    
     if (respuesta.status === 404) {
+      console.log('db.json no existe, se creará al primer guardado');
       currentSha = null;
       db.resultados = [];
       db.auditoria = [];
       return;
     }
+    
     if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
+    
     const data = await respuesta.json();
     currentSha = data.sha;
-    const contenido = atob(data.content);
+    // Decodificar correctamente el contenido Base64
+    const contenido = decodeURIComponent(escape(atob(data.content)));
     const parsed = JSON.parse(contenido);
     db.resultados = parsed.resultados || [];
     db.auditoria = parsed.auditoria || [];
+    console.log(`📦 DB cargada: ${db.resultados.length} resultados, ${db.auditoria.length} auditorías`);
   } catch(error) {
-    console.warn(error);
+    console.warn('Error leyendo db.json:', error);
     db.resultados = [];
     db.auditoria = [];
   }
@@ -283,20 +287,41 @@ async function leerDBGitHub() {
 
 async function guardarDBGitHub() {
   const contenido = JSON.stringify({ resultados: db.resultados, auditoria: db.auditoria }, null, 2);
+  // Codificar correctamente a Base64
   const contentBase64 = btoa(unescape(encodeURIComponent(contenido)));
-  const payload = { message: `Update ${new Date().toISOString()}`, content: contentBase64, sha: currentSha || undefined };
+  const payload = { 
+    message: `Update ${new Date().toISOString()}`, 
+    content: contentBase64, 
+    sha: currentSha || undefined 
+  };
+  
   try {
     const respuesta = await fetch(API_DB_URL, { 
       method: 'PUT', 
-      headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' }, 
+      headers: { 
+        'Authorization': `token ${GITHUB_TOKEN}`, 
+        'Content-Type': 'application/json' 
+      }, 
       body: JSON.stringify(payload) 
     });
-    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
+    
+    if (!respuesta.ok) {
+      const errorData = await respuesta.json();
+      throw new Error(`HTTP ${respuesta.status}: ${errorData.message}`);
+    }
+    
     const result = await respuesta.json();
     if (result.sha) currentSha = result.sha;
+    console.log('✅ DB guardada correctamente en GitHub');
+    document.getElementById('status-badge').innerHTML = '● SINCRO OK';
+    setTimeout(() => { 
+      if(document.getElementById('status-badge')) 
+        document.getElementById('status-badge').innerHTML = '● LIVE'; 
+    }, 1500);
     return true;
   } catch(error) {
-    showToast('Error al guardar', 'err');
+    console.error('Error guardando en GitHub:', error);
+    showToast('Error al guardar en GitHub: ' + error.message, 'err');
     return false;
   }
 }
@@ -311,7 +336,10 @@ function calcularRanking() {
   return db.equipos.map(eq => {
     const resEq = db.resultados.filter(r => r.equipoId === eq.id);
     const puntajeTotal = parseFloat(resEq.reduce((s, r) => s + r.puntaje, 0).toFixed(1));
-    const tiempoTotal = resEq.reduce((s, r) => { const d = timeToMin(r.salida) - timeToMin(r.llegada); return s + (d > 0 ? d : 0); }, 0);
+    const tiempoTotal = resEq.reduce((s, r) => { 
+      const d = timeToMin(r.salida) - timeToMin(r.llegada); 
+      return s + (d > 0 ? d : 0); 
+    }, 0);
     return { ...eq, puntajeTotal, tiempoTotal, estacionesCompletadas: resEq.length, resultados: resEq };
   }).sort((a, b) => b.puntajeTotal - a.puntajeTotal || a.tiempoTotal - b.tiempoTotal);
 }
@@ -333,22 +361,19 @@ function actualizarEstacionesPorEquipo() {
     return;
   }
   
-  // Obtener estaciones ya capturadas por este equipo
   const resultadosEquipo = db.resultados.filter(r => r.equipoId === equipoId);
   const estacionesCompletadas = new Set(resultadosEquipo.map(r => r.estacionId));
   
-  // Construir select de estaciones
   let options = '<option value="">— Seleccionar estación —</option>';
   ESTACIONES.forEach(est => {
     const area = AREAS.find(a => a.id === est.areaId);
     const yaCapturada = estacionesCompletadas.has(est.id);
     options += `<option value="${est.id}" ${yaCapturada ? 'disabled style="opacity:0.5"' : ''}>
-      ${area.emoji} ${est.nombre} ${yaCapturada ? '✓ (completada)' : ''}
+      ${area.emoji} ${est.nombre} ${yaCapturada ? '✓' : ''}
     </option>`;
   });
   selectEst.innerHTML = options;
   
-  // Mostrar progreso del equipo
   mostrarProgresoEquipo(equipoId);
   document.getElementById('cap-progreso').style.display = 'block';
 }
@@ -392,7 +417,6 @@ function mostrarInfoEstacion() {
     banner.innerHTML = `<span style="font-size:22px">${area.emoji}</span><div><div style="font-size:13px;font-weight:700;color:${area.color}">${area.nombre}</div><div style="font-size:11px;color:#6b7280">Máx: ${estacion.puntajeMax} pts</div></div>`;
   }
   
-  // Verificar si ya existe resultado (por si acaso)
   const existe = db.resultados.find(r => r.equipoId === equipoId && r.estacionId === estacionId);
   if (existe && !editandoId) {
     warnDiv.style.display = 'block';
@@ -417,7 +441,6 @@ async function guardarCaptura() {
   if (!equipoId || !estacionId) { showToast('Selecciona equipo y estación', 'err'); return; }
   if (isNaN(puntaje) || puntaje < 0 || puntaje > 10) { showToast('Puntaje inválido (0–10)', 'err'); return; }
   
-  // Verificar si ya existe (doble check)
   const existe = db.resultados.find(r => r.equipoId === equipoId && r.estacionId === estacionId);
   if (existe && !editandoId) { showToast('Ya existe un resultado para esta estación', 'err'); return; }
   
@@ -426,32 +449,49 @@ async function guardarCaptura() {
     if (idx >= 0) {
       db.resultados[idx] = { ...db.resultados[idx], equipoId, estacionId, puntaje, llegada, salida, obs, ts: Date.now(), capturista: 'Admin' };
       await agregarAuditoria(`Resultado editado: ${puntaje}pts`);
-      showToast('Resultado actualizado ✓');
+      showToast('Resultado actualizado en GitHub ✓');
     }
     cancelEdit();
   } else {
-    db.resultados.push({ id: Date.now(), equipoId, estacionId, puntaje, llegada, salida, obs, ts: Date.now(), capturista: 'Admin' });
+    const nuevoId = Date.now();
+    const nuevaCaptura = { 
+      id: nuevoId, 
+      equipoId, 
+      estacionId, 
+      puntaje, 
+      llegada, 
+      salida, 
+      obs, 
+      ts: Date.now(), 
+      capturista: 'Admin' 
+    };
+    db.resultados.push(nuevaCaptura);
+    
     const equipo = db.equipos.find(e => e.id === equipoId);
     const estacion = ESTACIONES.find(e => e.id === estacionId);
     await agregarAuditoria(`Captura: ${equipo?.nombre} / ${estacion?.nombre} = ${puntaje}pts`);
     showToast('Resultado guardado en GitHub ✓');
     
-    // Resetear campos
     document.getElementById('cap-puntaje').value = '';
     document.getElementById('cap-llegada').value = '';
     document.getElementById('cap-salida').value = '';
     document.getElementById('cap-obs').value = '';
   }
   
-  await guardarDBGitHub();
+  // Recargar todos los datos desde GitHub para asegurar consistencia
+  await leerDBGitHub();
   rankingCache = calcularRanking();
   
-  // Refrescar todo
+  // Actualizar todas las vistas
   actualizarEstacionesPorEquipo();
   renderRecientes();
   renderDashboard();
   renderEquipos();
   renderResultados();
+  renderAuditoria();
+  
+  // Actualizar el banner de estado
+  document.getElementById('gh-status').innerHTML = `✅ ${db.resultados.length} resultados`;
 }
 
 function renderRecientes() {
@@ -538,7 +578,7 @@ function renderDashboard() {
     <td style="font-weight:700;color:#34d399">${eq.puntajeTotal}</td>
     <td style="color:#9ca3af;font-size:12px">${minToStr(eq.tiempoTotal)}</td>
     <td><span class="badge" style="background:${eq.activo?'#064e3b':'#450a0a'};color:${eq.activo?'#34d399':'#f87171'}">${eq.activo?'Activo':'Desc.'}</span></td>
-  </tr>`).join('');
+  </table>`).join('');
   
   document.getElementById('dash-cobertura').innerHTML = ESTACIONES.map(est => {
     const total = db.resultados.filter(r=>r.estacionId===est.id).length;
@@ -581,7 +621,7 @@ function renderEquipos() {
 function renderResultados() {
   const rk = rankingCache;
   document.getElementById('res-count').innerHTML = rk.length;
-  document.getElementById('res-filtros').innerHTML = `<button class="btn-small" onclick="setFiltro(0)" style="background:${filtroArea===0?'#4f46e5':'#1a1d2e'}">Todas</button>${AREAS.map(a => `<button class="btn-small" onclick="setFiltro(${a.id})" style="background:${filtroArea===a.id?a.color+'33':'#1a1d2e'};color:${filtroArea===a.id?a.color:'#9ca3af'}">${a.emoji} ${a.nombre}</button>`).join('')}<div class="ml-auto"><button class="btn-small" onclick="alert('CSV exportado')" style="background:#064e3b;color:#34d399">↓ CSV</button><button onclick="alert('PDF en desarrollo')" style="background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:none;border-radius:8px;padding:8px 20px;cursor:pointer">📄 Exportar PDF</button></div>`;
+  document.getElementById('res-filtros').innerHTML = `<button class="btn-small" onclick="setFiltro(0)" style="background:${filtroArea===0?'#4f46e5':'#1a1d2e'}">Todas</button>${AREAS.map(a => `<button class="btn-small" onclick="setFiltro(${a.id})" style="background:${filtroArea===a.id?a.color+'33':'#1a1d2e'};color:${filtroArea===a.id?a.color:'#9ca3af'}">${a.emoji} ${a.nombre}</button>`).join('')}<div class="ml-auto"><button class="btn-small" onclick="exportarCSV()" style="background:#064e3b;color:#34d399">↓ CSV</button><button onclick="alert('PDF en desarrollo')" style="background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:none;border-radius:8px;padding:8px 20px;cursor:pointer">📄 Exportar PDF</button></div>`;
   
   const estacionesFiltradas = ESTACIONES.filter(e => filtroArea === 0 || e.areaId === filtroArea);
   document.getElementById('res-thead').innerHTML = `<tr><th>#</th><th>Equipo</th><th>Plantel</th><th>Turno</th><th>Total</th><th>Tiempo</th>${estacionesFiltradas.map(e => { const a = AREAS.find(x=>x.id===e.areaId); return `<th>${a.emoji}</th>`; }).join('')}<th></th></tr>`;
@@ -602,6 +642,22 @@ function renderAuditoria() {
   const list = document.getElementById('aud-list');
   if (db.auditoria.length === 0) { list.innerHTML = '<div style="color:#4b5563;padding:40px 0;text-align:center">Sin registros aún</div>'; return; }
   list.innerHTML = [...db.auditoria].reverse().slice(0,100).map(a => `<div class="audit-row"><div style="font-size:11px;color:#4b5563;min-width:150px">${new Date(a.ts).toLocaleString('es-MX')}</div><div style="font-size:12px;color:#60a5fa;min-width:70px">${a.usuario}</div><div style="font-size:12px;color:#9ca3af">${a.accion}</div></div>`).join('');
+}
+
+function exportarCSV() {
+  const rk = rankingCache;
+  let csv = "Posición,Equipo,Plantel,Turno,Puntaje Total,Estaciones Completadas\n";
+  rk.forEach((eq, i) => {
+    csv += `${i+1},"${eq.nombre}","${eq.plantel}","${eq.turno}",${eq.puntajeTotal},${eq.estacionesCompletadas}\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `rally_resultados_${new Date().toISOString().slice(0,19)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV exportado correctamente', 'ok');
 }
 
 // ================= NAVEGACIÓN =================
@@ -642,7 +698,19 @@ async function openDescalif(id) {
 function closeDescalif() { document.getElementById('modal-descalif').classList.remove('show'); }
 function openReset() { document.getElementById('modal-reset').classList.add('show'); }
 function closeReset() { document.getElementById('modal-reset').classList.remove('show'); }
-async function doReset() { db.resultados = []; db.auditoria = []; await guardarDBGitHub(); await agregarAuditoria('BASE DE DATOS REINICIADA'); rankingCache = calcularRanking(); closeReset(); renderDashboard(); renderEquipos(); renderResultados(); renderAuditoria(); showToast('Base de datos remota reiniciada', 'warn'); }
+async function doReset() { 
+  db.resultados = []; 
+  db.auditoria = []; 
+  await guardarDBGitHub(); 
+  await agregarAuditoria('BASE DE DATOS REINICIADA'); 
+  rankingCache = calcularRanking(); 
+  closeReset(); 
+  renderDashboard(); 
+  renderEquipos(); 
+  renderResultados(); 
+  renderAuditoria(); 
+  showToast('Base de datos remota reiniciada', 'warn'); 
+}
 
 function updateClock() { document.getElementById('sidebar-clock').textContent = nowStr(); }
 setInterval(updateClock, 30000);
@@ -661,6 +729,7 @@ async function inicializar() {
   renderAuditoria();
   document.getElementById('dash-sub').innerHTML = `Actualizado ${nowStr()} · GitHub Sync`;
   document.getElementById('quick-btns').innerHTML = [0,5,6,7,8,9,10].map(v => `<button class="quick-btn" onclick="setQuick(${v})">${v}</button>`).join('');
+  document.getElementById('gh-status').innerHTML = `✅ ${db.resultados.length} resultados guardados`;
 }
 
 inicializar();
