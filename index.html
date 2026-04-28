@@ -3,1310 +3,737 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Rally Académico — Análisis de Resultados</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<title>Rally Académico 2025 · Live GitHub</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --bg:#09090f;--surface:#0f0f1a;--card:#13131f;--border:#1f1f33;--border2:#282840;
-  --text:#e2e4f0;--muted:#5a5a7a;--muted2:#3a3a58;
-  --accent:#6c63ff;--accent2:#4ade80;--accent3:#f59e0b;--accent4:#f472b6;
-  --red:#f87171;--cyan:#22d3ee;
-}
-*{scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
-::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
-body{font-family:'DM Sans',sans-serif;min-height:100vh;background:var(--bg);color:var(--text);}
-a{color:inherit;}
-.layout{display:flex;min-height:100vh;}
-
-/* SIDEBAR */
-.sidebar{width:220px;min-height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:0 0 16px;position:sticky;top:0;height:100vh;overflow:hidden;}
-.sidebar-top{padding:20px 16px 16px;border-bottom:1px solid var(--border);}
-.brand{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-.brand-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#9c6fff);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.brand-name{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;line-height:1.2;}
-.brand-sub{font-size:10px;color:var(--muted);font-weight:400;letter-spacing:0.05em;}
-.sidebar-clock{font-family:'DM Mono',monospace;font-size:24px;font-weight:500;color:var(--accent);text-align:center;padding:12px 0 4px;}
-.sidebar-date{font-size:10px;color:var(--muted);text-align:center;padding-bottom:14px;}
-.sidebar-nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:3px;overflow-y:auto;}
-.nav-btn{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;background:transparent;border:none;cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;width:100%;text-align:left;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
-.nav-btn:hover{background:var(--card);color:var(--text);}
-.nav-btn.active{background:linear-gradient(135deg,#6c63ff18,#9c6fff18);color:#b8b4ff;border:1px solid #6c63ff33;}
-.nav-btn .nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
-.nav-divider{height:1px;background:var(--border);margin:8px 0;}
-.sidebar-bottom{padding:12px 16px;border-top:1px solid var(--border);}
-.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;}
-.chip-green{background:#064e3b;color:#4ade80;}
-.chip-blue{background:#1e3a5f;color:#60a5fa;}
-.chip-gray{background:#1f1f33;color:var(--muted);}
-
-/* MAIN */
-main{flex:1;overflow-y:auto;padding:28px 32px;min-height:100vh;}
-.page{display:none;}
-.page.active{display:block;}
-
-/* PAGE HEADER */
-.page-header{margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;}
-.page-header-left{display:flex;align-items:center;gap:12px;}
-.ph-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#9c6fff);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
-.ph-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.5px;}
-.ph-sub{font-size:12px;color:var(--muted);margin-top:3px;}
-
-/* CARDS */
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;}
-.card-sm{padding:14px 16px;}
-.section-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;}
-
-/* GRID */
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.grid-sidebar{display:grid;grid-template-columns:300px 1fr;gap:18px;}
-
-/* KPI CARD */
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
-.kpi-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;}
-.kpi-val{font-family:'DM Mono',monospace;font-size:36px;font-weight:500;line-height:1.1;margin:8px 0 4px;}
-.kpi-sub{font-size:11px;color:var(--muted);}
-
-/* TABLE */
-.tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
-.tbl th{padding:9px 11px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;white-space:nowrap;border-bottom:1px solid var(--border);background:var(--surface);}
-.tbl td{padding:9px 11px;vertical-align:middle;border-bottom:1px solid #13131f;}
-.tbl tr:hover td{background:#1a1a2e44;}
-.overflow-x{overflow-x:auto;}
-
-/* BADGE */
-.badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;white-space:nowrap;}
-.badge-green{background:#064e3b;color:#4ade80;}
-.badge-red{background:#450a0a;color:#f87171;}
-.badge-amber{background:#451a03;color:#fbbf24;}
-.badge-blue{background:#1e3a5f;color:#60a5fa;}
-.badge-purple{background:#2e1065;color:#c4b5fd;}
-
-/* BUTTONS */
-.btn-primary{background:linear-gradient(135deg,var(--accent),#9c6fff);color:#fff;border:none;border-radius:9px;padding:10px 20px;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;}
-.btn-primary:hover{filter:brightness(1.12);}
-.btn-secondary{background:var(--card);color:#9ca3af;border:1px solid var(--border2);border-radius:9px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;}
-.btn-secondary:hover{filter:brightness(1.1);}
-.btn-danger{background:#7f1d1d;color:#fca5a5;border:none;border-radius:9px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;}
-.btn-sm{background:var(--card);color:var(--muted);border:1px solid var(--border2);border-radius:6px;padding:4px 9px;cursor:pointer;font-size:11px;font-weight:500;white-space:nowrap;font-family:'DM Sans',sans-serif;}
-.btn-sm:hover{filter:brightness(1.15);}
-
-/* INPUT */
-.input{width:100%;background:#1a1a2e;border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;outline:none;font-family:'DM Sans',sans-serif;}
-.input:focus{border-color:var(--accent);}
-select.input option{background:#1a1a2e;}
-label.lbl{display:block;font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;}
+body{font-family:'DM Sans',sans-serif;min-height:100vh;background:#0f1117;color:#e8eaf0;}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:#0f1117;}
+::-webkit-scrollbar-thumb{background:#2d3148;border-radius:3px;}
+tr:hover td{background:#1a1d2e44;}
+button:hover{filter:brightness(1.15);}
+select option{background:#1a1d2e;}
 input[type=number]::-webkit-inner-spin-button{opacity:0.3;}
 input[type=time]{color-scheme:dark;}
-
-/* UPLOAD ZONE */
-.upload-zone{border:2px dashed var(--border2);border-radius:12px;padding:28px 20px;text-align:center;cursor:pointer;transition:all 0.2s;background:#0d0d1a;}
-.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:#6c63ff0a;}
-.upload-zone input{display:none;}
-
-/* PODIUM */
-.podium-item{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:10px;background:#1a1a2e;border:1px solid var(--border);}
-.podium-item.gold{background:linear-gradient(135deg,#78350f18,#92400e22);border-color:#92400e;}
-.podium-item.silver{background:linear-gradient(135deg,#27272a18,#3f3f4622);border-color:#52525b;}
-.podium-item.bronze{background:linear-gradient(135deg,#431407, #3d1b0a);border-color:#7c3909;}
-
-/* PROGRESS */
-.prog-wrap{background:var(--bg);border-radius:4px;height:5px;overflow:hidden;}
-.prog-fill{height:5px;border-radius:4px;transition:width 0.5s;}
-
-/* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;padding:11px 18px;border-radius:10px;color:#fff;font-weight:600;font-size:13px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.6);display:none;align-items:center;gap:8px;}
-.toast.show{display:flex;}
-
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:9998;}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:210px;min-height:100vh;background:#0b0d14;border-right:1px solid #1e2130;display:flex;flex-direction:column;padding:20px 10px;position:sticky;top:0;height:100vh;overflow:hidden;gap:4px;}
+.sidebar-logo{display:flex;align-items:center;gap:10px;padding:0 8px 20px;border-bottom:1px solid #1e2130;margin-bottom:12px;}
+.logo-icon{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.sidebar-clock{text-align:center;font-size:22px;font-weight:700;font-family:'Space Grotesk',sans-serif;color:#4f46e5;letter-spacing:0.05em;padding:8px 0 14px;border-bottom:1px solid #1e2130;margin-bottom:10px;}
+.nav-btn{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:transparent;border:none;cursor:pointer;color:#6b7280;font-size:14px;font-weight:500;width:100%;text-align:left;font-family:'DM Sans',sans-serif;}
+.nav-btn.active{background:#4f46e522;color:#818cf8;border:1px solid #4f46e533;}
+.sidebar-user{margin-top:auto;padding:14px 12px;border-top:1px solid #1e2130;}
+main{flex:1;overflow-y:auto;min-height:100vh;padding:28px 32px;}
+.page{display:none;}
+.page.active{display:block;}
+.card{background:#141620;border:1px solid #1e2130;border-radius:14px;padding:20px 22px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+.kpi-card{background:#141620;border:1px solid #1e2130;border-radius:14px;padding:20px 22px;}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.tbl th{padding:10px 12px;text-align:left;font-size:11px;font-weight:600;color:#4b5563;text-transform:uppercase;letter-spacing:0.06em;white-space:nowrap;border-bottom:1px solid #1e2130;background:#0f1117;}
+.tbl td{padding:10px 12px;vertical-align:middle;border-bottom:1px solid #1a1d2e;}
+.badge{display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;}
+.input{width:100%;background:#1a1d2e;border:1px solid #2d3148;border-radius:8px;padding:9px 12px;color:#e8eaf0;font-size:13px;outline:none;font-family:'DM Sans',sans-serif;}
+.input:focus{border-color:#4f46e5;}
+label.lbl{display:block;font-size:11px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;}
+.btn-primary{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:8px;padding:11px 20px;cursor:pointer;font-size:13px;font-weight:600;width:100%;font-family:'DM Sans',sans-serif;}
+.btn-secondary{background:#1a1d2e;color:#9ca3af;border:1px solid #2d3148;border-radius:8px;padding:10px 18px;cursor:pointer;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;}
+.btn-small{background:#1a1d2e;color:#9ca3af;border:1px solid #2d3148;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:11px;font-weight:500;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;color:#fff;font-weight:600;font-size:14px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.5);display:none;}
+.toast.show{display:block;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:none;align-items:center;justify-content:center;z-index:9998;}
 .modal-overlay.show{display:flex;}
-.modal{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:32px 36px;text-align:center;max-width:400px;width:90%;}
-
-/* AUDIT */
-.audit-row{display:flex;gap:12px;padding:8px 12px;border-radius:7px;background:#1a1a2e;border:1px solid var(--border);margin-bottom:4px;}
-
-/* BAR CHART */
-.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
-.bar-label{font-size:11px;color:var(--muted);white-space:nowrap;width:140px;overflow:hidden;text-overflow:ellipsis;text-align:right;}
-.bar-track{flex:1;background:var(--bg);border-radius:3px;height:14px;overflow:hidden;}
-.bar-fill{height:14px;border-radius:3px;transition:width 0.5s;}
-.bar-val{font-size:11px;font-family:'DM Mono',monospace;font-weight:500;width:36px;text-align:right;color:var(--text);}
-
-/* DETAIL */
-.det-row{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;background:#1a1a2e;border:1px solid var(--border);}
-.det-row.done{background:#064e3b1a;border-color:#4ade8044;}
-.warn-block{padding:8px 12px;border-radius:8px;background:#78350f22;border:1px solid #92400e;font-size:12px;color:#fbbf24;}
-.info-block{font-size:11px;color:var(--muted);padding:10px 12px;background:#1a1a2e;border-radius:8px;line-height:1.8;}
-
-/* FLEX UTILS */
-.flex{display:flex;}
-.flex-col{display:flex;flex-direction:column;gap:14px;}
-.items-center{align-items:center;}
-.gap-8{gap:8px;}
-.gap-12{gap:12px;}
-.ml-auto{margin-left:auto;}
-.flex-wrap{flex-wrap:wrap;}
-.mb-4{margin-bottom:16px;}
-.mb-2{margin-bottom:8px;}
-.mt-4{margin-top:16px;}
-
-/* SCORE COLOR */
-.s-hi{color:#4ade80;}
-.s-md{color:#fbbf24;}
-.s-lo{color:#f87171;}
-.s-none{color:var(--muted2);}
-
-/* STAT BOX */
-.stat-box{background:#1a1a2e;border:1px solid var(--border);border-radius:9px;padding:10px 14px;}
-
-/* ESTACION CARD */
-.est-card{background:#1a1a2e;border-radius:10px;padding:12px 14px;border:1px solid var(--border);}
-.est-card:hover{border-color:var(--border2);}
-
-/* NO DATA */
-.empty{text-align:center;padding:50px 0;color:var(--muted);font-size:14px;}
+.modal{background:#141620;border:1px solid #2d3148;border-radius:16px;padding:32px 36px;text-align:center;max-width:400px;width:100%;}
+.page-header{margin-bottom:28px;display:flex;align-items:center;gap:12px;}
+.page-header-icon{width:42px;height:42px;border-radius:10px;background:#4f46e522;border:1px solid #4f46e544;display:flex;align-items:center;justify-content:center;font-size:20px;color:#818cf8;}
+.section-title{font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;}
+.status-on{padding:3px 10px;border-radius:20px;background:#064e3b;color:#34d399;font-weight:600;font-size:11px;}
+.quick-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:6px;}
+.quick-btn{padding:5px 2px;text-align:center;background:#1a1d2e;border:1px solid #2d3148;color:#9ca3af;font-size:12px;font-weight:600;border-radius:6px;cursor:pointer;}
+.quick-btn.sel{background:#4f46e5;color:#fff;border-color:#4f46e5;}
+.grid2-sm{display:grid;grid-template-columns:360px 1fr;gap:20px;}
+.flex-col{display:flex;flex-direction:column;gap:16px;}
+.overflow-x{overflow-x:auto;margin-top:14px;}
+.gap-flex{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;align-items:center;}
+.ml-auto{margin-left:auto;display:flex;gap:8px;}
+.podium-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;background:#1a1d2e;border:1px solid #1e2130;}
+.podium-item.gold{background:linear-gradient(135deg,#78350f22,#92400e33);border-color:#92400e;}
+.prog-bar{background:#0f1117;border-radius:4px;height:6px;margin-bottom:6px;}
+.prog-fill{height:6px;border-radius:4px;transition:width 0.5s;}
+.det-row{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;background:#1a1d2e;border:1px solid #1e2130;}
+.det-row.done{background:#064e3b22;border-color:#34d39944;}
+.audit-row{display:flex;gap:14px;padding:9px 14px;border-radius:7px;background:#1a1d2e;border:1px solid #1e2130;}
+.loading-spinner{display:inline-block;width:16px;height:16px;border:2px solid #4f46e5;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.error-box{background:#450a0a;border:1px solid #f87171;border-radius:8px;padding:12px;margin:10px 0;color:#f87171;font-size:12px;}
 </style>
 </head>
 <body>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
-
-<!-- MODAL DESCALIF -->
-<div class="modal-overlay" id="modal-descalif">
-  <div class="modal">
-    <div style="font-size:36px;margin-bottom:12px" id="modal-icon">⚠️</div>
-    <div style="font-weight:700;font-size:18px;margin-bottom:8px;font-family:'Syne',sans-serif" id="modal-title">¿Descalificar equipo?</div>
-    <div style="color:var(--muted);margin-bottom:24px;font-size:14px" id="modal-name"></div>
-    <div style="display:flex;gap:10px;justify-content:center">
-      <button class="btn-secondary" onclick="closeDescalif()">Cancelar</button>
-      <button id="btn-confirm-descalif" class="btn-primary">Confirmar</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL RESET -->
-<div class="modal-overlay" id="modal-reset">
-  <div class="modal">
-    <div style="font-size:36px;margin-bottom:12px">🗑️</div>
-    <div style="font-weight:700;font-size:18px;margin-bottom:8px;font-family:'Syne',sans-serif">¿Reiniciar base de datos?</div>
-    <div style="color:var(--muted);margin-bottom:24px;font-size:14px">Se borrarán todos los equipos y resultados cargados. No se puede deshacer.</div>
-    <div style="display:flex;gap:10px;justify-content:center">
-      <button class="btn-secondary" onclick="closeReset()">Cancelar</button>
-      <button class="btn-danger" onclick="doReset()">Sí, reiniciar</button>
-    </div>
-  </div>
-</div>
+<div class="modal-overlay" id="modal-descalif"><div class="modal"><div style="font-size:32px;margin-bottom:12px" id="modal-descalif-icon">⚠️</div><div style="font-weight:700;font-size:18px;margin-bottom:8px" id="modal-descalif-title">¿Descalificar equipo?</div><div style="color:#9ca3af;margin-bottom:24px;font-size:14px" id="modal-descalif-name"></div><div style="display:flex;gap:10px;justify-content:center"><button class="btn-secondary" onclick="closeDescalif()">Cancelar</button><button id="btn-confirm-descalif" class="btn-primary" style="max-width:160px">Confirmar</button></div></div></div>
+<div class="modal-overlay" id="modal-reset"><div class="modal"><div style="font-size:32px;margin-bottom:12px">🗑️</div><div style="font-weight:700;font-size:18px;margin-bottom:8px">¿Reiniciar base de datos remota?</div><div style="color:#9ca3af;margin-bottom:24px;font-size:14px">Se borrarán resultados y auditoría en GitHub. No reversible.</div><div style="display:flex;gap:10px;justify-content:center"><button class="btn-secondary" onclick="closeReset()">Cancelar</button><button class="btn-primary" style="max-width:160px;background:#dc2626" onclick="doReset()">Sí, reiniciar</button></div></div></div>
 
 <div class="layout">
-  <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-top">
-      <div class="brand">
-        <div class="brand-icon">🏆</div>
-        <div>
-          <div class="brand-name">Rally Académico</div>
-          <div class="brand-sub">COBAED · ANÁLISIS</div>
-        </div>
-      </div>
-      <div class="sidebar-clock" id="sidebar-clock">00:00</div>
-      <div class="sidebar-date" id="sidebar-date"></div>
-      <div style="text-align:center"><span class="chip" id="status-chip">● SIN DATOS</span></div>
-    </div>
-    <nav class="sidebar-nav">
-      <button class="nav-btn active" onclick="goPage('dashboard')" id="nav-dashboard"><span class="nav-icon">◈</span><span>Dashboard</span></button>
-      <button class="nav-btn" onclick="goPage('equipos')" id="nav-equipos"><span class="nav-icon">⬡</span><span>Equipos</span></button>
-      <button class="nav-btn" onclick="goPage('resultados')" id="nav-resultados"><span class="nav-icon">◉</span><span>Resultados</span></button>
-      <button class="nav-btn" onclick="goPage('estaciones')" id="nav-estaciones"><span class="nav-icon">⊞</span><span>Estaciones</span></button>
-      <button class="nav-btn" onclick="goPage('auditoria')" id="nav-auditoria"><span class="nav-icon">≡</span><span>Auditoría</span></button>
-      <div class="nav-divider"></div>
-    </nav>
-    <div class="sidebar-bottom">
-      <div style="font-size:10px;color:var(--muted);margin-bottom:4px">SISTEMA</div>
-      <div style="font-size:12px;font-weight:600;color:#9ca3af">👤 Análisis Local</div>
-      <div style="font-size:10px;color:var(--muted);margin-top:3px" id="sb-registros">0 registros cargados</div>
+    <div class="sidebar-logo"><div class="logo-icon">🏆</div><div><div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px">Rally</div><div style="font-size:11px;color:#6b7280;font-weight:500">ACADÉMICO 2025</div></div></div>
+    <div class="sidebar-clock" id="sidebar-clock">00:00</div>
+    <div style="text-align:center;margin-bottom:8px"><span class="status-on" id="status-badge">● CONECTANDO</span></div>
+    <button class="nav-btn active" onclick="goPage('dashboard')" id="nav-dashboard"><span style="font-size:18px">◈</span><span>Dashboard</span></button>
+    <button class="nav-btn" onclick="goPage('equipos')" id="nav-equipos"><span style="font-size:18px">⬡</span><span>Equipos</span></button>
+    <button class="nav-btn" onclick="goPage('captura')" id="nav-captura"><span style="font-size:18px">⊕</span><span>Captura</span></button>
+    <button class="nav-btn" onclick="goPage('resultados')" id="nav-resultados"><span style="font-size:18px">◉</span><span>Resultados</span></button>
+    <button class="nav-btn" onclick="goPage('auditoria')" id="nav-auditoria"><span style="font-size:18px">≡</span><span>Auditoría</span></button>
+    <button class="nav-btn" onclick="openReset()" style="margin-top:8px;border-top:1px solid #1e2130;padding-top:14px;color:#f87171"><span style="font-size:16px">🗑️</span><span style="font-size:12px">Reiniciar BD</span></button>
+    <div class="sidebar-user">
+      <div style="font-size:11px;color:#4b5563">GITHUB SYNC</div>
+      <div style="font-size:13px;font-weight:600;color:#9ca3af;margin-top:4px">🔁 tiempo real</div>
+      <div style="font-size:9px;color:#374151;margin-top:4px" id="gh-status"></div>
     </div>
   </aside>
 
   <main>
-
-    <!-- ══════════════════════════════════════════════
-         CARGA CSV (pantalla inicial / botón)
-    ══════════════════════════════════════════════ -->
-    <div class="page" id="page-carga">
-      <div class="page-header">
-        <div class="page-header-left">
-          <div class="ph-icon">📂</div>
-          <div><div class="ph-title">Cargar Datos CSV</div><div class="ph-sub">Importa el archivo de resultados del Rally</div></div>
-        </div>
-      </div>
-      <div style="max-width:600px;margin:0 auto;margin-top:20px">
-        <div class="card" style="border:1px solid #6c63ff44">
-          <div class="section-label">Seleccionar archivo</div>
-          <label class="upload-zone" id="upload-zone" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
-            <input type="file" id="csv-input" accept=".csv" onchange="handleCSVFile(event)"/>
-            <div style="font-size:44px;margin-bottom:10px">📄</div>
-            <div style="font-size:16px;font-weight:600;color:#b8b4ff;margin-bottom:4px">Seleccionar archivo CSV</div>
-            <div style="font-size:12px;color:var(--muted)">o arrastra y suelta aquí</div>
-          </label>
-
-          <div id="csv-preview" style="display:none;margin-top:16px;padding:16px;border-radius:10px;background:#1a1a2e;border:1px solid #6c63ff33">
-            <div style="font-size:13px;color:#b8b4ff;font-weight:600;margin-bottom:6px" id="csv-preview-name"></div>
-            <div style="font-size:12px;color:var(--muted)" id="csv-preview-info"></div>
-            <div id="csv-duplicates-warn" style="display:none;margin-top:10px" class="warn-block"></div>
-            <div style="display:flex;gap:8px;margin-top:14px">
-              <button class="btn-primary" id="btn-importar" onclick="importarCSV()" style="flex:1">✓ Importar resultados</button>
-              <button class="btn-secondary" onclick="cancelCSV()">Cancelar</button>
-            </div>
-          </div>
-
-          <div class="info-block" style="margin-top:16px">
-            <strong style="color:#6b7280">Formato CSV esperado:</strong><br>
-            id, nombre, plantel, Turno, estacion, puntajeEstacion, Llegada, Salida<br>
-            <span style="color:var(--accent)">1, ALQUIMISTAS, 01 La Forestal, Matutino, Matemáticas, 85, 10:10:00 a. m., 10:55:00 a. m.</span><br><br>
-            <strong style="color:#6b7280">Notas:</strong><br>
-            • Cada fila representa un resultado de un equipo en una estación<br>
-            • El sistema detecta automáticamente las estaciones disponibles<br>
-            • Duplicados (mismo equipo + estación): se conserva el mayor puntaje
-          </div>
-        </div>
-
-        <div id="datos-actuales" style="display:none;margin-top:16px">
-          <div class="card">
-            <div class="section-label">Datos actualmente cargados</div>
-            <div style="display:flex;gap:12px;flex-wrap:wrap" id="datos-chips"></div>
-            <div style="margin-top:16px;display:flex;gap:8px">
-              <button class="btn-primary" onclick="goPage('dashboard')">Ver Dashboard →</button>
-              <button class="btn-secondary" onclick="document.getElementById('csv-input').click()">Cargar otro CSV</button>
-              <button class="btn-secondary" id="btn-actualizar-github" onclick="cargarDatosDesdeGitHub()">🔄 Actualizar desde GitHub</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════════
-         DASHBOARD
-    ══════════════════════════════════════════════ -->
-    <div class="page" id="page-dashboard">
-      <div class="page-header">
-        <div class="page-header-left">
-          <div class="ph-icon">◈</div>
-          <div><div class="ph-title">Dashboard General</div><div class="ph-sub" id="dash-sub">Resumen de resultados</div></div>
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn-secondary" onclick="exportCSV()" style="font-size:12px">↓ CSV</button>
-          <button class="btn-primary" onclick="exportPDF()" style="font-size:12px">📄 PDF</button>
-          <button class="btn-secondary" onclick="cargarDatosDesdeGitHub()" style="font-size:12px">🔄 Actualizar datos</button>
-        </div>
-      </div>
+    <div class="page active" id="page-dashboard">
+      <div class="page-header"><div class="page-header-icon">◈</div><div><h1 style="font-size:22px;font-weight:700;">Dashboard en Tiempo Real</h1><div style="font-size:13px;color:#4b5563;margin-top:2px" id="dash-sub"></div></div></div>
       <div class="grid4" id="dash-kpis"></div>
-      <div style="display:grid;grid-template-columns:1fr 2fr;gap:18px;margin-bottom:18px">
-        <div class="card">
-          <div class="section-label">🏆 Podio Actual</div>
-          <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px" id="dash-podio"></div>
-        </div>
-        <div class="card">
-          <div class="section-label">📊 Clasificación General</div>
-          <div class="overflow-x">
-            <table class="tbl">
-              <thead><tr><th>#</th><th>Equipo</th><th>Plantel</th><th>Turno</th><th>Estaciones</th><th>Puntos</th><th>Estado</th></tr></thead>
-              <tbody id="dash-tabla"></tbody>
-            </table>
-          </div>
-        </div>
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:20px">
+        <div class="card"><div class="section-title">🏆 Podio Actual</div><div style="display:flex;flex-direction:column;gap:12px;margin-top:16px" id="dash-podio"></div></div>
+        <div class="card"><div class="section-title">📊 Tabla General</div><div class="overflow-x"><table class="tbl"><thead><tr><th>#</th><th>Equipo</th><th>Plantel</th><th>Turno</th><th>Est.</th><th>Puntos</th><th>Tiempo</th><th>Estado</th></tr></thead><tbody id="dash-tabla"></tbody></table></div></div>
       </div>
-      <div class="card">
-        <div class="section-label">⊞ Cobertura por Estación</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:4px" id="dash-cobertura"></div>
-      </div>
-      <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
-        <div class="card">
-          <div class="section-label">📈 Puntaje promedio por estación</div>
-          <div id="dash-barras" style="margin-top:8px"></div>
-        </div>
-        <div class="card">
-          <div class="section-label">🎯 Top 10 equipos — puntaje total</div>
-          <div id="dash-top10" style="margin-top:8px"></div>
-        </div>
-      </div>
+      <div class="card" style="margin-top:20px"><div class="section-title">⊞ Cobertura por Estación</div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px" id="dash-cobertura"></div></div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-         EQUIPOS
-    ══════════════════════════════════════════════ -->
     <div class="page" id="page-equipos">
-      <div class="page-header">
-        <div class="page-header-left">
-          <div class="ph-icon">⬡</div>
-          <div><div class="ph-title">Equipos</div><div class="ph-sub" id="eq-sub">0 equipos registrados</div></div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <input class="input" id="eq-buscar" placeholder="Buscar equipo o plantel…" style="width:220px" oninput="renderEquipos()"/>
-          <select class="input" id="eq-filtro-turno" style="width:130px" onchange="renderEquipos()">
-            <option value="">Todos los turnos</option>
-            <option value="matutino">Matutino</option>
-            <option value="vespertino">Vespertino</option>
-          </select>
-        </div>
-      </div>
-      <div class="card">
-        <div class="section-label">Lista — <span id="eq-count">0</span> equipos</div>
-        <div class="overflow-x">
-          <table class="tbl">
-            <thead><tr>
-              <th>#</th><th>ID</th><th>Equipo</th><th>Plantel</th><th>Turno</th>
-              <th>Estaciones</th><th>Puntaje Total</th><th>Promedio</th><th>Estado</th><th>Acción</th>
-            </tr></thead>
-            <tbody id="eq-tabla"></tbody>
-          </table>
-        </div>
-      </div>
+      <div class="page-header"><div class="page-header-icon">⬡</div><div><h1 style="font-size:22px;font-weight:700;">Equipos (desde datos.csv)</h1><div style="font-size:13px;color:#4b5563;margin-top:2px" id="eq-sub"></div></div></div>
+      <div class="card"><div class="section-title">Lista de equipos (<span id="eq-count">0</span>)</div><div class="overflow-x"><table class="tbl"><thead><tr><th>#</th><th>Nombre</th><th>Plantel</th><th>Turno</th><th>Est.</th><th>Puntaje</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="eq-tabla"></tbody></table></div></div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-         RESULTADOS
-    ══════════════════════════════════════════════ -->
-    <div class="page" id="page-resultados">
-      <div class="page-header">
-        <div class="page-header-left">
-          <div class="ph-icon">◉</div>
-          <div><div class="ph-title">Resultados & Reportes</div><div class="ph-sub">Detalle por equipo y estación · exportación PDF/CSV</div></div>
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn-secondary" onclick="exportCSV()" style="font-size:12px">↓ CSV</button>
-          <button class="btn-primary" onclick="exportPDF()" style="font-size:12px">📄 PDF Oficial</button>
-        </div>
-      </div>
-      <!-- DETALLE EQUIPO -->
-      <div id="res-detalle" style="display:none">
-        <button class="btn-secondary" style="margin-bottom:16px" onclick="closeDetalleEq()">← Volver a Resultados</button>
-        <div class="card" id="res-detalle-content"></div>
-      </div>
-      <!-- TABLA PRINCIPAL -->
-      <div id="res-main">
-        <div class="flex flex-wrap gap-8 mb-4" id="res-filtros" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center"></div>
-        <div class="card">
-          <div class="section-label">Ranking — <span id="res-count">0</span> equipos</div>
-          <div class="overflow-x">
-            <table class="tbl">
-              <thead id="res-thead"></thead>
-              <tbody id="res-tbody"></tbody>
-            </table>
+    <div class="page" id="page-captura">
+      <div class="page-header"><div class="page-header-icon">⊕</div><div><h1 style="font-size:22px;">Captura de Resultados</h1><div style="font-size:13px;color:#4b5563;">Puntaje 0.0–10.0 · guardado en GitHub (db.json)</div></div></div>
+      <div class="grid2-sm">
+        <div class="flex-col">
+          <div class="card" id="cap-card">
+            <div class="section-title" id="cap-title">📝 Nueva Captura</div>
+            <div id="cap-area-banner" style="display:none;margin:12px 0;padding:10px 14px;border-radius:8px"></div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+              <div>
+                <label class="lbl">Equipo</label>
+                <select class="input" id="cap-equipo" onchange="actualizarEstacionesPorEquipo()">
+                  <option value="">— Seleccionar equipo —</option>
+                </select>
+              </div>
+              <div>
+                <label class="lbl">Estación</label>
+                <select class="input" id="cap-estacion" onchange="mostrarInfoEstacion()">
+                  <option value="">— Seleccionar estación —</option>
+                </select>
+              </div>
+              <div id="cap-dup-warn" style="display:none" class="warn-block"></div>
+              <div>
+                <label class="lbl">Puntaje <span style="color:#6b7280;">(0–10)</span></label>
+                <input type="number" class="input" id="cap-puntaje" min="0" max="10" step="0.1" placeholder="8.5"/>
+                <div class="quick-grid" id="quick-btns"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <div><label class="lbl">Llegada</label><input type="time" class="input" id="cap-llegada"/></div>
+                <div><label class="lbl">Salida</label><input type="time" class="input" id="cap-salida"/></div>
+              </div>
+              <div><label class="lbl">Observaciones</label><textarea class="input" id="cap-obs" style="height:60px;resize:vertical" placeholder="Opcional…"></textarea></div>
+              <button class="btn-primary" id="btn-guardar-cap" onclick="guardarCaptura()">Guardar Resultado</button>
+              <button class="btn-secondary" id="btn-cancel-edit" style="display:none" onclick="cancelEdit()">Cancelar edición</button>
+            </div>
+          </div>
+          <div class="card" id="cap-progreso" style="display:none">
+            <div class="section-title">📊 Progreso del equipo</div>
+            <div id="cap-prog-list"></div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════════
-         ESTACIONES
-    ══════════════════════════════════════════════ -->
-    <div class="page" id="page-estaciones">
-      <div class="page-header">
-        <div class="page-header-left">
-          <div class="ph-icon">⊞</div>
-          <div><div class="ph-title">Análisis por Estación</div><div class="ph-sub">Estadísticas detalladas de cada área evaluada</div></div>
+        <div class="card">
+          <div class="section-title">🕐 Últimas Capturas</div>
+          <div class="overflow-x"><table class="tbl"><thead><tr><th>Equipo</th><th>Plantel</th><th>Estación</th><th>Pts</th><th>Llegada</th><th>Salida</th><th>Capturista</th><th></th></tr></thead><tbody id="cap-recientes"></tbody></table></div>
         </div>
       </div>
-      <div id="est-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px"></div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-         AUDITORÍA
-    ══════════════════════════════════════════════ -->
+    <div class="page" id="page-resultados">
+      <div class="page-header"><div class="page-header-icon">◉</div><div><h1 style="font-size:22px;">Resultados & Reportes</h1><div style="font-size:13px;color:#4b5563;">Exportación PDF/CSV</div></div></div>
+      <div id="res-detalle" style="display:none"><button class="btn-secondary" style="margin-bottom:16px" onclick="closeDetalleEq()">← Volver</button><div class="card" id="res-detalle-content"></div></div>
+      <div id="res-main"><div class="gap-flex" id="res-filtros"></div><div class="card"><div class="section-title">Ranking — <span id="res-count">0</span> equipos</div><div class="overflow-x"><table class="tbl" id="res-tabla"><thead id="res-thead"></thead><tbody id="res-tbody"></tbody><table></div></div></div>
+    </div>
+
     <div class="page" id="page-auditoria">
-      <div class="page-header">
-        <div class="page-header-left">
-          <div class="ph-icon">≡</div>
-          <div><div class="ph-title">Auditoría</div><div class="ph-sub">Historial de acciones del sistema</div></div>
-        </div>
-        <button class="btn-secondary" onclick="clearAuditoria()" style="font-size:12px">Limpiar</button>
-      </div>
-      <div class="card">
-        <div class="section-label">Bitácora — <span id="aud-count">0</span> registros</div>
-        <div style="margin-top:10px" id="aud-list"></div>
-      </div>
+      <div class="page-header"><div class="page-header-icon">≡</div><div><h1 style="font-size:22px;">Auditoría</h1><div style="font-size:13px;color:#4b5563;">Historial de acciones global</div></div></div>
+      <div class="card"><div class="section-title">Bitácora (<span id="aud-count">0</span>)</div><div id="aud-list"></div></div>
     </div>
-
   </main>
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════════
-// CONFIGURACIÓN DE ESTACIONES (colores / emoji)
-// ════════════════════════════════════════════════════════════
-const ESTACION_META = {
-  'Matemáticas':           {color:'#a78bfa', emoji:'📐'},
-  'Inglés':                {color:'#60a5fa', emoji:'🌐'},
-  'Informática':           {color:'#34d399', emoji:'💻'},
-  'Ciencias Naturales':    {color:'#2dd4bf', emoji:'🔬'},
-  'Humanidades':           {color:'#e879f9', emoji:'📚'},
-  'Artes':                 {color:'#f472b6', emoji:'🎨'},
-  'Socioemocional':        {color:'#f87171', emoji:'❤️'},
-  'Ciencias Sociales':     {color:'#fb923c', emoji:'🌍'},
-  'Orientación':           {color:'#fbbf24', emoji:'🧭'},
-  'Lengua y Comunicación': {color:'#818cf8', emoji:'🧮'},
-};
-function getEstMeta(nombre){
-  return ESTACION_META[nombre] || {color:'#9ca3af', emoji:'⭐'};
-}
+// ================= CONFIGURACIÓN =================
+const GITHUB_TOKEN = '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';
+const GITHUB_REPO_OWNER = 'ezamarripa-creator';
+const GITHUB_REPO_NAME = 'Eventos_Academicos2026';
 
-const LS_EQUIPOS    = 'rally_eq_v2';
-const LS_RESULTADOS = 'rally_res_v2';
-const LS_AUDITORIA  = 'rally_aud_v2';
-const LS_ESTACIONES = 'rally_ests_v2';
+const GITHUB_CSV_URL = `https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/main/datos.csv`;
+const API_DB_URL = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/db.json`;
 
-// GitHub data URL - busca el archivo datos.csv en la misma carpeta que index.html
-const GITHUB_DATA_URL = 'datos.csv';
+// ================= DATA =================
+let db = { equipos: [], resultados: [], auditoria: [] };
+let rankingCache = [];
+let editandoId = null;
+let filtroArea = 0;
+let currentSha = null;
 
-// ════════════════════════════════════════════════════════════
-// STATE
-// ════════════════════════════════════════════════════════════
-let db = { equipos:[], resultados:[], auditoria:[], estaciones:[] };
-let csvPendiente = null;
-let detalleEqId  = null;
-let filtroEst    = '';
+const AREAS = [
+  {id:1,nombre:"Matemáticas",color:"#a78bfa",emoji:"📐"},{id:2,nombre:"Inglés",color:"#60a5fa",emoji:"🌐"},
+  {id:3,nombre:"Informática",color:"#34d399",emoji:"💻"},{id:4,nombre:"Ciencias Naturales",color:"#2dd4bf",emoji:"🔬"},
+  {id:5,nombre:"Humanidades",color:"#e879f9",emoji:"📚"},{id:6,nombre:"Artes",color:"#f472b6",emoji:"🎨"},
+  {id:7,nombre:"Socioemocional",color:"#f87171",emoji:"❤️"},{id:8,nombre:"Ciencias Sociales",color:"#fb923c",emoji:"🌍"},
+  {id:9,nombre:"Orientación",color:"#fbbf24",emoji:"🧭"},{id:10,nombre:"Matemáticas Avanzadas",color:"#818cf8",emoji:"🧮"}
+];
 
-// ════════════════════════════════════════════════════════════
-// PERSISTENCIA
-// ════════════════════════════════════════════════════════════
-function readDB(){
-  try{
-    db.equipos    = JSON.parse(localStorage.getItem(LS_EQUIPOS)    || '[]');
-    db.resultados = JSON.parse(localStorage.getItem(LS_RESULTADOS) || '[]');
-    db.auditoria  = JSON.parse(localStorage.getItem(LS_AUDITORIA)  || '[]');
-    db.estaciones = JSON.parse(localStorage.getItem(LS_ESTACIONES) || '[]');
-  }catch(e){ db={equipos:[],resultados:[],auditoria:[],estaciones:[]}; }
-}
-function saveAll(){
-  localStorage.setItem(LS_EQUIPOS,    JSON.stringify(db.equipos));
-  localStorage.setItem(LS_RESULTADOS, JSON.stringify(db.resultados));
-  localStorage.setItem(LS_AUDITORIA,  JSON.stringify(db.auditoria));
-  localStorage.setItem(LS_ESTACIONES, JSON.stringify(db.estaciones));
-}
-function logAudit(accion){
-  db.auditoria.push({usuario:'Admin', accion, ts:new Date().toISOString()});
-  if(db.auditoria.length>500) db.auditoria=db.auditoria.slice(-500);
-  localStorage.setItem(LS_AUDITORIA, JSON.stringify(db.auditoria));
-}
+const ESTACIONES = [
+  {id:1,nombre:"Matemáticas",areaId:1,puntajeMax:10},{id:2,nombre:"Inglés",areaId:2,puntajeMax:10},
+  {id:3,nombre:"Informática",areaId:3,puntajeMax:10},{id:4,nombre:"Ciencias Naturales",areaId:4,puntajeMax:10},
+  {id:5,nombre:"Humanidades",areaId:5,puntajeMax:10},{id:6,nombre:"Artes",areaId:6,puntajeMax:10},
+  {id:7,nombre:"Socioemocional",areaId:7,puntajeMax:10},{id:8,nombre:"Ciencias Sociales",areaId:8,puntajeMax:10},
+  {id:9,nombre:"Orientación",areaId:9,puntajeMax:10},{id:10,nombre:"Matemáticas Avanzadas",areaId:10,puntajeMax:10}
+];
 
-// ════════════════════════════════════════════════════════════
-// HELPERS
-// ════════════════════════════════════════════════════════════
-const nowStr  = ()=>new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
-const fechaHoy= ()=>new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
-const norm    = s=>(s||'').trim().toLowerCase();
-const pctColor= p=>p>=80?'#4ade80':p>=60?'#fbbf24':'#f87171';
-
-function ranking(){
-  return db.equipos
-    .map(eq=>{
-      const resEq = db.resultados.filter(r=>r.equipoId===eq.id);
-      const puntajeTotal = resEq.reduce((s,r)=>s+r.puntaje,0);
-      const promedio = resEq.length ? (puntajeTotal/resEq.length).toFixed(1) : 0;
-      return {...eq, puntajeTotal, promedio, estacionesCompletadas:resEq.length, resultados:resEq};
-    })
-    .sort((a,b)=>b.puntajeTotal-a.puntajeTotal || b.estacionesCompletadas-a.estacionesCompletadas);
-}
-
-function parseCSVText(text){
-  const lines = text.replace(/^\uFEFF/,'').trim().split('\n');
-  const raw   = lines[0];
-  const headers = raw.split(',').map(h=>h.trim().toLowerCase().replace(/\s+/g,'').replace(/[^a-záéíóúüñ0-9]/gi,''));
-  const rows = [];
-  for(let i=1;i<lines.length;i++){
-    const line = lines[i].trim();
-    if(!line) continue;
-    const vals = [];
-    let cur='', inQ=false;
-    for(const c of line){
-      if(c==='"') inQ=!inQ;
-      else if(c===','&&!inQ){ vals.push(cur.trim()); cur=''; }
-      else cur+=c;
-    }
-    vals.push(cur.trim());
-    const obj={};
-    headers.forEach((h,i)=>{ obj[h]=vals[i]||''; });
-    rows.push(obj);
-  }
-  return {headers, rows};
-}
-
-function cleanTime(t){
-  if(!t) return '';
-  t = t.trim().toLowerCase().replace(/\s/g,' ');
-  const pm = t.includes('p. m.')||t.includes('p.m.');
-  const am = t.includes('a. m.')||t.includes('a.m.');
-  const match = t.match(/(\d+):(\d+)/);
-  if(!match) return '';
-  let h=parseInt(match[1]), m=parseInt(match[2]);
-  if(pm && h!==12) h+=12;
-  if(am && h===12) h=0;
-  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-}
-
-// ════════════════════════════════════════════════════════════
-// CARGA DE DATOS DESDE GITHUB (datos.csv)
-// ════════════════════════════════════════════════════════════
-async function cargarDatosDesdeGitHub() {
-  showToast('Cargando datos desde GitHub...', 'ok');
-  try {
-    const response = await fetch(GITHUB_DATA_URL);
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: No se pudo cargar ${GITHUB_DATA_URL}`);
-    }
-    const text = await response.text();
-    
-    // Procesar el CSV
-    const {rows} = parseCSVText(text);
-    const validos = rows.filter(r=>r.id&&r.nombre&&r.estacion!==undefined);
-    
-    if (validos.length === 0) {
-      throw new Error('El archivo CSV no contiene datos válidos');
-    }
-    
-    // Equipos
-    const equiposMap=new Map();
-    validos.forEach(r=>{
-      const id=parseInt(r.id);
-      if(!equiposMap.has(id)){
-        equiposMap.set(id,{id, nombre:r.nombre.trim(), plantel:(r.plantel||'').trim(), turno:norm(r.turno||'matutino'), activo:true});
-      }
-    });
-    db.equipos=[...equiposMap.values()];
-    
-    // Estaciones detectadas
-    const estsSet=new Set(validos.map(r=>r.estacion.trim()).filter(Boolean));
-    db.estaciones=[...estsSet];
-    
-    // Resultados — por cada equipo+estacion, tomar el mayor puntaje
-    const resMap=new Map();
-    validos.forEach(r=>{
-      const equipoId=parseInt(r.id);
-      const estNombre=r.estacion.trim();
-      if(!estNombre) return;
-      const puntaje=parseFloat(r.puntajeestacion||r.puntajeestacion||0)||0;
-      const llegada=cleanTime(r.llegada||'');
-      const salida=cleanTime(r.salida||'');
-      const key=`${equipoId}__${norm(estNombre)}`;
-      const prev=resMap.get(key);
-      if(!prev||puntaje>prev.puntaje){
-        resMap.set(key,{id:Date.now()+Math.random(),equipoId,estacion:estNombre,puntaje,llegada,salida,ts:Date.now()});
-      }
-    });
-    db.resultados=[...resMap.values()];
-    
-    saveAll();
-    logAudit(`Datos cargados desde GitHub: ${db.equipos.length} equipos, ${db.resultados.length} resultados, ${db.estaciones.length} estaciones`);
-    updateStatusBar();
-    renderCarga();
-    renderDashboard();
-    renderEquipos();
-    renderResultados();
-    renderEstaciones();
-    renderAuditoria();
-    showToast(`✓ ${db.equipos.length} equipos · ${db.resultados.length} resultados importados desde GitHub`, 'ok');
-    
-    // Si estamos en la página de carga, mostrar los datos actuales
-    if (document.getElementById('page-carga').classList.contains('active')) {
-      document.getElementById('datos-actuales').style.display = 'block';
-    }
-    
-  } catch (error) {
-    console.error('Error cargando datos desde GitHub:', error);
-    showToast(`Error: ${error.message}`, 'err');
-  }
-}
-
-// ════════════════════════════════════════════════════════════
-// TOAST
-// ════════════════════════════════════════════════════════════
-let toastTimer=null;
-function showToast(msg,tipo='ok'){
-  const el=document.getElementById('toast');
-  el.innerHTML = (tipo==='err'?'✕':tipo==='warn'?'⚠':'✓')+' '+msg;
+// ================= HELPERS =================
+function showToast(msg, tipo='ok'){
+  const el = document.getElementById('toast');
+  el.textContent = (tipo==='err'?'✕ ':tipo==='warn'?'⚠ ':'✓ ') + msg;
   el.style.background = tipo==='err'?'#7f1d1d':tipo==='warn'?'#78350f':'#064e3b';
   el.classList.add('show');
-  if(toastTimer) clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>el.classList.remove('show'),3500);
+  setTimeout(()=>el.classList.remove('show'), 4000);
 }
 
-// ════════════════════════════════════════════════════════════
-// CLOCK
-// ════════════════════════════════════════════════════════════
-function updateClock(){
-  document.getElementById('sidebar-clock').textContent=nowStr();
-  document.getElementById('sidebar-date').textContent=new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
-}
-setInterval(updateClock,30000);
-updateClock();
+const timeToMin = t => { if(!t) return 0; const [h,m]=t.split(':').map(Number); return h*60+m; };
+const minToStr = m => { if(!m||isNaN(m)) return '—'; const h=Math.floor(m/60),mn=m%60; return `${h}h ${mn.toString().padStart(2,'0')}m`; };
+const nowStr = () => new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
 
-// ════════════════════════════════════════════════════════════
-// NAV
-// ════════════════════════════════════════════════════════════
-function goPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  const nb=document.getElementById('nav-'+id);
-  if(nb) nb.classList.add('active');
-  renderPage(id);
-}
-function renderPage(id){
-  if(id==='dashboard')  renderDashboard();
-  if(id==='equipos')    renderEquipos();
-  if(id==='resultados') renderResultados();
-  if(id==='estaciones') renderEstaciones();
-  if(id==='auditoria')  renderAuditoria();
-  if(id==='carga')      renderCarga();
-}
-
-// ════════════════════════════════════════════════════════════
-// STATUS BADGE + SIDEBAR INFO
-// ════════════════════════════════════════════════════════════
-function updateStatusBar(){
-  const chip=document.getElementById('status-chip');
-  const sb=document.getElementById('sb-registros');
-  if(db.equipos.length===0){
-    chip.textContent='● SIN DATOS';
-    chip.className='chip chip-gray';
-    sb.textContent='Sin datos cargados';
-  } else {
-    chip.textContent=`● ${db.equipos.length} equipos`;
-    chip.className='chip chip-green';
-    sb.textContent=`${db.resultados.length} resultados · ${db.estaciones.length} estaciones`;
-  }
-}
-
-// ════════════════════════════════════════════════════════════
-// CSV CARGA (manual)
-// ════════════════════════════════════════════════════════════
-function onDragOver(e){ e.preventDefault(); document.getElementById('upload-zone').classList.add('drag'); }
-function onDragLeave(){ document.getElementById('upload-zone').classList.remove('drag'); }
-function onDrop(e){
-  e.preventDefault();
-  onDragLeave();
-  const f=e.dataTransfer.files[0];
-  if(f) procesarArchivo(f);
-}
-function handleCSVFile(e){
-  const f=e.target.files[0];
-  if(f) procesarArchivo(f);
-}
-function procesarArchivo(file){
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    previewCSV(ev.target.result, file.name);
-  };
-  reader.readAsText(file,'UTF-8');
-}
-function previewCSV(text, fname){
-  const {rows} = parseCSVText(text);
-  const validos = rows.filter(r=>r.id&&r.nombre&&r.estacion!==undefined);
-
-  const equiposMap = new Map();
-  validos.forEach(r=>{
-    const id=parseInt(r.id);
-    if(!equiposMap.has(id)){
-      equiposMap.set(id,{
-        id, nombre:r.nombre.trim(), plantel:(r.plantel||'').trim(),
-        turno:norm(r.turno||'matutino'), activo:true
-      });
+// ================= CARGAR CSV =================
+async function cargarEquiposDesdeCSV() {
+  try {
+    document.getElementById('status-badge').innerHTML = '<span class="loading-spinner"></span> CARGANDO';
+    const respuesta = await fetch(GITHUB_CSV_URL);
+    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
+    const texto = await respuesta.text();
+    const lineas = texto.replace(/^\uFEFF/, '').trim().split('\n');
+    if (lineas.length < 2) throw new Error('CSV vacío');
+    const encabezados = lineas[0].split(',').map(h => h.trim().toLowerCase());
+    const equiposRaw = [];
+    for (let i = 1; i < lineas.length; i++) {
+      if (!lineas[i].trim()) continue;
+      const valores = lineas[i].split(',').map(v => v.trim().replace(/^["']|["']$/g, ''));
+      const obj = {};
+      encabezados.forEach((h, idx) => { obj[h] = valores[idx] || ''; });
+      if (obj.id && obj.nombre) equiposRaw.push(obj);
     }
-  });
-  const estsSet = new Set(validos.map(r=>r.estacion.trim()).filter(Boolean));
-
-  const dupKey = r=>`${r.id}__${norm(r.estacion)}`;
-  const dupMap = new Map();
-  validos.forEach(r=>{ const k=dupKey(r); dupMap.set(k,(dupMap.get(k)||0)+1); });
-  const dups = [...dupMap.entries()].filter(([,v])=>v>1).length;
-
-  csvPendiente = { text, fname, equiposCount:equiposMap.size, estsCount:estsSet.size, filas:validos.length, dups };
-
-  document.getElementById('csv-preview-name').textContent=`📋 ${fname}`;
-  document.getElementById('csv-preview-info').textContent=`${equiposMap.size} equipos · ${estsSet.size} estaciones · ${validos.length} resultados`;
-  document.getElementById('btn-importar').textContent=`✓ Importar ${equiposMap.size} equipos / ${validos.length} resultados`;
-
-  const dw=document.getElementById('csv-duplicates-warn');
-  if(dups>0){
-    dw.textContent=`⚠ ${dups} combinaciones equipo+estación duplicadas. Se conservará el mayor puntaje de cada una.`;
-    dw.style.display='block';
-  } else {
-    dw.style.display='none';
-  }
-
-  document.getElementById('csv-preview').style.display='block';
-}
-function cancelCSV(){
-  csvPendiente=null;
-  document.getElementById('csv-preview').style.display='none';
-  document.getElementById('csv-input').value='';
-}
-function importarCSV(){
-  if(!csvPendiente) return;
-  const {rows} = parseCSVText(csvPendiente.text);
-  const validos = rows.filter(r=>r.id&&r.nombre&&r.estacion!==undefined);
-
-  const equiposMap=new Map();
-  validos.forEach(r=>{
-    const id=parseInt(r.id);
-    if(!equiposMap.has(id)){
-      equiposMap.set(id,{id, nombre:r.nombre.trim(), plantel:(r.plantel||'').trim(), turno:norm(r.turno||'matutino'), activo:true});
-    }
-  });
-  db.equipos=[...equiposMap.values()];
-
-  const estsSet=new Set(validos.map(r=>r.estacion.trim()).filter(Boolean));
-  db.estaciones=[...estsSet];
-
-  const resMap=new Map();
-  validos.forEach(r=>{
-    const equipoId=parseInt(r.id);
-    const estNombre=r.estacion.trim();
-    if(!estNombre) return;
-    const puntaje=parseFloat(r.puntajeestacion||r.puntajeestacion||0)||0;
-    const llegada=cleanTime(r.llegada||'');
-    const salida=cleanTime(r.salida||'');
-    const key=`${equipoId}__${norm(estNombre)}`;
-    const prev=resMap.get(key);
-    if(!prev||puntaje>prev.puntaje){
-      resMap.set(key,{id:Date.now()+Math.random(),equipoId,estacion:estNombre,puntaje,llegada,salida,ts:Date.now()});
-    }
-  });
-  db.resultados=[...resMap.values()];
-
-  saveAll();
-  logAudit(`CSV importado: ${db.equipos.length} equipos, ${db.resultados.length} resultados, ${db.estaciones.length} estaciones`);
-  updateStatusBar();
-  cancelCSV();
-  renderCarga();
-  showToast(`✓ ${db.equipos.length} equipos · ${db.resultados.length} resultados importados`);
-  setTimeout(()=>goPage('dashboard'),600);
-}
-function renderCarga(){
-  const div=document.getElementById('datos-actuales');
-  if(db.equipos.length>0){
-    div.style.display='block';
-    const rk=ranking();
-    document.getElementById('datos-chips').innerHTML=`
-      <span class="chip chip-green">⬡ ${db.equipos.length} equipos</span>
-      <span class="chip chip-blue">📊 ${db.resultados.length} resultados</span>
-      <span class="chip chip-blue">⊞ ${db.estaciones.length} estaciones</span>
-      <span class="chip chip-green">🏆 Líder: ${rk[0]?.nombre||'—'} (${rk[0]?.puntajeTotal||0} pts)</span>
-    `;
-  } else {
-    div.style.display='none';
+    db.equipos = equiposRaw.map(e => ({
+      id: parseInt(e.id),
+      nombre: e.nombre,
+      plantel: e.plantel || 'Sin plantel',
+      turno: (e.turno || '').toLowerCase().includes('vespertino') ? 'vespertino' : 'matutino',
+      activo: (e.estatus || 'activo').toLowerCase() !== 'inactivo'
+    }));
+    document.getElementById('status-badge').innerHTML = '● ONLINE CSV';
+    document.getElementById('gh-status').innerHTML = `✅ ${db.equipos.length} equipos`;
+    return db.equipos;
+  } catch(error) {
+    console.error(error);
+    document.getElementById('status-badge').innerHTML = '● ERROR CSV';
+    document.getElementById('gh-status').innerHTML = `❌ Error`;
+    db.equipos = [];
+    return [];
   }
 }
 
-// ════════════════════════════════════════════════════════════
-// DASHBOARD
-// ════════════════════════════════════════════════════════════
-function renderDashboard(){
-  if(db.equipos.length===0){
-    document.getElementById('dash-kpis').innerHTML=`<div style="grid-column:1/-1" class="card"><div class="empty">Sin datos. <button class="btn-primary" onclick="cargarDatosDesdeGitHub()" style="margin-top:10px">🔄 Actualizar datos</button></div></div>`;
-    document.getElementById('dash-podio').innerHTML='';
-    document.getElementById('dash-tabla').innerHTML='';
-    document.getElementById('dash-cobertura').innerHTML='';
-    document.getElementById('dash-barras').innerHTML='';
-    document.getElementById('dash-top10').innerHTML='';
-    return;
-  }
-  const rk=ranking();
-  document.getElementById('dash-sub').textContent=`Actualizado ${nowStr()} · ${rk.length} equipos · ${db.estaciones.length} estaciones`;
-
-  const activos=rk.filter(e=>e.activo).length;
-  const promedio=rk.length?(rk.reduce((s,e)=>s+e.puntajeTotal,0)/rk.length).toFixed(0):0;
-  const totEsts=db.estaciones.length||1;
-  const completados=rk.filter(e=>e.estacionesCompletadas===totEsts).length;
-  const kpis=[
-    {label:'Equipos',     val:rk.length,    sub:`${activos} activos`,         color:'#60a5fa'},
-    {label:'Resultados',  val:db.resultados.length, sub:'registros totales', color:'#4ade80'},
-    {label:'Promedio',    val:promedio,       sub:'puntos por equipo',         color:'#c4b5fd'},
-    {label:'Completos',   val:completados,    sub:`${totEsts} estaciones`,     color:'#fbbf24'},
-  ];
-  document.getElementById('dash-kpis').innerHTML=kpis.map(k=>`
-    <div class="kpi">
-      <div class="kpi-label">${k.label}</div>
-      <div class="kpi-val" style="color:${k.color}">${k.val}</div>
-      <div class="kpi-sub">${k.sub}</div>
-    </div>`).join('');
-
-  const medals=['🥇','🥈','🥉'];
-  const podClasses=['gold','silver','bronze'];
-  document.getElementById('dash-podio').innerHTML=rk.slice(0,3).map((eq,i)=>`
-    <div class="podium-item ${podClasses[i]||''}">
-      <span style="font-size:22px">${medals[i]||'#'+(i+1)}</span>
-      <div style="flex:1;min-width:0">
-        <div style="font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${eq.nombre}</div>
-        <div style="font-size:10px;color:var(--muted)">${eq.plantel}</div>
-      </div>
-      <div style="text-align:right;flex-shrink:0">
-        <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:#fbbf24">${eq.puntajeTotal}</div>
-        <div style="font-size:9px;color:var(--muted)">pts</div>
-      </div>
-    </div>`).join('')||'<div class="empty">Sin resultados</div>';
-
-  document.getElementById('dash-tabla').innerHTML=rk.map((eq,i)=>`<tr>
-    <td style="font-weight:700;font-family:'DM Mono',monospace;color:${i<3?['#fbbf24','#9ca3af','#cd7c2f'][i]:'var(--muted)'}">${i+1}</td>
-    <td style="font-weight:600;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${eq.nombre}</td>
-    <td style="color:var(--muted);font-size:11px">${eq.plantel}</td>
-    <td style="color:var(--muted);font-size:11px;text-transform:capitalize">${eq.turno}</td>
-    <td style="color:var(--muted);font-size:12px">${eq.estacionesCompletadas}/${totEsts}</td>
-    <td style="font-weight:700;color:#4ade80;font-family:'DM Mono',monospace">${eq.puntajeTotal}</td>
-    <td><span class="badge ${eq.activo?'badge-green':'badge-red'}">${eq.activo?'Activo':'Desc.'}</span></td>
-  </tr>`).join('');
-
-  document.getElementById('dash-cobertura').innerHTML=db.estaciones.map(est=>{
-    const meta=getEstMeta(est);
-    const total=db.resultados.filter(r=>r.estacion===est).length;
-    const pct=rk.length?Math.min(100,(total/rk.length)*100):0;
-    const avgPts=total>0?(db.resultados.filter(r=>r.estacion===est).reduce((s,r)=>s+r.puntaje,0)/total).toFixed(0):0;
-    return `<div class="est-card">
-      <div style="font-size:12px;color:${meta.color};font-weight:600;margin-bottom:4px">${meta.emoji} ${est}</div>
-      <div class="prog-wrap" style="margin-bottom:5px"><div class="prog-fill" style="background:${meta.color};width:${pct}%"></div></div>
-      <div style="display:flex;justify-content:space-between">
-        <div style="font-size:10px;color:var(--muted)">${total} equipos</div>
-        <div style="font-size:10px;color:var(--muted)">⌀ ${avgPts} pts</div>
-      </div>
-    </div>`;
-  }).join('');
-
-  const barData=db.estaciones.map(est=>{
-    const res=db.resultados.filter(r=>r.estacion===est);
-    const avg=res.length?res.reduce((s,r)=>s+r.puntaje,0)/res.length:0;
-    return {est, avg, meta:getEstMeta(est)};
-  }).sort((a,b)=>b.avg-a.avg);
-  const maxAvg=barData.length?Math.max(...barData.map(b=>b.avg)):100;
-  document.getElementById('dash-barras').innerHTML=barData.map(b=>`
-    <div class="bar-row">
-      <div class="bar-label" style="color:${b.meta.color}">${b.meta.emoji} ${b.est}</div>
-      <div class="bar-track"><div class="bar-fill" style="background:${b.meta.color};width:${(b.avg/maxAvg)*100}%"></div></div>
-      <div class="bar-val">${b.avg.toFixed(0)}</div>
-    </div>`).join('');
-
-  const maxPts=rk.length?rk[0].puntajeTotal:1;
-  document.getElementById('dash-top10').innerHTML=rk.slice(0,10).map((eq,i)=>`
-    <div class="bar-row">
-      <div class="bar-label" style="color:${i<3?'#fbbf24':'var(--text)'}">${i+1}. ${eq.nombre.substring(0,20)}</div>
-      <div class="bar-track"><div class="bar-fill" style="background:${i===0?'#fbbf24':i===1?'#9ca3af':i===2?'#cd7c2f':'#6c63ff'};width:${(eq.puntajeTotal/(maxPts||1))*100}%"></div></div>
-      <div class="bar-val">${eq.puntajeTotal}</div>
-    </div>`).join('');
-}
-
-// ════════════════════════════════════════════════════════════
-// EQUIPOS
-// ════════════════════════════════════════════════════════════
-function renderEquipos(){
-  const buscar=norm(document.getElementById('eq-buscar').value||'');
-  const turnoF=document.getElementById('eq-filtro-turno').value||'';
-  const rk=ranking();
-  const totEsts=db.estaciones.length||1;
-  let lista=rk;
-  if(buscar) lista=lista.filter(e=>norm(e.nombre).includes(buscar)||norm(e.plantel).includes(buscar));
-  if(turnoF) lista=lista.filter(e=>norm(e.turno)===turnoF);
-  document.getElementById('eq-sub').textContent=`${db.equipos.length} equipos · ${lista.length} mostrados`;
-  document.getElementById('eq-count').textContent=lista.length;
-  document.getElementById('eq-tabla').innerHTML=lista.length===0
-    ?`<tr><td colspan="10" class="empty">${db.equipos.length===0?'Sin equipos.': 'Sin resultados para el filtro.'}</td></tr>`
-    :lista.map((eq,i)=>{
-      const pct=eq.puntajeTotal&&totEsts>0?(eq.puntajeTotal/totEsts).toFixed(0):0;
-      return `<tr style="opacity:${eq.activo?1:0.45}">
-        <td style="color:var(--muted);font-family:'DM Mono',monospace">${i+1}</td>
-        <td style="color:var(--muted);font-size:11px">${eq.id}</td>
-        <td style="font-weight:600">${eq.nombre}</td>
-        <td style="font-size:11px;color:var(--muted)">${eq.plantel}</td>
-        <td style="font-size:11px;text-transform:capitalize;color:var(--muted)">${eq.turno}</td>
-        <td style="font-size:12px;color:var(--muted)">${eq.estacionesCompletadas}/${totEsts}</td>
-        <td style="font-weight:700;font-family:'DM Mono',monospace;color:#4ade80">${eq.puntajeTotal}</td>
-        <td style="font-size:12px;color:${pctColor(eq.promedio)}">${eq.promedio}</td>
-        <td><span class="badge ${eq.activo?'badge-green':'badge-red'}">${eq.activo?'Activo':'Desc.'}</span></td>
-        <td style="display:flex;gap:5px">
-          <button class="btn-sm" onclick="openDetalleEq_eq(${eq.id})" style="background:#1e3a5f;color:#60a5fa">Ver</button>
-          <button class="btn-sm ${eq.activo?'':'badge-green'}" style="background:${eq.activo?'#450a0a':'#064e3b'};color:${eq.activo?'#f87171':'#4ade80'}" onclick="openDescalif(${eq.id})">${eq.activo?'Desc.':'Rehab.'}</button>
-        </td>
-      </tr>`;
-    }).join('');
-}
-function openDetalleEq_eq(id){
-  filtroEst='';
-  goPage('resultados');
-  setTimeout(()=>openDetalleEq(id),50);
-}
-
-// ════════════════════════════════════════════════════════════
-// DESCALIF MODAL
-// ════════════════════════════════════════════════════════════
-let descalifId=null;
-function openDescalif(id){
-  const eq=db.equipos.find(e=>e.id===id);
-  if(!eq) return;
-  descalifId=id;
-  document.getElementById('modal-icon').textContent=eq.activo?'⚠️':'✅';
-  document.getElementById('modal-title').textContent=eq.activo?'¿Descalificar equipo?':'¿Rehabilitar equipo?';
-  document.getElementById('modal-name').textContent=eq.nombre;
-  document.getElementById('btn-confirm-descalif').style.background=eq.activo?'#dc2626':'#16a34a';
-  document.getElementById('modal-descalif').classList.add('show');
-}
-function closeDescalif(){ document.getElementById('modal-descalif').classList.remove('show'); }
-document.getElementById('btn-confirm-descalif').onclick=()=>{
-  const eq=db.equipos.find(e=>e.id===descalifId);
-  if(!eq) return;
-  eq.activo=!eq.activo;
-  saveAll();
-  logAudit(`Equipo ${eq.nombre} ${eq.activo?'rehabilitado':'descalificado'}`);
-  closeDescalif();
-  renderEquipos();
-  showToast(`Estado actualizado: ${eq.nombre}`,eq.activo?'ok':'warn');
-};
-
-// RESET
-function openReset(){ document.getElementById('modal-reset').classList.add('show'); }
-function closeReset(){ document.getElementById('modal-reset').classList.remove('show'); }
-function doReset(){
-  db={equipos:[],resultados:[],auditoria:[],estaciones:[]};
-  saveAll();
-  closeReset();
-  updateStatusBar();
-  renderDashboard();
-  showToast('Base de datos reiniciada 🗑️','warn');
-}
-
-// ════════════════════════════════════════════════════════════
-// RESULTADOS
-// ════════════════════════════════════════════════════════════
-function renderResultados(){
-  const rk=ranking();
-  document.getElementById('res-count').textContent=rk.length;
-
-  const fp=document.getElementById('res-filtros');
-  fp.innerHTML=`
-    <button class="btn-sm" onclick="setFiltroEst('')" style="background:${!filtroEst?'var(--accent)':'var(--card)'};color:${!filtroEst?'#fff':'var(--muted)'};border-color:${!filtroEst?'var(--accent)':'var(--border2)'}">Todas</button>
-    ${db.estaciones.map(est=>{
-      const m=getEstMeta(est);
-      return `<button class="btn-sm" onclick="setFiltroEst('${est.replace(/'/g,"\\'")}')" style="background:${filtroEst===est?m.color+'33':'var(--card)'};color:${filtroEst===est?m.color:'var(--muted)'};border-color:${filtroEst===est?m.color:'var(--border2)'}">${m.emoji} ${est}</button>`;
-    }).join('')}
-    <div class="ml-auto" style="display:flex;gap:8px">
-      <button class="btn-secondary" style="font-size:12px;padding:5px 12px" onclick="exportCSV()">↓ CSV</button>
-      <button class="btn-primary" style="font-size:12px;padding:5px 14px" onclick="exportPDF()">📄 PDF</button>
-    </div>`;
-
-  const ests = filtroEst ? db.estaciones.filter(e=>e===filtroEst) : db.estaciones;
-  document.getElementById('res-thead').innerHTML=`<tr>
-    <th>#</th><th>Equipo</th><th>Plantel</th><th>Turno</th><th>Total</th>
-    ${ests.map(e=>{ const m=getEstMeta(e); return`<th title="${e}" style="cursor:help">${m.emoji}</th>`; }).join('')}
-    <th></th>
-   </tr>`;
-
-  document.getElementById('res-tbody').innerHTML=rk.map((eq,i)=>`<tr style="opacity:${eq.activo?1:0.4}">
-    <td style="font-weight:700;font-family:'DM Mono',monospace;color:${i<3?['#fbbf24','#9ca3af','#cd7c2f'][i]:'var(--muted)'}">${i+1}</td>
-    <td style="font-weight:600;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${eq.nombre}</td>
-    <td style="font-size:10px;color:var(--muted)">${eq.plantel}</td>
-    <td style="font-size:10px;color:var(--muted);text-transform:capitalize">${eq.turno}</td>
-    <td style="font-weight:700;font-family:'DM Mono',monospace;color:#4ade80">${eq.puntajeTotal}</td>
-    ${ests.map(est=>{
-      const r=db.resultados.find(r=>r.equipoId===eq.id&&r.estacion===est);
-      const m=getEstMeta(est);
-      if(!r) return`<td style="text-align:center"><span style="color:var(--muted2)">–</span></td>`;
-      const pct=r.puntaje;
-      return`<td style="text-align:center"><span style="font-weight:700;color:${pctColor(pct)};font-family:'DM Mono',monospace;font-size:12px">${r.puntaje}</span></td>`;
-    }).join('')}
-    <td><button class="btn-sm" style="background:#1e3a5f;color:#60a5fa" onclick="openDetalleEq(${eq.id})">Ver →</button></td>
-   </tr>`).join('');
-}
-function setFiltroEst(est){ filtroEst=est; renderResultados(); }
-
-function openDetalleEq(id){
-  const eq=ranking().find(e=>e.id===id);
-  if(!eq) return;
-  const resEq=db.resultados.filter(r=>r.equipoId===id);
-  const totPts=eq.puntajeTotal;
-
-  document.getElementById('res-detalle-content').innerHTML=`
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:24px">
-      <div>
-        <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800">${eq.nombre}</div>
-        <div style="color:var(--muted);font-size:13px;margin-top:4px">${eq.plantel} · <span style="text-transform:capitalize">${eq.turno}</span></div>
-        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
-          <span class="chip ${eq.activo?'chip-green':'chip-gray'}">${eq.activo?'Activo':'Descalificado'}</span>
-          <span class="chip chip-blue">⊞ ${eq.estacionesCompletadas}/${db.estaciones.length} estaciones</span>
-          <span class="chip chip-blue">⌀ ${eq.promedio} pts/estación</span>
-        </div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-family:'DM Mono',monospace;font-size:46px;font-weight:500;color:#4ade80;line-height:1">${totPts}</div>
-        <div style="font-size:11px;color:var(--muted)">puntos totales</div>
-      </div>
-    </div>
-    <div class="section-label">Resultados por Estación</div>
-    <div class="overflow-x">
-    <table class="tbl" style="margin-top:10px">
-      <thead><tr>${['Estación','Puntaje','%','Llegada','Salida'].map(h=>`<th>${h}</th>`).join('')}</tr></thead>
-      <tbody>${db.estaciones.map(est=>{
-        const r=resEq.find(r=>r.estacion===est);
-        const m=getEstMeta(est);
-        const pct=r?r.puntaje:null;
-        return`<tr style="opacity:${r?1:0.35}">
-          <td><span style="color:${m.color};font-weight:600">${m.emoji} ${est}</span></td>
-          <td style="font-family:'DM Mono',monospace;font-weight:700;color:${pct!==null?pctColor(pct):'var(--muted)'}">${r?r.puntaje:'—'}</td>
-          <td>${pct!==null?`<span style="color:${pctColor(pct)}">${pct}%</span>`:'—'}</td>
-          <td style="font-size:11px;color:var(--muted)">${r?.llegada||'—'}</td>
-          <td style="font-size:11px;color:var(--muted)">${r?.salida||'—'}</td>
-        </tr>`;
-      }).join('')}</tbody>
-    </div>`;
-
-  document.getElementById('res-detalle').style.display='block';
-  document.getElementById('res-main').style.display='none';
-}
-function closeDetalleEq(){
-  document.getElementById('res-detalle').style.display='none';
-  document.getElementById('res-main').style.display='block';
-}
-
-// ════════════════════════════════════════════════════════════
-// ESTACIONES
-// ════════════════════════════════════════════════════════════
-function renderEstaciones(){
-  if(db.estaciones.length===0){
-    document.getElementById('est-grid').innerHTML=`<div style="grid-column:1/-1" class="card"><div class="empty">Sin datos de estaciones.</div></div>`;
-    return;
-  }
-  const rk=ranking();
-  document.getElementById('est-grid').innerHTML=db.estaciones.map(est=>{
-    const m=getEstMeta(est);
-    const res=db.resultados.filter(r=>r.estacion===est&&db.equipos.find(e=>e.id===r.equipoId&&e.activo));
-    const total=res.length;
-    const avg=total?res.reduce((s,r)=>s+r.puntaje,0)/total:0;
-    const max=total?Math.max(...res.map(r=>r.puntaje)):0;
-    const min=total?Math.min(...res.map(r=>r.puntaje)):0;
-    const perfect=res.filter(r=>r.puntaje>=100).length;
-    const cero=res.filter(r=>r.puntaje===0).length;
-    const sorted=[...res].sort((a,b)=>b.puntaje-a.puntaje);
-    const top3=sorted.slice(0,3);
-
-    return `<div class="card">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <div style="width:36px;height:36px;border-radius:9px;background:${m.color}22;border:1px solid ${m.color}44;display:flex;align-items:center;justify-content:center;font-size:18px">${m.emoji}</div>
-        <div>
-          <div style="font-weight:700;font-size:15px;font-family:'Syne',sans-serif">${est}</div>
-          <div style="font-size:10px;color:var(--muted)">${total} participantes</div>
-        </div>
-        <div style="margin-left:auto;text-align:right">
-          <div style="font-family:'DM Mono',monospace;font-size:24px;color:${m.color};font-weight:500">${avg.toFixed(0)}</div>
-          <div style="font-size:9px;color:var(--muted)">prom.</div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">
-        <div class="stat-box"><div style="font-size:9px;color:var(--muted)">MÁXIMO</div><div style="font-size:18px;font-family:'DM Mono',monospace;color:#4ade80">${max}</div></div>
-        <div class="stat-box"><div style="font-size:9px;color:var(--muted)">MÍNIMO</div><div style="font-size:18px;font-family:'DM Mono',monospace;color:#f87171">${min}</div></div>
-        <div class="stat-box"><div style="font-size:9px;color:var(--muted)">PERFECTOS</div><div style="font-size:18px;font-family:'DM Mono',monospace;color:#fbbf24">${perfect}</div></div>
-        <div class="stat-box"><div style="font-size:9px;color:var(--muted)">EN CERO</div><div style="font-size:18px;font-family:'DM Mono',monospace;color:#f87171">${cero}</div></div>
-      </div>
-      <div class="section-label" style="margin-bottom:8px">TOP 3 en esta estación</div>
-      ${top3.map((r,i)=>{
-        const eq=db.equipos.find(e=>e.id===r.equipoId);
-        const medals=['🥇','🥈','🥉'];
-        return`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;padding:5px 8px;border-radius:6px;background:#1a1a2e">
-          <span>${medals[i]}</span>
-          <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${eq?.nombre||r.equipoId}</div><div style="font-size:9px;color:var(--muted)">${eq?.plantel||''}</div></div>
-          <div style="font-family:'DM Mono',monospace;font-size:14px;color:${pctColor(r.puntaje)};font-weight:500">${r.puntaje}</div>
-        </div>`;
-      }).join('')}
-      <div style="margin-top:10px">
-        <div class="prog-wrap"><div class="prog-fill" style="background:${m.color};width:${avg}%"></div></div>
-        <div style="font-size:9px;color:var(--muted);margin-top:3px">Promedio: ${avg.toFixed(1)} / 100</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ════════════════════════════════════════════════════════════
-// AUDITORÍA
-// ════════════════════════════════════════════════════════════
-function renderAuditoria(){
-  document.getElementById('aud-count').textContent=db.auditoria.length;
-  const list=document.getElementById('aud-list');
-  if(db.auditoria.length===0){
-    list.innerHTML=`<div class="empty">Sin registros aún</div>`;
-    return;
-  }
-  list.innerHTML=[...db.auditoria].reverse().map(a=>`
-    <div class="audit-row">
-      <div style="font-size:10px;color:var(--muted);white-space:nowrap;min-width:150px">${new Date(a.ts).toLocaleString('es-MX')}</div>
-      <div style="font-size:11px;color:#60a5fa;font-weight:600;min-width:60px">${a.usuario}</div>
-      <div style="font-size:12px;color:var(--muted)">${a.accion}</div>
-    </div>`).join('');
-}
-function clearAuditoria(){
-  db.auditoria=[];
-  localStorage.setItem(LS_AUDITORIA, JSON.stringify([]));
-  renderAuditoria();
-  showToast('Auditoría limpiada','warn');
-}
-
-// ════════════════════════════════════════════════════════════
-// EXPORT CSV
-// ════════════════════════════════════════════════════════════
-function exportCSV(){
-  const rk=ranking();
-  if(!rk.length){ showToast('Sin datos para exportar','warn'); return; }
-  const headers=['Pos','ID','Equipo','Plantel','Turno','Puntaje Total','Estaciones Completadas','Promedio',...db.estaciones];
-  const rows=[headers];
-  rk.forEach((eq,i)=>{
-    const rowData=[i+1,eq.id,`"${eq.nombre}"`,`"${eq.plantel}"`,eq.turno,eq.puntajeTotal,eq.estacionesCompletadas,eq.promedio,
-      ...db.estaciones.map(est=>{
-        const r=db.resultados.find(r=>r.equipoId===eq.id&&r.estacion===est);
-        return r?r.puntaje:'';
-      })
-    ];
-    rows.push(rowData);
-  });
-  const bom='\uFEFF';
-  const csv=bom+rows.map(r=>r.join(',')).join('\n');
-  const a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-  a.download=`Rally_Resultados_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-  logAudit('Exportación CSV');
-  showToast('CSV exportado ✓');
-}
-
-// ════════════════════════════════════════════════════════════
-// EXPORT PDF
-// ════════════════════════════════════════════════════════════
-function exportPDF(){
-  if(!window.jspdf){ showToast('Cargando librería PDF…','warn'); return; }
-  const rk=ranking();
-  if(!rk.length){ showToast('Sin datos para exportar','warn'); return; }
-  const {jsPDF}=window.jspdf;
-  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  const W=210,M=14,CW=W-M*2;
-  const C={
-    dark:[15,15,25],azul:[107,99,255],verde:[74,222,128],
-    gris:[107,114,128],grisL:[243,244,246],blanco:[255,255,255],
-    dorado:[251,191,36],rojo:[248,113,113],purp:[196,181,253]
-  };
-  let y=0;
-  const newPage=()=>{doc.addPage();y=22;pie();};
-  const chk=(n=20)=>{if(y+n>275)newPage();};
-  const pie=()=>{
-    const pg=doc.internal.getCurrentPageInfo().pageNumber;
-    const tot=doc.internal.getNumberOfPages();
-    doc.setFillColor(240,240,250);doc.rect(0,285,210,12,'F');
-    doc.setFontSize(7);doc.setTextColor(...C.gris);
-    doc.text('Rally Académico COBAED — Reporte Oficial',M,291);
-    doc.text(`Pág. ${pg}/${tot}`,W-M,291,{align:'right'});
-    doc.text(new Date().toLocaleString('es-MX'),W/2,291,{align:'center'});
-  };
-  // Portada
-  doc.setFillColor(...C.dark);doc.rect(0,0,210,55,'F');
-  doc.setFillColor(...C.azul);doc.rect(0,55,210,4,'F');
-  doc.setTextColor(...C.blanco);doc.setFont('helvetica','bold');doc.setFontSize(22);
-  doc.text('RALLY ACADÉMICO COBAED',W/2,22,{align:'center'});
-  doc.setFontSize(12);doc.setFont('helvetica','normal');
-  doc.text('Reporte Oficial de Resultados',W/2,32,{align:'center'});
-  doc.setFontSize(9);doc.text(fechaHoy(),W/2,42,{align:'center'});
-  doc.text(`Total: ${rk.length} equipos · ${db.estaciones.length} estaciones`,W/2,50,{align:'center'});
-  y=65;
-  // KPIs
-  const promedio=rk.length?(rk.reduce((s,e)=>s+e.puntajeTotal,0)/rk.length).toFixed(0):0;
-  const kpis=[{l:'Equipos',v:rk.length,c:C.azul},{l:'Resultados',v:db.resultados.length,c:C.verde},{l:'Promedio',v:promedio+' pts',c:C.purp},{l:'Líder',v:rk[0]?.puntajeTotal??0,c:C.dorado}];
-  const kW=(CW-9)/4;
-  kpis.forEach((k,i)=>{
-    const x=M+i*(kW+3);
-    doc.setFillColor(...C.grisL);doc.roundedRect(x,y,kW,20,1.5,1.5,'F');
-    doc.setDrawColor(...k.c);doc.setLineWidth(0.4);doc.roundedRect(x,y,kW,20,1.5,1.5,'S');
-    doc.setFontSize(6.5);doc.setTextColor(...C.gris);doc.setFont('helvetica','normal');
-    doc.text(k.l.toUpperCase(),x+kW/2,y+6,{align:'center'});
-    doc.setFontSize(14);doc.setTextColor(...k.c);doc.setFont('helvetica','bold');
-    doc.text(String(k.v),x+kW/2,y+15,{align:'center'});
-  });
-  y+=26;
-  // Tabla general
-  doc.setFillColor(...C.dark);doc.rect(M,y,CW,7,'F');
-  doc.setTextColor(...C.blanco);doc.setFontSize(10);doc.setFont('helvetica','bold');
-  doc.text('TABLA GENERAL DE POSICIONES',M+3,y+4.8);y+=9;
-  doc.autoTable({startY:y,margin:{left:M,right:M},
-    head:[['#','Equipo','Plantel','Turno','Est.','Puntos','Estado']],
-    body:rk.map((eq,i)=>[i+1,eq.nombre,eq.plantel,eq.turno,`${eq.estacionesCompletadas}/${db.estaciones.length}`,eq.puntajeTotal,eq.activo?'Activo':'Desc.']),
-    theme:'grid',styles:{fontSize:7.5,cellPadding:2.2},
-    headStyles:{fillColor:C.azul,textColor:C.blanco,fontStyle:'bold'},
-    alternateRowStyles:{fillColor:[249,250,251]},
-    columnStyles:{0:{halign:'center',cellWidth:8},5:{halign:'center',cellWidth:16,fontStyle:'bold'},6:{halign:'center',cellWidth:14}}
-  });
-  y=doc.lastAutoTable.finalY+8;
-  // Detalle por equipo
-  rk.forEach((eq,idx)=>{
-    chk(50);
-    const pos=idx+1;
-    const posC=pos===1?C.dorado:pos===2?[150,150,150]:pos===3?[180,100,40]:C.azul;
-    doc.setFillColor(248,250,252);doc.roundedRect(M,y,CW,12,2,2,'F');
-    doc.setDrawColor(...posC);doc.setLineWidth(0.7);doc.roundedRect(M,y,CW,12,2,2,'S');
-    doc.setFontSize(12);doc.setFont('helvetica','bold');doc.setTextColor(...posC);doc.text(`#${pos}`,M+5,y+8.5);
-    doc.setFontSize(10);doc.setTextColor(15,15,25);doc.text(eq.nombre,M+17,y+5.5);
-    doc.setFontSize(7.5);doc.setFont('helvetica','normal');doc.setTextColor(...C.gris);
-    doc.text(`${eq.plantel} · ${eq.turno} · ${eq.estacionesCompletadas}/${db.estaciones.length} estaciones`,M+17,y+10);
-    doc.setFontSize(15);doc.setFont('helvetica','bold');doc.setTextColor(...C.verde);
-    doc.text(`${eq.puntajeTotal} pts`,W-M-2,y+9,{align:'right'});
-    y+=15;chk(30);
-    const resEq=db.resultados.filter(r=>r.equipoId===eq.id);
-    doc.autoTable({startY:y,margin:{left:M,right:M},
-      head:[['Estación','Puntaje','%','Llegada','Salida']],
-      body:db.estaciones.map(est=>{
-        const r=resEq.find(r=>r.estacion===est);
-        return[est,r?r.puntaje:'—',r?`${r.puntaje}%`:'—',r?.llegada||'—',r?.salida||'—'];
-      }),
-      theme:'grid',styles:{fontSize:7,cellPadding:1.8},
-      headStyles:{fillColor:[71,85,105],textColor:C.blanco,fontStyle:'bold',fontSize:7},
-      alternateRowStyles:{fillColor:[249,250,251]},
+// ================= DB.JSON - FUNCIONES CORREGIDAS =================
+async function leerDBGitHub() {
+  try {
+    const respuesta = await fetch(API_DB_URL, { 
+      headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' } 
     });
-    y=doc.lastAutoTable.finalY+7;
-  });
-  const tot=doc.internal.getNumberOfPages();
-  for(let p=1;p<=tot;p++){doc.setPage(p);pie();}
-  doc.save(`Rally_COBAED_${new Date().toISOString().slice(0,10)}.pdf`);
-  logAudit('Exportación PDF');
-  showToast('PDF generado ✓');
+    
+    if (respuesta.status === 404) {
+      console.log('db.json no existe, se creará al primer guardado');
+      currentSha = null;
+      db.resultados = [];
+      db.auditoria = [];
+      return;
+    }
+    
+    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
+    
+    const data = await respuesta.json();
+    currentSha = data.sha;
+    // Decodificar correctamente el contenido Base64
+    const contenido = decodeURIComponent(escape(atob(data.content)));
+    const parsed = JSON.parse(contenido);
+    db.resultados = parsed.resultados || [];
+    db.auditoria = parsed.auditoria || [];
+    console.log(`📦 DB cargada: ${db.resultados.length} resultados, ${db.auditoria.length} auditorías`);
+  } catch(error) {
+    console.warn('Error leyendo db.json:', error);
+    db.resultados = [];
+    db.auditoria = [];
+  }
 }
 
-// ════════════════════════════════════════════════════════════
-// INIT - Cargar datos desde GitHub automáticamente
-// ════════════════════════════════════════════════════════════
-readDB();
-updateStatusBar();
+async function guardarDBGitHub() {
+  const contenido = JSON.stringify({ resultados: db.resultados, auditoria: db.auditoria }, null, 2);
+  // Codificar correctamente a Base64
+  const contentBase64 = btoa(unescape(encodeURIComponent(contenido)));
+  const payload = { 
+    message: `Update ${new Date().toISOString()}`, 
+    content: contentBase64, 
+    sha: currentSha || undefined 
+  };
+  
+  try {
+    const respuesta = await fetch(API_DB_URL, { 
+      method: 'PUT', 
+      headers: { 
+        'Authorization': `token ${GITHUB_TOKEN}`, 
+        'Content-Type': 'application/json' 
+      }, 
+      body: JSON.stringify(payload) 
+    });
+    
+    if (!respuesta.ok) {
+      const errorData = await respuesta.json();
+      throw new Error(`HTTP ${respuesta.status}: ${errorData.message}`);
+    }
+    
+    const result = await respuesta.json();
+    if (result.sha) currentSha = result.sha;
+    console.log('✅ DB guardada correctamente en GitHub');
+    document.getElementById('status-badge').innerHTML = '● SINCRO OK';
+    setTimeout(() => { 
+      if(document.getElementById('status-badge')) 
+        document.getElementById('status-badge').innerHTML = '● LIVE'; 
+    }, 1500);
+    return true;
+  } catch(error) {
+    console.error('Error guardando en GitHub:', error);
+    showToast('Error al guardar en GitHub: ' + error.message, 'err');
+    return false;
+  }
+}
 
-// Si hay datos en localStorage, los mostramos; luego actualizamos desde GitHub
-if(db.equipos.length > 0){
-  goPage('dashboard');
+async function agregarAuditoria(accion) {
+  db.auditoria.push({ usuario: 'Admin', accion, ts: new Date().toISOString() });
+  if (db.auditoria.length > 500) db.auditoria = db.auditoria.slice(-500);
+  await guardarDBGitHub();
+}
+
+function calcularRanking() {
+  return db.equipos.map(eq => {
+    const resEq = db.resultados.filter(r => r.equipoId === eq.id);
+    const puntajeTotal = parseFloat(resEq.reduce((s, r) => s + r.puntaje, 0).toFixed(1));
+    const tiempoTotal = resEq.reduce((s, r) => { 
+      const d = timeToMin(r.salida) - timeToMin(r.llegada); 
+      return s + (d > 0 ? d : 0); 
+    }, 0);
+    return { ...eq, puntajeTotal, tiempoTotal, estacionesCompletadas: resEq.length, resultados: resEq };
+  }).sort((a, b) => b.puntajeTotal - a.puntajeTotal || a.tiempoTotal - b.tiempoTotal);
+}
+
+// ================= FUNCIONES PRINCIPALES DE CAPTURA =================
+function actualizarSelectEquipos() {
+  const selectEq = document.getElementById('cap-equipo');
+  selectEq.innerHTML = '<option value="">— Seleccionar equipo —</option>' + 
+    db.equipos.filter(e => e.activo).map(e => `<option value="${e.id}">${e.nombre} · ${e.plantel}</option>`).join('');
+}
+
+function actualizarEstacionesPorEquipo() {
+  const equipoId = parseInt(document.getElementById('cap-equipo').value);
+  const selectEst = document.getElementById('cap-estacion');
+  
+  if (!equipoId) {
+    selectEst.innerHTML = '<option value="">— Seleccionar estación —</option>';
+    document.getElementById('cap-progreso').style.display = 'none';
+    return;
+  }
+  
+  const resultadosEquipo = db.resultados.filter(r => r.equipoId === equipoId);
+  const estacionesCompletadas = new Set(resultadosEquipo.map(r => r.estacionId));
+  
+  let options = '<option value="">— Seleccionar estación —</option>';
+  ESTACIONES.forEach(est => {
+    const area = AREAS.find(a => a.id === est.areaId);
+    const yaCapturada = estacionesCompletadas.has(est.id);
+    options += `<option value="${est.id}" ${yaCapturada ? 'disabled style="opacity:0.5"' : ''}>
+      ${area.emoji} ${est.nombre} ${yaCapturada ? '✓' : ''}
+    </option>`;
+  });
+  selectEst.innerHTML = options;
+  
+  mostrarProgresoEquipo(equipoId);
+  document.getElementById('cap-progreso').style.display = 'block';
+}
+
+function mostrarProgresoEquipo(equipoId) {
+  const resultadosEq = db.resultados.filter(r => r.equipoId === equipoId);
+  const contenedor = document.getElementById('cap-prog-list');
+  
+  contenedor.innerHTML = ESTACIONES.map(est => {
+    const resultado = resultadosEq.find(r => r.estacionId === est.id);
+    const area = AREAS.find(a => a.id === est.areaId);
+    return `<div class="det-row ${resultado ? 'done' : ''}">
+      <span style="font-size:14px">${area.emoji}</span>
+      <span style="font-size:12px;flex:1;color:${resultado ? '#e8eaf0' : '#6b7280'}">${est.nombre}</span>
+      ${resultado ? `<span style="font-size:13px;font-weight:700;color:#34d399">${resultado.puntaje}</span>` : `<span style="font-size:11px;color:#4b5563">pendiente</span>`}
+    </div>`;
+  }).join('');
+}
+
+function mostrarInfoEstacion() {
+  const equipoId = parseInt(document.getElementById('cap-equipo').value);
+  const estacionId = parseInt(document.getElementById('cap-estacion').value);
+  const banner = document.getElementById('cap-area-banner');
+  const warnDiv = document.getElementById('cap-dup-warn');
+  
+  if (!equipoId || !estacionId) {
+    banner.style.display = 'none';
+    warnDiv.style.display = 'none';
+    return;
+  }
+  
+  const estacion = ESTACIONES.find(e => e.id === estacionId);
+  const area = AREAS.find(a => a.id === estacion?.areaId);
+  
+  if (area) {
+    banner.style.display = 'flex';
+    banner.style.alignItems = 'center';
+    banner.style.gap = '10px';
+    banner.style.background = `${area.color}15`;
+    banner.style.border = `1px solid ${area.color}44`;
+    banner.innerHTML = `<span style="font-size:22px">${area.emoji}</span><div><div style="font-size:13px;font-weight:700;color:${area.color}">${area.nombre}</div><div style="font-size:11px;color:#6b7280">Máx: ${estacion.puntajeMax} pts</div></div>`;
+  }
+  
+  const existe = db.resultados.find(r => r.equipoId === equipoId && r.estacionId === estacionId);
+  if (existe && !editandoId) {
+    warnDiv.style.display = 'block';
+    warnDiv.innerHTML = `⚠️ Ya hay resultado (${existe.puntaje} pts). <button onclick="cargarEdicion(${existe.id})" style="background:none;border:none;color:#fbbf24;text-decoration:underline;cursor:pointer">Editar</button>`;
+  } else {
+    warnDiv.style.display = 'none';
+  }
+}
+
+function setQuick(v) {
+  document.getElementById('cap-puntaje').value = v;
+}
+
+async function guardarCaptura() {
+  const equipoId = parseInt(document.getElementById('cap-equipo').value);
+  const estacionId = parseInt(document.getElementById('cap-estacion').value);
+  const puntaje = parseFloat(parseFloat(document.getElementById('cap-puntaje').value).toFixed(1));
+  const llegada = document.getElementById('cap-llegada').value;
+  const salida = document.getElementById('cap-salida').value;
+  const obs = document.getElementById('cap-obs').value;
+  
+  if (!equipoId || !estacionId) { showToast('Selecciona equipo y estación', 'err'); return; }
+  if (isNaN(puntaje) || puntaje < 0 || puntaje > 10) { showToast('Puntaje inválido (0–10)', 'err'); return; }
+  
+  const existe = db.resultados.find(r => r.equipoId === equipoId && r.estacionId === estacionId);
+  if (existe && !editandoId) { showToast('Ya existe un resultado para esta estación', 'err'); return; }
+  
+  if (editandoId) {
+    const idx = db.resultados.findIndex(r => r.id === editandoId);
+    if (idx >= 0) {
+      db.resultados[idx] = { ...db.resultados[idx], equipoId, estacionId, puntaje, llegada, salida, obs, ts: Date.now(), capturista: 'Admin' };
+      await agregarAuditoria(`Resultado editado: ${puntaje}pts`);
+      showToast('Resultado actualizado en GitHub ✓');
+    }
+    cancelEdit();
+  } else {
+    const nuevoId = Date.now();
+    const nuevaCaptura = { 
+      id: nuevoId, 
+      equipoId, 
+      estacionId, 
+      puntaje, 
+      llegada, 
+      salida, 
+      obs, 
+      ts: Date.now(), 
+      capturista: 'Admin' 
+    };
+    db.resultados.push(nuevaCaptura);
+    
+    const equipo = db.equipos.find(e => e.id === equipoId);
+    const estacion = ESTACIONES.find(e => e.id === estacionId);
+    await agregarAuditoria(`Captura: ${equipo?.nombre} / ${estacion?.nombre} = ${puntaje}pts`);
+    showToast('Resultado guardado en GitHub ✓');
+    
+    document.getElementById('cap-puntaje').value = '';
+    document.getElementById('cap-llegada').value = '';
+    document.getElementById('cap-salida').value = '';
+    document.getElementById('cap-obs').value = '';
+  }
+  
+  // Recargar todos los datos desde GitHub para asegurar consistencia
+  await leerDBGitHub();
+  rankingCache = calcularRanking();
+  
+  // Actualizar todas las vistas
+  actualizarEstacionesPorEquipo();
+  renderRecientes();
   renderDashboard();
   renderEquipos();
   renderResultados();
-  renderEstaciones();
   renderAuditoria();
-  renderCarga();
-  // Actualizar en segundo plano desde GitHub
-  setTimeout(() => {
-    cargarDatosDesdeGitHub();
-  }, 500);
-} else {
-  // Intentar cargar desde GitHub automáticamente
-  cargarDatosDesdeGitHub().then(() => {
-    goPage('dashboard');
-    renderCarga();
-  }).catch(() => {
-    goPage('carga');
-    document.getElementById('nav-carga').classList.add('active');
-    document.getElementById('nav-dashboard').classList.remove('active');
-  });
+  
+  // Actualizar el banner de estado
+  document.getElementById('gh-status').innerHTML = `✅ ${db.resultados.length} resultados`;
 }
+
+function renderRecientes() {
+  const recientes = [...db.resultados].sort((a,b)=>b.ts - a.ts).slice(0,10);
+  const tbody = document.getElementById('cap-recientes');
+  if (recientes.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#4b5563;padding:30px">Sin capturas aún</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = recientes.map(r => {
+    const eq = db.equipos.find(e=>e.id===r.equipoId);
+    const est = ESTACIONES.find(e=>e.id===r.estacionId);
+    const ar = AREAS.find(a=>a.id===est?.areaId);
+    return `<tr>
+      <td style="font-weight:600">${eq?.nombre || `Eq.${r.equipoId}`}</td>
+      <td style="font-size:11px;color:#6b7280">${eq?.plantel || ''}</td>
+      <td><span class="badge" style="background:${ar?.color}22;color:${ar?.color}">${ar?.emoji} ${est?.nombre}</span></td>
+      <td style="font-weight:700;color:#34d399">${r.puntaje}</td>
+      <td style="font-size:12px">${r.llegada||'—'}</td>
+      <td style="font-size:12px">${r.salida||'—'}</td>
+      <td style="font-size:11px">${r.capturista||'Admin'}</td>
+      <td><button class="btn-small" onclick="cargarEdicion(${r.id})">✏️</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function cargarEdicion(id) {
+  const r = db.resultados.find(x => x.id === id);
+  if (!r) return;
+  editandoId = id;
+  document.getElementById('cap-equipo').value = r.equipoId;
+  actualizarEstacionesPorEquipo();
+  setTimeout(() => {
+    document.getElementById('cap-estacion').value = r.estacionId;
+    mostrarInfoEstacion();
+  }, 100);
+  document.getElementById('cap-puntaje').value = r.puntaje;
+  document.getElementById('cap-llegada').value = r.llegada || '';
+  document.getElementById('cap-salida').value = r.salida || '';
+  document.getElementById('cap-obs').value = r.obs || '';
+  document.getElementById('cap-title').innerHTML = '✏️ Editar Resultado';
+  document.getElementById('btn-guardar-cap').innerHTML = 'Actualizar Resultado';
+  document.getElementById('btn-cancel-edit').style.display = 'block';
+  goPage('captura');
+}
+
+function cancelEdit() {
+  editandoId = null;
+  document.getElementById('cap-equipo').value = '';
+  document.getElementById('cap-estacion').innerHTML = '<option value="">— Seleccionar estación —</option>';
+  document.getElementById('cap-puntaje').value = '';
+  document.getElementById('cap-llegada').value = '';
+  document.getElementById('cap-salida').value = '';
+  document.getElementById('cap-obs').value = '';
+  document.getElementById('cap-title').innerHTML = '📝 Nueva Captura';
+  document.getElementById('btn-guardar-cap').innerHTML = 'Guardar Resultado';
+  document.getElementById('btn-cancel-edit').style.display = 'none';
+  document.getElementById('cap-dup-warn').style.display = 'none';
+  document.getElementById('cap-area-banner').style.display = 'none';
+  document.getElementById('cap-progreso').style.display = 'none';
+  renderRecientes();
+}
+
+// ================= RENDERIZADO GENERAL =================
+function renderDashboard() {
+  const rk = rankingCache;
+  const promedio = rk.length ? (rk.reduce((s,e)=>s+e.puntajeTotal,0)/rk.length).toFixed(1) : 0;
+  document.getElementById('dash-kpis').innerHTML = [
+    {label:'Equipos', val:rk.length, sub:`${rk.filter(e=>e.activo).length} activos`, color:'#60a5fa'},
+    {label:'Capturas', val:db.resultados.length, sub:'resultados', color:'#34d399'},
+    {label:'Promedio', val:promedio, sub:'puntos/equipo', color:'#a78bfa'},
+    {label:'Líder', val:rk[0]?.puntajeTotal??0, sub:rk[0]?.nombre??'—', color:'#fbbf24'}
+  ].map(k => `<div class="kpi-card"><div style="font-size:11px;color:#6b7280;">${k.label}</div><div style="font-size:36px;font-weight:700;color:${k.color}">${k.val}</div><div style="font-size:12px;color:#4b5563;">${k.sub}</div></div>`).join('');
+  
+  const medals = ['🥇','🥈','🥉'];
+  document.getElementById('dash-podio').innerHTML = rk.slice(0,3).map((eq,i) => `<div class="podium-item ${i===0?'gold':''}"><span style="font-size:24px">${medals[i]}</span><div style="flex:1"><div style="font-weight:600">${eq.nombre}</div><div style="font-size:11px;color:#6b7280">${eq.plantel}</div></div><div style="text-align:right"><div style="font-weight:700;font-size:20px;color:#fbbf24">${eq.puntajeTotal}</div><div style="font-size:10px;">pts</div></div></div>`).join('') || '<div style="color:#4b5563;text-align:center;padding:20px">Sin resultados</div>';
+  
+  document.getElementById('dash-tabla').innerHTML = rk.map((eq,i) => `<tr>
+    <td style="font-weight:700;color:${i<3?['#fbbf24','#9ca3af','#cd7c2f'][i]:'#4b5563'}">${i+1}</td>
+    <td style="font-weight:600">${eq.nombre}</td>
+    <td style="color:#6b7280;font-size:12px">${eq.plantel}</td>
+    <td style="color:#6b7280;font-size:12px">${eq.turno}</td>
+    <td style="color:#6b7280">${eq.estacionesCompletadas}/10</td>
+    <td style="font-weight:700;color:#34d399">${eq.puntajeTotal}</td>
+    <td style="color:#9ca3af;font-size:12px">${minToStr(eq.tiempoTotal)}</td>
+    <td><span class="badge" style="background:${eq.activo?'#064e3b':'#450a0a'};color:${eq.activo?'#34d399':'#f87171'}">${eq.activo?'Activo':'Desc.'}</span></td>
+  </table>`).join('');
+  
+  document.getElementById('dash-cobertura').innerHTML = ESTACIONES.map(est => {
+    const total = db.resultados.filter(r=>r.estacionId===est.id).length;
+    const area = AREAS.find(a=>a.id===est.areaId);
+    const pct = rk.length ? Math.min(100,(total/rk.length)*100) : 0;
+    return `<div style="background:#1a1d2e;border-radius:10px;padding:12px;border:1px solid #1e2130">
+      <div style="font-size:10px;color:${area.color};">${area.emoji} E${est.id}</div>
+      <div style="font-size:12px;font-weight:600;">${est.nombre}</div>
+      <div class="prog-bar"><div class="prog-fill" style="background:${area.color};width:${pct}%"></div></div>
+      <div style="font-size:11px;color:#6b7280">${total} equipos</div>
+    </div>`;
+  }).join('');
+}
+
+function renderEquipos() {
+  document.getElementById('eq-sub').innerHTML = `${db.equipos.length} equipos registrados`;
+  document.getElementById('eq-count').innerHTML = db.equipos.length;
+  const rk = rankingCache;
+  
+  if (db.equipos.length === 0) {
+    document.getElementById('eq-tabla').innerHTML = `<tr><td colspan="8" style="text-align:center;color:#f87171;padding:40px">⚠️ No se cargaron equipos. Verifica datos.csv</td></tr>`;
+    return;
+  }
+  
+  document.getElementById('eq-tabla').innerHTML = db.equipos.map((eq,i) => {
+    const eqRank = rk.find(r=>r.id===eq.id);
+    return `<tr style="opacity:${eq.activo?1:0.5}">
+      <td style="color:#4b5563;">${i+1}</td>
+      <td style="font-weight:600">${eq.nombre}</td>
+      <td style="font-size:12px;color:#6b7280">${eq.plantel}</td>
+      <td style="font-size:12px;color:#6b7280">${eq.turno}</td>
+      <td style="font-size:12px;color:#6b7280">${eqRank?.estacionesCompletadas||0}/10</td>
+      <td style="font-weight:700;color:#34d399">${eqRank?.puntajeTotal||0}</td>
+      <td><span class="badge" style="background:${eq.activo?'#064e3b':'#450a0a'};color:${eq.activo?'#34d399':'#f87171'}">${eq.activo?'Activo':'Desc.'}</span></td>
+      <td><button class="btn-small" style="background:${eq.activo?'#450a0a':'#064e3b'};color:${eq.activo?'#f87171':'#34d399'}" onclick="openDescalif(${eq.id})">${eq.activo?'Descalif.':'Rehabilitar'}</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderResultados() {
+  const rk = rankingCache;
+  document.getElementById('res-count').innerHTML = rk.length;
+  document.getElementById('res-filtros').innerHTML = `<button class="btn-small" onclick="setFiltro(0)" style="background:${filtroArea===0?'#4f46e5':'#1a1d2e'}">Todas</button>${AREAS.map(a => `<button class="btn-small" onclick="setFiltro(${a.id})" style="background:${filtroArea===a.id?a.color+'33':'#1a1d2e'};color:${filtroArea===a.id?a.color:'#9ca3af'}">${a.emoji} ${a.nombre}</button>`).join('')}<div class="ml-auto"><button class="btn-small" onclick="exportarCSV()" style="background:#064e3b;color:#34d399">↓ CSV</button><button onclick="alert('PDF en desarrollo')" style="background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:none;border-radius:8px;padding:8px 20px;cursor:pointer">📄 Exportar PDF</button></div>`;
+  
+  const estacionesFiltradas = ESTACIONES.filter(e => filtroArea === 0 || e.areaId === filtroArea);
+  document.getElementById('res-thead').innerHTML = `<tr><th>#</th><th>Equipo</th><th>Plantel</th><th>Turno</th><th>Total</th><th>Tiempo</th>${estacionesFiltradas.map(e => { const a = AREAS.find(x=>x.id===e.areaId); return `<th>${a.emoji}</th>`; }).join('')}<th></th></tr>`;
+  document.getElementById('res-tbody').innerHTML = rk.map((eq,i) => `<tr style="opacity:${eq.activo?1:0.4}">
+    <td style="font-weight:700;color:${i<3?['#fbbf24','#9ca3af','#cd7c2f'][i]:'#4b5563'}">${i+1}</td>
+    <td style="font-weight:600">${eq.nombre}</td>
+    <td style="font-size:11px">${eq.plantel}</td>
+    <td style="font-size:11px">${eq.turno}</td>
+    <td style="font-weight:700;color:#34d399">${eq.puntajeTotal}</td>
+    <td style="font-size:12px">${minToStr(eq.tiempoTotal)}</td>
+    ${estacionesFiltradas.map(est => { const r = db.resultados.find(r => r.equipoId === eq.id && r.estacionId === est.id); const ar = AREAS.find(a=>a.id===est.areaId); return `<td style="text-align:center">${r ? `<span style="font-weight:700;color:${ar.color}">${r.puntaje}</span>` : `<span style="color:#2d3148">–</span>`}</td>`; }).join('')}
+    <td><button class="btn-small" onclick="alert('Detalle equipo')">Ver →</button></td>
+  </tr>`).join('');
+}
+
+function renderAuditoria() {
+  document.getElementById('aud-count').innerHTML = db.auditoria.length;
+  const list = document.getElementById('aud-list');
+  if (db.auditoria.length === 0) { list.innerHTML = '<div style="color:#4b5563;padding:40px 0;text-align:center">Sin registros aún</div>'; return; }
+  list.innerHTML = [...db.auditoria].reverse().slice(0,100).map(a => `<div class="audit-row"><div style="font-size:11px;color:#4b5563;min-width:150px">${new Date(a.ts).toLocaleString('es-MX')}</div><div style="font-size:12px;color:#60a5fa;min-width:70px">${a.usuario}</div><div style="font-size:12px;color:#9ca3af">${a.accion}</div></div>`).join('');
+}
+
+function exportarCSV() {
+  const rk = rankingCache;
+  let csv = "Posición,Equipo,Plantel,Turno,Puntaje Total,Estaciones Completadas\n";
+  rk.forEach((eq, i) => {
+    csv += `${i+1},"${eq.nombre}","${eq.plantel}","${eq.turno}",${eq.puntajeTotal},${eq.estacionesCompletadas}\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `rally_resultados_${new Date().toISOString().slice(0,19)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV exportado correctamente', 'ok');
+}
+
+// ================= NAVEGACIÓN =================
+function goPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`page-${id}`).classList.add('active');
+  document.getElementById(`nav-${id}`).classList.add('active');
+  if (id === 'dashboard') renderDashboard();
+  else if (id === 'equipos') renderEquipos();
+  else if (id === 'captura') { actualizarSelectEquipos(); renderRecientes(); }
+  else if (id === 'resultados') renderResultados();
+  else if (id === 'auditoria') renderAuditoria();
+}
+
+function setFiltro(id) { filtroArea = id; renderResultados(); }
+function closeDetalleEq() {}
+
+async function openDescalif(id) {
+  const eq = db.equipos.find(e => e.id === id);
+  if (!eq) return;
+  document.getElementById('modal-descalif-icon').textContent = eq.activo ? '⚠️' : '✅';
+  document.getElementById('modal-descalif-title').textContent = eq.activo ? '¿Descalificar equipo?' : '¿Rehabilitar equipo?';
+  document.getElementById('modal-descalif-name').textContent = eq.nombre;
+  document.getElementById('modal-descalif').classList.add('show');
+  window._descalifId = id;
+  document.getElementById('btn-confirm-descalif').onclick = async () => {
+    const eqFind = db.equipos.find(e => e.id === window._descalifId);
+    if (eqFind) eqFind.activo = !eqFind.activo;
+    await agregarAuditoria(`Equipo ${eqFind.nombre} ${eqFind.activo ? 'rehabilitado' : 'descalificado'}`);
+    closeDescalif();
+    rankingCache = calcularRanking();
+    renderEquipos();
+    renderDashboard();
+    showToast(`Estado actualizado: ${eqFind.nombre}`);
+  };
+}
+function closeDescalif() { document.getElementById('modal-descalif').classList.remove('show'); }
+function openReset() { document.getElementById('modal-reset').classList.add('show'); }
+function closeReset() { document.getElementById('modal-reset').classList.remove('show'); }
+async function doReset() { 
+  db.resultados = []; 
+  db.auditoria = []; 
+  await guardarDBGitHub(); 
+  await agregarAuditoria('BASE DE DATOS REINICIADA'); 
+  rankingCache = calcularRanking(); 
+  closeReset(); 
+  renderDashboard(); 
+  renderEquipos(); 
+  renderResultados(); 
+  renderAuditoria(); 
+  showToast('Base de datos remota reiniciada', 'warn'); 
+}
+
+function updateClock() { document.getElementById('sidebar-clock').textContent = nowStr(); }
+setInterval(updateClock, 30000);
+updateClock();
+
+// ================= INICIALIZACIÓN =================
+async function inicializar() {
+  await cargarEquiposDesdeCSV();
+  await leerDBGitHub();
+  rankingCache = calcularRanking();
+  actualizarSelectEquipos();
+  renderDashboard();
+  renderEquipos();
+  renderRecientes();
+  renderResultados();
+  renderAuditoria();
+  document.getElementById('dash-sub').innerHTML = `Actualizado ${nowStr()} · GitHub Sync`;
+  document.getElementById('quick-btns').innerHTML = [0,5,6,7,8,9,10].map(v => `<button class="quick-btn" onclick="setQuick(${v})">${v}</button>`).join('');
+  document.getElementById('gh-status').innerHTML = `✅ ${db.resultados.length} resultados guardados`;
+}
+
+inicializar();
+setInterval(inicializar, 30000);
 </script>
 </body>
 </html>
