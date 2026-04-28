@@ -1,70 +1,377 @@
-async function cargarEquiposDesdeCSV() {
-  try {
-    setBadge('<span class="loading-spinner"></span> CARGANDO');
-
-    const url = GITHUB_CSV_URL() + '?t=' + Date.now();
-    console.log("Cargando CSV desde:", url);
-
-    const respuesta = await fetch(url);
-
-    if (!respuesta.ok) {
-      throw new Error(`HTTP ${respuesta.status} - ${respuesta.statusText}`);
-    }
-
-    const texto = await respuesta.text();
-
-    if (!texto || texto.length < 10) {
-      throw new Error('CSV vacío o inválido');
-    }
-
-    const lineas = texto.replace(/^\uFEFF/, '').trim().split('\n');
-
-    if (lineas.length < 2) {
-      throw new Error('CSV sin datos');
-    }
-
-    const encabezados = lineas[0]
-      .split(',')
-      .map(h => h.trim().toLowerCase().replace(/\r/g, ''));
-
-    const equiposRaw = [];
-
-    for (let i = 1; i < lineas.length; i++) {
-      const linea = lineas[i].replace(/\r/g,'');
-      if (!linea.trim()) continue;
-
-      const valores = parseCsvLine(linea);
-      const obj = {};
-
-      encabezados.forEach((h, idx) => {
-        obj[h] = (valores[idx] || '').trim();
-      });
-
-      if (obj.id && obj.nombre) equiposRaw.push(obj);
-    }
-
-    db.equipos = equiposRaw.map(e => ({
-      id: parseInt(e.id),
-      nombre: e.nombre,
-      plantel: e.plantel || 'Sin plantel',
-      turno: (e.turno || '').toLowerCase().includes('vespertino')
-        ? 'vespertino'
-        : 'matutino',
-      activo: (e.estatus || 'activo').toLowerCase() !== 'inactivo'
-    }));
-
-    setBadge('● ONLINE', '#064e3b');
-    document.getElementById('gh-status').innerHTML = `✅ ${db.equipos.length} equipos`;
-
-    return db.equipos;
-
-  } catch(err) {
-    console.error('Error CSV DETALLADO:', err);
-
-    setBadge('● ERROR CSV', '#7f1d1d');
-    document.getElementById('gh-status').innerHTML =
-      `❌ CSV: ${err.message}`;
-
-    return [];
-  }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rally Académico — Análisis de Resultados</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#09090f;--surface:#0f0f1a;--card:#13131f;--border:#1f1f33;--border2:#282840;
+  --text:#e2e4f0;--muted:#5a5a7a;--muted2:#3a3a58;
+  --accent:#6c63ff;--accent2:#4ade80;--accent3:#f59e0b;--accent4:#f472b6;
+  --red:#f87171;--cyan:#22d3ee;
 }
+*{scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+body{font-family:'DM Sans',sans-serif;min-height:100vh;background:var(--bg);color:var(--text);}
+a{color:inherit;}
+.layout{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:220px;min-height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:0 0 16px;position:sticky;top:0;height:100vh;overflow:hidden;}
+.sidebar-top{padding:20px 16px 16px;border-bottom:1px solid var(--border);}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.brand-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#9c6fff);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.brand-name{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;line-height:1.2;}
+.brand-sub{font-size:10px;color:var(--muted);font-weight:400;letter-spacing:0.05em;}
+.sidebar-clock{font-family:'DM Mono',monospace;font-size:24px;font-weight:500;color:var(--accent);text-align:center;padding:12px 0 4px;}
+.sidebar-date{font-size:10px;color:var(--muted);text-align:center;padding-bottom:14px;}
+.sidebar-nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:3px;overflow-y:auto;}
+.nav-btn{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;background:transparent;border:none;cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;width:100%;text-align:left;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.nav-btn:hover{background:var(--card);color:var(--text);}
+.nav-btn.active{background:linear-gradient(135deg,#6c63ff18,#9c6fff18);color:#b8b4ff;border:1px solid #6c63ff33;}
+.nav-btn .nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
+.nav-divider{height:1px;background:var(--border);margin:8px 0;}
+.sidebar-bottom{padding:12px 16px;border-top:1px solid var(--border);}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;}
+.chip-green{background:#064e3b;color:#4ade80;}
+.chip-blue{background:#1e3a5f;color:#60a5fa;}
+.chip-gray{background:#1f1f33;color:var(--muted);}
+
+/* MAIN */
+main{flex:1;overflow-y:auto;padding:28px 32px;min-height:100vh;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* PAGE HEADER */
+.page-header{margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.page-header-left{display:flex;align-items:center;gap:12px;}
+.ph-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#9c6fff);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.ph-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.5px;}
+.ph-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;}
+.card-sm{padding:14px 16px;}
+.section-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;}
+
+/* GRID */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid-sidebar{display:grid;grid-template-columns:300px 1fr;gap:18px;}
+
+/* KPI CARD */
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
+.kpi-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;}
+.kpi-val{font-family:'DM Mono',monospace;font-size:36px;font-weight:500;line-height:1.1;margin:8px 0 4px;}
+.kpi-sub{font-size:11px;color:var(--muted);}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+.tbl th{padding:9px 11px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;white-space:nowrap;border-bottom:1px solid var(--border);background:var(--surface);}
+.tbl td{padding:9px 11px;vertical-align:middle;border-bottom:1px solid #13131f;}
+.tbl tr:hover td{background:#1a1a2e44;}
+.overflow-x{overflow-x:auto;}
+
+/* BADGE */
+.badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;white-space:nowrap;}
+.badge-green{background:#064e3b;color:#4ade80;}
+.badge-red{background:#450a0a;color:#f87171;}
+.badge-amber{background:#451a03;color:#fbbf24;}
+.badge-blue{background:#1e3a5f;color:#60a5fa;}
+.badge-purple{background:#2e1065;color:#c4b5fd;}
+
+/* BUTTONS */
+.btn-primary{background:linear-gradient(135deg,var(--accent),#9c6fff);color:#fff;border:none;border-radius:9px;padding:10px 20px;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;}
+.btn-primary:hover{filter:brightness(1.12);}
+.btn-secondary{background:var(--card);color:#9ca3af;border:1px solid var(--border2);border-radius:9px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;}
+.btn-secondary:hover{filter:brightness(1.1);}
+.btn-danger{background:#7f1d1d;color:#fca5a5;border:none;border-radius:9px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;}
+.btn-sm{background:var(--card);color:var(--muted);border:1px solid var(--border2);border-radius:6px;padding:4px 9px;cursor:pointer;font-size:11px;font-weight:500;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.btn-sm:hover{filter:brightness(1.15);}
+
+/* INPUT */
+.input{width:100%;background:#1a1a2e;border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;outline:none;font-family:'DM Sans',sans-serif;}
+.input:focus{border-color:var(--accent);}
+select.input option{background:#1a1a2e;}
+label.lbl{display:block;font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;}
+input[type=number]::-webkit-inner-spin-button{opacity:0.3;}
+input[type=time]{color-scheme:dark;}
+
+/* UPLOAD ZONE */
+.upload-zone{border:2px dashed var(--border2);border-radius:12px;padding:28px 20px;text-align:center;cursor:pointer;transition:all 0.2s;background:#0d0d1a;}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:#6c63ff0a;}
+.upload-zone input{display:none;}
+
+/* PODIUM */
+.podium-item{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:10px;background:#1a1a2e;border:1px solid var(--border);}
+.podium-item.gold{background:linear-gradient(135deg,#78350f18,#92400e22);border-color:#92400e;}
+.podium-item.silver{background:linear-gradient(135deg,#27272a18,#3f3f4622);border-color:#52525b;}
+.podium-item.bronze{background:linear-gradient(135deg,#431407, #3d1b0a);border-color:#7c3909;}
+
+/* PROGRESS */
+.prog-wrap{background:var(--bg);border-radius:4px;height:5px;overflow:hidden;}
+.prog-fill{height:5px;border-radius:4px;transition:width 0.5s;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;padding:11px 18px;border-radius:10px;color:#fff;font-weight:600;font-size:13px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.6);display:none;align-items:center;gap:8px;}
+.toast.show{display:flex;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:9998;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:32px 36px;text-align:center;max-width:400px;width:90%;}
+
+/* AUDIT */
+.audit-row{display:flex;gap:12px;padding:8px 12px;border-radius:7px;background:#1a1a2e;border:1px solid var(--border);margin-bottom:4px;}
+
+/* BAR CHART */
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.bar-label{font-size:11px;color:var(--muted);white-space:nowrap;width:140px;overflow:hidden;text-overflow:ellipsis;text-align:right;}
+.bar-track{flex:1;background:var(--bg);border-radius:3px;height:14px;overflow:hidden;}
+.bar-fill{height:14px;border-radius:3px;transition:width 0.5s;}
+.bar-val{font-size:11px;font-family:'DM Mono',monospace;font-weight:500;width:36px;text-align:right;color:var(--text);}
+
+/* DETAIL */
+.det-row{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;background:#1a1a2e;border:1px solid var(--border);}
+.det-row.done{background:#064e3b1a;border-color:#4ade8044;}
+.warn-block{padding:8px 12px;border-radius:8px;background:#78350f22;border:1px solid #92400e;font-size:12px;color:#fbbf24;}
+.info-block{font-size:11px;color:var(--muted);padding:10px 12px;background:#1a1a2e;border-radius:8px;line-height:1.8;}
+
+/* NO DATA */
+.empty{text-align:center;padding:50px 0;color:var(--muted);font-size:14px;}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="brand">
+        <div class="brand-icon">🏆</div>
+        <div>
+          <div class="brand-name">Rally Académico</div>
+          <div class="brand-sub">COBAED · ANÁLISIS</div>
+        </div>
+      </div>
+      <div class="sidebar-clock" id="sidebar-clock">00:00</div>
+      <div class="sidebar-date" id="sidebar-date"></div>
+      <div style="text-align:center"><span class="chip" id="status-chip">● CARGANDO...</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" onclick="goPage('dashboard')" id="nav-dashboard"><span class="nav-icon">◈</span><span>Dashboard</span></button>
+      <button class="nav-btn" onclick="goPage('equipos')" id="nav-equipos"><span class="nav-icon">⬡</span><span>Equipos</span></button>
+      <button class="nav-btn" onclick="goPage('resultados')" id="nav-resultados"><span class="nav-icon">◉</span><span>Resultados</span></button>
+      <button class="nav-btn" onclick="goPage('estaciones')" id="nav-estaciones"><span class="nav-icon">⊞</span><span>Estaciones</span></button>
+      <button class="nav-btn" onclick="goPage('auditoria')" id="nav-auditoria"><span class="nav-icon">≡</span><span>Auditoría</span></button>
+      <div class="nav-divider"></div>
+      <button class="nav-btn" onclick="goPage('carga')" id="nav-carga"><span class="nav-icon">📂</span><span>Configuración</span></button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div style="font-size:10px;color:var(--muted);margin-bottom:4px">SISTEMA</div>
+      <div style="font-size:12px;font-weight:600;color:#9ca3af">👤 GitHub Sync</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:3px" id="sb-registros">Cargando datos remotos...</div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="page" id="page-carga">
+      <div class="page-header">
+        <div class="page-header-left">
+          <div class="ph-icon">⚙️</div>
+          <div><div class="ph-title">Configuración de Datos</div><div class="ph-sub">Gestión de la conexión con GitHub</div></div>
+        </div>
+      </div>
+      <div style="max-width:600px;margin:0 auto;margin-top:20px">
+        <div class="card">
+          <div class="section-label">Origen de datos</div>
+          <div class="info-block">
+            Sincronizado con: <code id="github-url-display" style="color:var(--accent)">datos.csv</code>
+          </div>
+          <button class="btn-primary mt-4" onclick="initGitHubData()">🔄 Forzar actualización</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div class="page-header-left">
+          <div class="ph-icon">◈</div>
+          <div><div class="ph-title">Dashboard General</div><div class="ph-sub" id="dash-sub">Resumen de resultados</div></div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-primary" onclick="exportPDF()" style="font-size:12px">📄 PDF</button>
+        </div>
+      </div>
+      <div class="grid4" id="dash-kpis"></div>
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:18px;margin-bottom:18px">
+        <div class="card">
+          <div class="section-label">🏆 Podio Actual</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px" id="dash-podio"></div>
+        </div>
+        <div class="card">
+          <div class="section-label">📊 Clasificación General</div>
+          <div class="overflow-x">
+            <table class="tbl">
+              <thead><tr><th>#</th><th>Equipo</th><th>Plantel</th><th>Turno</th><th>Estaciones</th><th>Puntos</th><th>Estado</th></tr></thead>
+              <tbody id="dash-tabla"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-equipos"><div class="card"><div id="eq-tabla">Cargando...</div></div></div>
+    <div class="page" id="page-resultados"><div class="card"><div id="res-tbody">Cargando...</div></div></div>
+    <div class="page" id="page-estaciones"><div id="est-grid"></div></div>
+    <div class="page" id="page-auditoria"><div id="aud-list"></div></div>
+  </main>
+</div>
+
+<script>
+// CONFIGURACIÓN GITHUB
+const GITHUB_DATA_URL = 'datos.csv'; // Esto buscará el archivo en la misma carpeta del sitio.
+
+let db = { equipos:[], resultados:[], auditoria:[], estaciones:[] };
+
+// Función de inicio para GitHub
+async function initGitHubData() {
+    try {
+        showToast("Cargando datos desde GitHub...", "warn");
+        const response = await fetch(GITHUB_DATA_URL);
+        if (!response.ok) throw new Error("No se pudo cargar el archivo datos.csv");
+        
+        const csvText = await response.text();
+        const data = parseCSVText(csvText);
+        
+        // Procesar Equipos y Resultados
+        const equiposMap = new Map();
+        const resultadosArr = [];
+        const estsSet = new Set();
+
+        data.rows.forEach(r => {
+            const id = parseInt(r.id);
+            if (!id) return;
+
+            if (!equiposMap.has(id)) {
+                equiposMap.set(id, {
+                    id,
+                    nombre: r.nombre.trim(),
+                    plantel: (r.plantel || '').trim(),
+                    turno: (r.turno || 'Matutino').toLowerCase(),
+                    activo: true
+                });
+            }
+
+            if (r.estacion) {
+                const estName = r.estacion.trim();
+                estsSet.add(estName);
+                resultadosArr.push({
+                    equipoId: id,
+                    estacion: estName,
+                    puntaje: parseInt(r.puntajeestacion) || 0,
+                    llegada: r.llegada || '—',
+                    salida: r.salida || '—'
+                });
+            }
+        });
+
+        db.equipos = Array.from(equiposMap.values());
+        db.resultados = resultadosArr;
+        db.estaciones = Array.from(estsSet);
+        
+        logAudit("Sincronización con GitHub completada");
+        updateStatusBar();
+        renderPage('dashboard');
+        showToast("Datos actualizados correctamente");
+
+    } catch (error) {
+        console.error(error);
+        showToast("Error al cargar datos remotos: " + error.message, "err");
+        document.getElementById('sb-registros').textContent = "Error de conexión";
+    }
+}
+
+// Helpers de procesamiento CSV
+function parseCSVText(text){
+    const lines = text.replace(/^\uFEFF/,'').trim().split('\n');
+    const headers = lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/\s+/g,'').replace(/[^a-záéíóúüñ0-9]/gi,''));
+    const rows = [];
+    for(let i=1; i<lines.length; i++){
+        const line = lines[i].trim();
+        if(!line) continue;
+        const vals = [];
+        let cur='', inQ=false;
+        for(const c of line){
+            if(c==='"') inQ=!inQ;
+            else if(c===','&&!inQ){ vals.push(cur.trim()); cur=''; }
+            else cur+=c;
+        }
+        vals.push(cur.trim());
+        const obj={};
+        headers.forEach((h,i)=>{ obj[h]=vals[i]||''; });
+        rows.push(obj);
+    }
+    return {rows};
+}
+
+// UI Helpers
+function showToast(msg,tipo='ok'){
+  const el=document.getElementById('toast');
+  el.innerHTML = msg;
+  el.style.background = tipo==='err'?'#7f1d1d':tipo==='warn'?'#78350f':'#064e3b';
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+function updateStatusBar(){
+  document.getElementById('status-chip').textContent = `● ${db.equipos.length} EQUIPOS`;
+  document.getElementById('status-chip').className = 'chip chip-green';
+  document.getElementById('sb-registros').textContent = `${db.resultados.length} resultados sincronizados`;
+}
+
+function logAudit(accion){
+  db.auditoria.push({accion, ts:new Date().toLocaleTimeString()});
+}
+
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  renderPage(id);
+}
+
+function renderPage(id) {
+    if(id === 'dashboard') renderDashboard();
+}
+
+function renderDashboard() {
+    const sorted = db.equipos.map(eq => {
+        const res = db.resultados.filter(r => r.equipoId === eq.id);
+        const total = res.reduce((s, r) => s + r.puntaje, 0);
+        return { ...eq, total, numEst: res.length };
+    }).sort((a, b) => b.total - a.total);
+
+    let html = '';
+    sorted.forEach((eq, idx) => {
+        html += `<tr><td>${idx+1}</td><td>${eq.nombre}</td><td>${eq.plantel}</td><td>${eq.turno}</td><td>${eq.numEst}</td><td>${eq.total}</td><td><span class="badge badge-green">Activo</span></td></tr>`;
+    });
+    document.getElementById('dash-tabla').innerHTML = html;
+}
+
+// Ejecutar al cargar
+window.onload = () => {
+    document.getElementById('sidebar-clock').textContent = new Date().toLocaleTimeString();
+    initGitHubData();
+};
+</script>
+</body>
+</html>
