@@ -1,0 +1,331 @@
+﻿id, nombre, plantel, Turno, estacion, puntajeEstacion,Llegada,Salida
+10,Guerreros Pinioleros,10 Santiago Papasquiaro,Matutino,Ciencias Sociales,100,10:10:00 a. m.,10:55:00 a. m.
+11,Papas Kiali Papali,10 Santiago Papasquiaro,Vespertino,Ciencias Sociales,100,10:10:00 a. m.,10:55:00 a. m.
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,Ciencias Sociales,45,10:10:00 a. m.,10:55:00 a. m.
+13,Apex Ducks,12 Nuevo Ideal,Matutino,Ciencias Sociales,80,10:10:00 a. m.,10:55:00 a. m.
+14,Impacto 13 ,13 Tamazula,Matutino,Ciencias Sociales,70,10:10:00 a. m.,10:55:00 a. m.
+15,LOS GUARDIANES DEL DESIERTO,14 San Juan De Guadalupe,Matutino,Ciencias Sociales,55,10:10:00 a. m.,10:55:00 a. m.
+16,MENTES NOCTURNAS ,15 San Miguel De Cruces,Matutino,Ciencias Sociales,35,10:10:00 a. m.,10:55:00 a. m.
+17,"Coba 16, Mente y Talento ",16 Tayoltita,Matutino,Ciencias Sociales,70,10:10:00 a. m.,10:55:00 a. m.
+18,Tribu Invencible Mezquital,17 Mezquital,Matutino,Ciencias Sociales,65,10:10:00 a. m.,10:55:00 a. m.
+19,O’dam Tasai,18 Antonio Amaro,Matutino,Ciencias Sociales,85,10:10:00 a. m.,10:55:00 a. m.
+1,ALQUIMISTAS ,01 La Forestal,Matutino,Ciencias Sociales,90,10:10:00 a. m.,10:55:00 a. m.
+20,JILGUEROS DEL ARROYO,19 Santa Clara,Matutino,Ciencias Sociales,80,10:10:00 a. m.,10:55:00 a. m.
+21,Guerreros ,20 Guadalupe Victoria,Matutino,Ciencias Sociales,40,10:10:00 a. m.,10:55:00 a. m.
+22,Corceles de fuego ,22 Santa Ma. Del Oro,Matutino,Ciencias Sociales,60,10:10:00 a. m.,10:55:00 a. m.
+23,Tusas mineras,23 Coneto de Comonfort,Matutino,Ciencias Sociales,80,10:10:00 a. m.,10:55:00 a. m.
+24,Coyotes,24 Simón Bolívar,Matutino,Ciencias Sociales,70,10:10:00 a. m.,10:55:00 a. m.
+25,ESCUADRÓN 27,27 Vicente Guerrero,Matutino,Ciencias Sociales,75,10:10:00 a. m.,10:55:00 a. m.
+26,TUKURA,28 El Salto,Matutino,Ciencias Sociales,100,10:10:00 a. m.,10:55:00 a. m.
+27,Furia Manzanera ,29 Canatlán,Matutino,Ciencias Sociales,80,10:10:00 a. m.,10:55:00 a. m.
+28,VIGIAS DEL SABER ,31 La Ciudad,Matutino,Ciencias Sociales,60,10:10:00 a. m.,10:55:00 a. m.
+29,LOBOS,32 Juana Villalobos,Matutino,Ciencias Sociales,95,10:10:00 a. m.,10:55:00 a. m.
+2,Guardianes del Jardín ,02 Lerdo,Vespertino,Ciencias Sociales,80,10:10:00 a. m.,10:55:00 a. m.
+30,Halcones,32 Juana Villalobos,Vespertino,Ciencias Sociales,75,10:10:00 a. m.,10:55:00 a. m.
+31,Titanes,33 Pino Suárez,vespertino,Ciencias Sociales,50,10:10:00 a. m.,10:55:00 a. m.
+32,SOMOS GIGANTES VILLAS,34 Villas Del Guadiana,Matutino,Ciencias Sociales,100,10:10:00 a. m.,10:55:00 a. m.
+33,la variable rebelde ,35 Gómez Palacio,Vespertino,Ciencias Sociales,45,10:10:00 a. m.,10:55:00 a. m.
+3,COBAED MADERO,03 Fco. I. Madero,Matutino,Ciencias Sociales,100,10:10:00 a. m.,10:55:00 a. m.
+4,En proceso,05 Bermejillo,Matutino,Ciencias Sociales,95,10:10:00 a. m.,10:55:00 a. m.
+5,ELITE DEL INTELECTO,06 Peñón Blanco,Matutino,Ciencias Sociales,65,10:10:00 a. m.,10:55:00 a. m.
+6,Campobellos en movimiento,07 Villa Ocampo,Matutino,Ciencias Sociales,80,10:10:00 a. m.,10:55:00 a. m.
+7,Escuadron respeto y victoria,08 Nazas,Matutino,Ciencias Sociales,70,10:10:00 a. m.,10:55:00 a. m.
+8,Pumas 09,09 Lomas,Matutino,Ciencias Sociales,35,10:10:00 a. m.,10:55:00 a. m.
+9,CORCELES DEL SABER  ,09 Lomas,Vespertino,Ciencias Sociales,35,10:10:00 a. m.,10:55:00 a. m.
+10,Guerreros Pinioleros,10 Santiago Papasquiaro,Matutino,Artes,14,,
+11,Papas Kiali Papali,10 Santiago Papasquiaro,Vespertino,Artes,19,,
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,Artes,19,,
+13,Apex Ducks,12 Nuevo Ideal,Matutino,Artes,12,,
+14,Impacto 13 ,13 Tamazula,Matutino,Artes,11,,
+15,LOS GUARDIANES DEL DESIERTO,14 San Juan De Guadalupe,Matutino,Artes,15,,
+16,MENTES NOCTURNAS ,15 San Miguel De Cruces,Matutino,Artes,14,,
+17,"Coba 16, Mente y Talento ",16 Tayoltita,Matutino,Artes,12,,
+18,Tribu Invencible Mezquital,17 Mezquital,Matutino,Artes,10,,
+19,O’dam Tasai,18 Antonio Amaro,Matutino,Artes,14,,
+1,ALQUIMISTAS ,01 La Forestal,Matutino,Artes,12,,
+20,JILGUEROS DEL ARROYO,19 Santa Clara,Matutino,Artes,14,,
+21,Guerreros ,20 Guadalupe Victoria,Matutino,Artes,10,,
+22,Corceles de fuego ,22 Santa Ma. Del Oro,Matutino,Artes,10,,
+23,Tusas mineras,23 Coneto de Comonfort,Matutino,Artes,13,,
+24,Coyotes,24 Simón Bolívar,Matutino,Artes,11,,
+25,ESCUADRÓN 27,27 Vicente Guerrero,Matutino,Artes,12,,
+26,TUKURA,28 El Salto,Matutino,Artes,20,,
+27,Furia Manzanera ,29 Canatlán,Matutino,Artes,12,,
+28,VIGIAS DEL SABER ,31 La Ciudad,Matutino,Artes,11,,
+29,LOBOS,32 Juana Villalobos,Matutino,Artes,13,,
+2,Guardianes del Jardín ,02 Lerdo,Vespertino,Artes,11,,
+30,Halcones,32 Juana Villalobos,Vespertino,Artes,11,,
+31,Titanes,33 Pino Suárez,vespertino,Artes,11,,
+32,SOMOS GIGANTES VILLAS,34 Villas Del Guadiana,Matutino,Artes,14,,
+33,la variable rebelde ,35 Gómez Palacio,Vespertino,Artes,0,,
+3,COBAED MADERO,03 Fco. I. Madero,Matutino,Artes,14,,
+4,En proceso,05 Bermejillo,Matutino,Artes,13,,
+5,ELITE DEL INTELECTO,06 Peñón Blanco,Matutino,Artes,14,,
+6,Campobellos en movimiento,07 Villa Ocampo,Matutino,Artes,14,,
+7,Escuadron respeto y victoria,08 Nazas,Matutino,Artes,10,,
+8,Pumas 09,09 Lomas,Matutino,Artes,14,,
+9,CORCELES DEL SABER  ,09 Lomas,Vespertino,Artes,14,,
+10,Guerreros Pinioleros,10 Santiago Papasquiaro,Matutino,Humanidades,85,10:10:00 a. m.,10:55:00 a. m.
+11,Papas Kiali Papali,10 Santiago Papasquiaro,Vespertino,Humanidades,95,10:10:00 a. m.,10:55:00 a. m.
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,Humanidades,90,10:10:00 a. m.,10:55:00 a. m.
+13,Apex Ducks,12 Nuevo Ideal,Matutino,Humanidades,80,10:10:00 a. m.,10:55:00 a. m.
+14,Impacto 13 ,13 Tamazula,Matutino,Humanidades,80,10:10:00 a. m.,10:55:00 a. m.
+15,LOS GUARDIANES DEL DESIERTO,14 San Juan De Guadalupe,Matutino,Humanidades,85,10:10:00 a. m.,10:55:00 a. m.
+16,MENTES NOCTURNAS ,15 San Miguel De Cruces,Matutino,Humanidades,95,10:10:00 a. m.,10:55:00 a. m.
+17,"Coba 16, Mente y Talento ",16 Tayoltita,Matutino,Humanidades,60,10:10:00 a. m.,10:55:00 a. m.
+18,Tribu Invencible Mezquital,17 Mezquital,Matutino,Humanidades,80,10:10:00 a. m.,10:55:00 a. m.
+19,O’dam Tasai,18 Antonio Amaro,Matutino,Humanidades,95,10:10:00 a. m.,10:55:00 a. m.
+1,ALQUIMISTAS ,01 La Forestal,Matutino,Humanidades,95,10:10:00 a. m.,10:55:00 a. m.
+20,JILGUEROS DEL ARROYO,19 Santa Clara,Matutino,Humanidades,90,10:10:00 a. m.,10:55:00 a. m.
+21,Guerreros ,20 Guadalupe Victoria,Matutino,Humanidades,95,10:10:00 a. m.,10:55:00 a. m.
+22,Corceles de fuego ,22 Santa Ma. Del Oro,Matutino,Humanidades,90,10:10:00 a. m.,10:55:00 a. m.
+23,Tusas mineras,23 Coneto de Comonfort,Matutino,Humanidades,85,10:10:00 a. m.,10:55:00 a. m.
+24,Coyotes,24 Simón Bolívar,Matutino,Humanidades,85,10:10:00 a. m.,10:55:00 a. m.
+25,ESCUADRÓN 27,27 Vicente Guerrero,Matutino,Humanidades,95,10:10:00 a. m.,10:55:00 a. m.
+26,TUKURA,28 El Salto,Matutino,Humanidades,95,10:10:00 a. m.,10:55:00 a. m.
+27,Furia Manzanera ,29 Canatlán,Matutino,Humanidades,90,10:10:00 a. m.,10:55:00 a. m.
+28,VIGIAS DEL SABER ,31 La Ciudad,Matutino,Humanidades,85,10:10:00 a. m.,10:55:00 a. m.
+29,LOBOS,32 Juana Villalobos,Matutino,Humanidades,90,10:10:00 a. m.,10:55:00 a. m.
+2,Guardianes del Jardín ,02 Lerdo,Vespertino,Humanidades,95,10:10:00 a. m.,10:55:00 a. m.
+30,Halcones,32 Juana Villalobos,Vespertino,Humanidades,70,10:10:00 a. m.,10:55:00 a. m.
+31,Titanes,33 Pino Suárez,vespertino,Humanidades,95,10:10:00 a. m.,10:55:00 a. m.
+32,SOMOS GIGANTES VILLAS,34 Villas Del Guadiana,Matutino,Humanidades,95,10:10:00 a. m.,10:55:00 a. m.
+33,la variable rebelde ,35 Gómez Palacio,Vespertino,Humanidades,70,10:10:00 a. m.,10:55:00 a. m.
+3,COBAED MADERO,03 Fco. I. Madero,Matutino,Humanidades,75,10:10:00 a. m.,10:55:00 a. m.
+4,En proceso,05 Bermejillo,Matutino,Humanidades,85,10:10:00 a. m.,10:55:00 a. m.
+5,ELITE DEL INTELECTO,06 Peñón Blanco,Matutino,Humanidades,90,10:10:00 a. m.,10:55:00 a. m.
+6,Campobellos en movimiento,07 Villa Ocampo,Matutino,Humanidades,75,10:10:00 a. m.,10:55:00 a. m.
+7,Escuadron respeto y victoria,08 Nazas,Matutino,Humanidades,65,10:10:00 a. m.,10:55:00 a. m.
+8,Pumas 09,09 Lomas,Matutino,Humanidades,75,10:10:00 a. m.,10:55:00 a. m.
+9,CORCELES DEL SABER  ,09 Lomas,Vespertino,Humanidades,80,10:10:00 a. m.,10:55:00 a. m.
+10,Guerreros Pinioleros,10 Santiago Papasquiaro,Matutino,Informática,30,10:10:00 a. m.,10:55:00 a. m.
+11,Papas Kiali Papali,10 Santiago Papasquiaro,Vespertino,Informática,58,10:10:00 a. m.,10:55:00 a. m.
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,Informática,53,10:10:00 a. m.,10:55:00 a. m.
+13,Apex Ducks,12 Nuevo Ideal,Matutino,Informática,48,10:10:00 a. m.,10:55:00 a. m.
+14,Impacto 13 ,13 Tamazula,Matutino,Informática,58,10:10:00 a. m.,10:55:00 a. m.
+15,LOS GUARDIANES DEL DESIERTO,14 San Juan De Guadalupe,Matutino,Informática,48,10:10:00 a. m.,10:55:00 a. m.
+16,MENTES NOCTURNAS ,15 San Miguel De Cruces,Matutino,Informática,10,10:10:00 a. m.,10:55:00 a. m.
+17,"Coba 16, Mente y Talento ",16 Tayoltita,Matutino,Informática,25,10:10:00 a. m.,10:55:00 a. m.
+18,Tribu Invencible Mezquital,17 Mezquital,Matutino,Informática,43,10:10:00 a. m.,10:55:00 a. m.
+19,O’dam Tasai,18 Antonio Amaro,Matutino,Informática,13,10:10:00 a. m.,10:55:00 a. m.
+1,ALQUIMISTAS ,01 La Forestal,Matutino,Informática,30,10:10:00 a. m.,10:55:00 a. m.
+20,JILGUEROS DEL ARROYO,19 Santa Clara,Matutino,Informática,30,10:10:00 a. m.,10:55:00 a. m.
+21,Guerreros ,20 Guadalupe Victoria,Matutino,Informática,53,10:10:00 a. m.,10:55:00 a. m.
+22,Corceles de fuego ,22 Santa Ma. Del Oro,Matutino,Informática,15,10:10:00 a. m.,10:55:00 a. m.
+23,Tusas mineras,23 Coneto de Comonfort,Matutino,Informática,35,10:10:00 a. m.,10:55:00 a. m.
+24,Coyotes,24 Simón Bolívar,Matutino,Informática,25,10:10:00 a. m.,10:55:00 a. m.
+25,ESCUADRÓN 27,27 Vicente Guerrero,Matutino,Informática,20,10:10:00 a. m.,10:55:00 a. m.
+26,TUKURA,28 El Salto,Matutino,Informática,65,10:10:00 a. m.,10:55:00 a. m.
+27,Furia Manzanera ,29 Canatlán,Matutino,Informática,58,10:10:00 a. m.,10:55:00 a. m.
+28,VIGIAS DEL SABER ,31 La Ciudad,Matutino,Informática,5,10:10:00 a. m.,10:55:00 a. m.
+29,LOBOS,32 Juana Villalobos,Matutino,Informática,18,10:10:00 a. m.,10:55:00 a. m.
+2,Guardianes del Jardín ,02 Lerdo,Vespertino,Informática,13,10:10:00 a. m.,10:55:00 a. m.
+30,Halcones,32 Juana Villalobos,Vespertino,Informática,0,10:10:00 a. m.,10:55:00 a. m.
+31,Titanes,33 Pino Suárez,vespertino,Informática,35,10:10:00 a. m.,10:55:00 a. m.
+32,SOMOS GIGANTES VILLAS,34 Villas Del Guadiana,Matutino,Informática,0,10:10:00 a. m.,10:55:00 a. m.
+33,la variable rebelde ,35 Gómez Palacio,Vespertino,Informática,5,10:10:00 a. m.,10:55:00 a. m.
+3,COBAED MADERO,03 Fco. I. Madero,Matutino,Informática,30,10:10:00 a. m.,10:55:00 a. m.
+4,En proceso,05 Bermejillo,Matutino,Informática,15,10:10:00 a. m.,10:55:00 a. m.
+5,ELITE DEL INTELECTO,06 Peñón Blanco,Matutino,Informática,25,10:10:00 a. m.,10:55:00 a. m.
+6,Campobellos en movimiento,07 Villa Ocampo,Matutino,Informática,10,10:10:00 a. m.,10:55:00 a. m.
+7,Escuadron respeto y victoria,08 Nazas,Matutino,Informática,45,10:10:00 a. m.,10:55:00 a. m.
+8,Pumas 09,09 Lomas,Matutino,Informática,18,10:10:00 a. m.,10:55:00 a. m.
+9,CORCELES DEL SABER  ,09 Lomas,Vespertino,Informática,13,10:10:00 a. m.,10:55:00 a. m.
+10,Guerreros Pinioleros,10 Santiago Papasquiaro,Matutino,Tutorías,95,10:10:00 a. m.,10:55:00 a. m.
+11,Papas Kiali Papali,10 Santiago Papasquiaro,Vespertino,Tutorías,95,10:10:00 a. m.,10:55:00 a. m.
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,Tutorías,100,10:10:00 a. m.,10:55:00 a. m.
+13,Apex Ducks,12 Nuevo Ideal,Matutino,Tutorías,100,10:10:00 a. m.,10:55:00 a. m.
+14,Impacto 13 ,13 Tamazula,Matutino,Tutorías,95,10:10:00 a. m.,10:55:00 a. m.
+15,LOS GUARDIANES DEL DESIERTO,14 San Juan De Guadalupe,Matutino,Tutorías,80,10:10:00 a. m.,10:55:00 a. m.
+16,MENTES NOCTURNAS ,15 San Miguel De Cruces,Matutino,Tutorías,75,10:10:00 a. m.,10:55:00 a. m.
+17,"Coba 16, Mente y Talento ",16 Tayoltita,Matutino,Tutorías,100,10:10:00 a. m.,10:55:00 a. m.
+18,Tribu Invencible Mezquital,17 Mezquital,Matutino,Tutorías,85,10:10:00 a. m.,10:55:00 a. m.
+19,O’dam Tasai,18 Antonio Amaro,Matutino,Tutorías,95,10:10:00 a. m.,10:55:00 a. m.
+1,ALQUIMISTAS ,01 La Forestal,Matutino,Tutorías,73,10:10:00 a. m.,10:55:00 a. m.
+20,JILGUEROS DEL ARROYO,19 Santa Clara,Matutino,Tutorías,78,10:10:00 a. m.,10:55:00 a. m.
+21,Guerreros ,20 Guadalupe Victoria,Matutino,Tutorías,100,10:10:00 a. m.,10:55:00 a. m.
+22,Corceles de fuego ,22 Santa Ma. Del Oro,Matutino,Tutorías,95,10:10:00 a. m.,10:55:00 a. m.
+23,Tusas mineras,23 Coneto de Comonfort,Matutino,Tutorías,75,10:10:00 a. m.,10:55:00 a. m.
+24,Coyotes,24 Simón Bolívar,Matutino,Tutorías,88,10:10:00 a. m.,10:55:00 a. m.
+25,ESCUADRÓN 27,27 Vicente Guerrero,Matutino,Tutorías,92,10:10:00 a. m.,10:55:00 a. m.
+26,TUKURA,28 El Salto,Matutino,Tutorías,83,10:10:00 a. m.,10:55:00 a. m.
+27,Furia Manzanera ,29 Canatlán,Matutino,Tutorías,83,10:10:00 a. m.,10:55:00 a. m.
+28,VIGIAS DEL SABER ,31 La Ciudad,Matutino,Tutorías,85,10:10:00 a. m.,10:55:00 a. m.
+29,LOBOS,32 Juana Villalobos,Matutino,Tutorías,75,10:10:00 a. m.,10:55:00 a. m.
+2,Guardianes del Jardín ,02 Lerdo,Vespertino,Tutorías,81,10:10:00 a. m.,10:55:00 a. m.
+30,Halcones,32 Juana Villalobos,Vespertino,Tutorías,80,10:10:00 a. m.,10:55:00 a. m.
+31,Titanes,33 Pino Suárez,vespertino,Tutorías,93,10:10:00 a. m.,10:55:00 a. m.
+32,SOMOS GIGANTES VILLAS,34 Villas Del Guadiana,Matutino,Tutorías,90,10:10:00 a. m.,10:55:00 a. m.
+33,la variable rebelde ,35 Gómez Palacio,Vespertino,Tutorías,90,10:10:00 a. m.,10:55:00 a. m.
+3,COBAED MADERO,03 Fco. I. Madero,Matutino,Tutorías,95,10:10:00 a. m.,10:55:00 a. m.
+4,En proceso,05 Bermejillo,Matutino,Tutorías,73,10:10:00 a. m.,10:55:00 a. m.
+5,ELITE DEL INTELECTO,06 Peñón Blanco,Matutino,Tutorías,95,10:10:00 a. m.,10:55:00 a. m.
+6,Campobellos en movimiento,07 Villa Ocampo,Matutino,Tutorías,88,10:10:00 a. m.,10:55:00 a. m.
+7,Escuadron respeto y victoria,08 Nazas,Matutino,Tutorías,90,10:10:00 a. m.,10:55:00 a. m.
+8,Pumas 09,09 Lomas,Matutino,Tutorías,75,10:10:00 a. m.,10:55:00 a. m.
+9,CORCELES DEL SABER  ,09 Lomas,Vespertino,Tutorías,75,10:10:00 a. m.,10:55:00 a. m.
+10,Guerreros Pinioleros,10 Santiago Papasquiaro,Matutino,Ciencias Naturales,95.23,10:10:00 a. m.,10:55:00 a. m.
+11,Papas Kiali Papali,10 Santiago Papasquiaro,Vespertino,Ciencias Naturales,90.47,10:10:00 a. m.,10:55:00 a. m.
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,Ciencias Naturales,71.43,10:10:00 a. m.,10:55:00 a. m.
+13,Apex Ducks,12 Nuevo Ideal,Matutino,Ciencias Naturales,90.47,10:10:00 a. m.,10:55:00 a. m.
+14,Impacto 13 ,13 Tamazula,Matutino,Ciencias Naturales,80.95,10:10:00 a. m.,10:55:00 a. m.
+15,LOS GUARDIANES DEL DESIERTO,14 San Juan De Guadalupe,Matutino,Ciencias Naturales,71.43,10:10:00 a. m.,10:55:00 a. m.
+16,MENTES NOCTURNAS ,15 San Miguel De Cruces,Matutino,Ciencias Naturales,95.23,10:10:00 a. m.,10:55:00 a. m.
+17,"Coba 16, Mente y Talento ",16 Tayoltita,Matutino,Ciencias Naturales,47.61,10:10:00 a. m.,10:55:00 a. m.
+18,Tribu Invencible Mezquital,17 Mezquital,Matutino,Ciencias Naturales,95.23,10:10:00 a. m.,10:55:00 a. m.
+19,O’dam Tasai,18 Antonio Amaro,Matutino,Ciencias Naturales,90.47,10:10:00 a. m.,10:55:00 a. m.
+1,ALQUIMISTAS ,01 La Forestal,Matutino,Ciencias Naturales,95.23,10:10:00 a. m.,10:55:00 a. m.
+20,JILGUEROS DEL ARROYO,19 Santa Clara,Matutino,Ciencias Naturales,85.71,10:10:00 a. m.,10:55:00 a. m.
+21,Guerreros ,20 Guadalupe Victoria,Matutino,Ciencias Naturales,95.23,10:10:00 a. m.,10:55:00 a. m.
+22,Corceles de fuego ,22 Santa Ma. Del Oro,Matutino,Ciencias Naturales,80.95,10:10:00 a. m.,10:55:00 a. m.
+23,Tusas mineras,23 Coneto de Comonfort,Matutino,Ciencias Naturales,66.66,10:10:00 a. m.,10:55:00 a. m.
+24,Coyotes,24 Simón Bolívar,Matutino,Ciencias Naturales,80.95,10:10:00 a. m.,10:55:00 a. m.
+25,ESCUADRÓN 27,27 Vicente Guerrero,Matutino,Ciencias Naturales,90.47,10:10:00 a. m.,10:55:00 a. m.
+26,TUKURA,28 El Salto,Matutino,Ciencias Naturales,85.72,10:10:00 a. m.,10:55:00 a. m.
+27,Furia Manzanera ,29 Canatlán,Matutino,Ciencias Naturales,90.47,10:10:00 a. m.,10:55:00 a. m.
+28,VIGIAS DEL SABER ,31 La Ciudad,Matutino,Ciencias Naturales,85.71,10:10:00 a. m.,10:55:00 a. m.
+29,LOBOS,32 Juana Villalobos,Matutino,Ciencias Naturales,85.71,10:10:00 a. m.,10:55:00 a. m.
+2,Guardianes del Jardín ,02 Lerdo,Vespertino,Ciencias Naturales,90.47,10:10:00 a. m.,10:55:00 a. m.
+30,Halcones,32 Juana Villalobos,Vespertino,Ciencias Naturales,95.23,10:10:00 a. m.,10:55:00 a. m.
+31,Titanes,33 Pino Suárez,vespertino,Ciencias Naturales,85.71,10:10:00 a. m.,10:55:00 a. m.
+32,SOMOS GIGANTES VILLAS,34 Villas Del Guadiana,Matutino,Ciencias Naturales,66.66,10:10:00 a. m.,10:55:00 a. m.
+33,la variable rebelde ,35 Gómez Palacio,Vespertino,Ciencias Naturales,95.23,10:10:00 a. m.,10:55:00 a. m.
+3,COBAED MADERO,03 Fco. I. Madero,Matutino,Ciencias Naturales,52.8,10:10:00 a. m.,10:55:00 a. m.
+4,En proceso,05 Bermejillo,Matutino,Ciencias Naturales,80.95,10:10:00 a. m.,10:55:00 a. m.
+5,ELITE DEL INTELECTO,06 Peñón Blanco,Matutino,Ciencias Naturales,95.23,10:10:00 a. m.,10:55:00 a. m.
+6,Campobellos en movimiento,07 Villa Ocampo,Matutino,Ciencias Naturales,80.95,10:10:00 a. m.,10:55:00 a. m.
+7,Escuadron respeto y victoria,08 Nazas,Matutino,Ciencias Naturales,85.71,10:10:00 a. m.,10:55:00 a. m.
+8,Pumas 09,09 Lomas,Matutino,Ciencias Naturales,80.95,10:10:00 a. m.,10:55:00 a. m.
+9,CORCELES DEL SABER  ,09 Lomas,Vespertino,Ciencias Naturales,90.47,10:10:00 a. m.,10:55:00 a. m.
+10,Guerreros Pinioleros,10 Santiago Papasquiaro,Matutino,Matemáticas,100,10:10:00 a. m.,10:55:00 a. m.
+11,Papas Kiali Papali,10 Santiago Papasquiaro,Vespertino,Matemáticas,100,10:10:00 a. m.,10:55:00 a. m.
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,Matemáticas,100,10:10:00 a. m.,10:55:00 a. m.
+13,Apex Ducks,12 Nuevo Ideal,Matutino,Matemáticas,100,10:10:00 a. m.,10:55:00 a. m.
+14,Impacto 13 ,13 Tamazula,Matutino,Matemáticas,75,10:10:00 a. m.,10:55:00 a. m.
+15,LOS GUARDIANES DEL DESIERTO,14 San Juan De Guadalupe,Matutino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+16,MENTES NOCTURNAS ,15 San Miguel De Cruces,Matutino,Matemáticas,75,10:10:00 a. m.,10:55:00 a. m.
+17,"Coba 16, Mente y Talento ",16 Tayoltita,Matutino,Matemáticas,100,10:10:00 a. m.,10:55:00 a. m.
+18,Tribu Invencible Mezquital,17 Mezquital,Matutino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+19,O’dam Tasai,18 Antonio Amaro,Matutino,Matemáticas,100,10:10:00 a. m.,10:55:00 a. m.
+1,ALQUIMISTAS ,01 La Forestal,Matutino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+20,JILGUEROS DEL ARROYO,19 Santa Clara,Matutino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+21,Guerreros ,20 Guadalupe Victoria,Matutino,Matemáticas,100,10:10:00 a. m.,10:55:00 a. m.
+22,Corceles de fuego ,22 Santa Ma. Del Oro,Matutino,Matemáticas,75,10:10:00 a. m.,10:55:00 a. m.
+23,Tusas mineras,23 Coneto de Comonfort,Matutino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+24,Coyotes,24 Simón Bolívar,Matutino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+25,ESCUADRÓN 27,27 Vicente Guerrero,Matutino,Matemáticas,100,10:10:00 a. m.,10:55:00 a. m.
+26,TUKURA,28 El Salto,Matutino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+27,Furia Manzanera ,29 Canatlán,Matutino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+28,VIGIAS DEL SABER ,31 La Ciudad,Matutino,Matemáticas,35,10:10:00 a. m.,10:55:00 a. m.
+29,LOBOS,32 Juana Villalobos,Matutino,Matemáticas,100,10:10:00 a. m.,10:55:00 a. m.
+2,Guardianes del Jardín ,02 Lerdo,Vespertino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+30,Halcones,32 Juana Villalobos,Vespertino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+31,Titanes,33 Pino Suárez,vespertino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+32,SOMOS GIGANTES VILLAS,34 Villas Del Guadiana,Matutino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+33,la variable rebelde ,35 Gómez Palacio,Vespertino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+3,COBAED MADERO,03 Fco. I. Madero,Matutino,Matemáticas,75,10:10:00 a. m.,10:55:00 a. m.
+4,En proceso,05 Bermejillo,Matutino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+5,ELITE DEL INTELECTO,06 Peñón Blanco,Matutino,Matemáticas,10,10:10:00 a. m.,10:55:00 a. m.
+6,Campobellos en movimiento,07 Villa Ocampo,Matutino,Matemáticas,50,10:10:00 a. m.,10:55:00 a. m.
+7,Escuadron respeto y victoria,08 Nazas,Matutino,Matemáticas,75,10:10:00 a. m.,10:55:00 a. m.
+8,Pumas 09,09 Lomas,Matutino,Matemáticas,100,10:10:00 a. m.,10:55:00 a. m.
+9,CORCELES DEL SABER  ,09 Lomas,Vespertino,Matemáticas,0,10:10:00 a. m.,10:55:00 a. m.
+10,Guerreros Pinioleros,10 Santiago Papasquiaro,Matutino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+11,Papas Kiali Papali,10 Santiago Papasquiaro,Vespertino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+13,Apex Ducks,12 Nuevo Ideal,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+14,Impacto 13 ,13 Tamazula,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+15,LOS GUARDIANES DEL DESIERTO,14 San Juan De Guadalupe,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+16,MENTES NOCTURNAS ,15 San Miguel De Cruces,Matutino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+17,"Coba 16, Mente y Talento ",16 Tayoltita,Matutino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+18,Tribu Invencible Mezquital,17 Mezquital,Matutino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+19,O’dam Tasai,18 Antonio Amaro,Matutino,Orientación,80,10:10:00 a. m.,10:55:00 a. m.
+1,ALQUIMISTAS ,01 La Forestal,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+20,JILGUEROS DEL ARROYO,19 Santa Clara,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+21,Guerreros ,20 Guadalupe Victoria,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+22,Corceles de fuego ,22 Santa Ma. Del Oro,Matutino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+23,Tusas mineras,23 Coneto de Comonfort,Matutino,Orientación,80,10:10:00 a. m.,10:55:00 a. m.
+24,Coyotes,24 Simón Bolívar,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+25,ESCUADRÓN 27,27 Vicente Guerrero,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+26,TUKURA,28 El Salto,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+27,Furia Manzanera ,29 Canatlán,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+28,VIGIAS DEL SABER ,31 La Ciudad,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+29,LOBOS,32 Juana Villalobos,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+2,Guardianes del Jardín ,02 Lerdo,Vespertino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+30,Halcones,32 Juana Villalobos,Vespertino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+31,Titanes,33 Pino Suárez,vespertino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+32,SOMOS GIGANTES VILLAS,34 Villas Del Guadiana,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+33,la variable rebelde ,35 Gómez Palacio,Vespertino,Orientación,80,10:10:00 a. m.,10:55:00 a. m.
+3,COBAED MADERO,03 Fco. I. Madero,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+4,En proceso,05 Bermejillo,Matutino,Orientación,80,10:10:00 a. m.,10:55:00 a. m.
+5,ELITE DEL INTELECTO,06 Peñón Blanco,Matutino,Orientación,100,10:10:00 a. m.,10:55:00 a. m.
+6,Campobellos en movimiento,07 Villa Ocampo,Matutino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+7,Escuadron respeto y victoria,08 Nazas,Matutino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+8,Pumas 09,09 Lomas,Matutino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+9,CORCELES DEL SABER  ,09 Lomas,Vespertino,Orientación,90,10:10:00 a. m.,10:55:00 a. m.
+10,Guerreros Pinioleros,10 Santiago Papasquiaro,Matutino,Inglés,90,10:10:00 a. m.,10:55:00 a. m.
+11,Papas Kiali Papali,10 Santiago Papasquiaro,Vespertino,Inglés,80,10:10:00 a. m.,10:55:00 a. m.
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,Inglés,90,10:10:00 a. m.,10:55:00 a. m.
+13,Apex Ducks,12 Nuevo Ideal,Matutino,Inglés,90,10:10:00 a. m.,10:55:00 a. m.
+14,Impacto 13 ,13 Tamazula,Matutino,Inglés,50,10:10:00 a. m.,10:55:00 a. m.
+15,LOS GUARDIANES DEL DESIERTO,14 San Juan De Guadalupe,Matutino,Inglés,75,10:10:00 a. m.,10:55:00 a. m.
+16,MENTES NOCTURNAS ,15 San Miguel De Cruces,Matutino,Inglés,29,10:10:00 a. m.,10:55:00 a. m.
+17,"Coba 16, Mente y Talento ",16 Tayoltita,Matutino,Inglés,22,10:10:00 a. m.,10:55:00 a. m.
+18,Tribu Invencible Mezquital,17 Mezquital,Matutino,Inglés,90,10:10:00 a. m.,10:55:00 a. m.
+19,O’dam Tasai,18 Antonio Amaro,Matutino,Inglés,75,10:10:00 a. m.,10:55:00 a. m.
+1,ALQUIMISTAS ,01 La Forestal,Matutino,Inglés,90,10:10:00 a. m.,10:55:00 a. m.
+20,JILGUEROS DEL ARROYO,19 Santa Clara,Matutino,Inglés,98,10:10:00 a. m.,10:55:00 a. m.
+21,Guerreros ,20 Guadalupe Victoria,Matutino,Inglés,65,10:10:00 a. m.,10:55:00 a. m.
+22,Corceles de fuego ,22 Santa Ma. Del Oro,Matutino,Inglés,90,10:10:00 a. m.,10:55:00 a. m.
+23,Tusas mineras,23 Coneto de Comonfort,Matutino,Inglés,49,10:10:00 a. m.,10:55:00 a. m.
+24,Coyotes,24 Simón Bolívar,Matutino,Inglés,80,10:10:00 a. m.,10:55:00 a. m.
+25,ESCUADRÓN 27,27 Vicente Guerrero,Matutino,Inglés,86,10:10:00 a. m.,10:55:00 a. m.
+26,TUKURA,28 El Salto,Matutino,Inglés,90,10:10:00 a. m.,10:55:00 a. m.
+27,Furia Manzanera ,29 Canatlán,Matutino,Inglés,80,10:10:00 a. m.,10:55:00 a. m.
+28,VIGIAS DEL SABER ,31 La Ciudad,Matutino,Inglés,90,10:10:00 a. m.,10:55:00 a. m.
+29,LOBOS,32 Juana Villalobos,Matutino,Inglés,59,10:10:00 a. m.,10:55:00 a. m.
+2,Guardianes del Jardín ,02 Lerdo,Vespertino,Inglés,70,10:10:00 a. m.,10:55:00 a. m.
+30,Halcones,32 Juana Villalobos,Vespertino,Inglés,71,10:10:00 a. m.,10:55:00 a. m.
+31,Titanes,33 Pino Suárez,vespertino,Inglés,47,10:10:00 a. m.,10:55:00 a. m.
+32,SOMOS GIGANTES VILLAS,34 Villas Del Guadiana,Matutino,Inglés,67,10:10:00 a. m.,10:55:00 a. m.
+33,la variable rebelde ,35 Gómez Palacio,Vespertino,Inglés,26,10:10:00 a. m.,10:55:00 a. m.
+3,COBAED MADERO,03 Fco. I. Madero,Matutino,Inglés,76,10:10:00 a. m.,10:55:00 a. m.
+4,En proceso,05 Bermejillo,Matutino,Inglés,90,10:10:00 a. m.,10:55:00 a. m.
+5,ELITE DEL INTELECTO,06 Peñón Blanco,Matutino,Inglés,60,10:10:00 a. m.,10:55:00 a. m.
+7,Escuadron respeto y victoria,08 Nazas,Matutino,Inglés,95,10:10:00 a. m.,10:55:00 a. m.
+7,Escuadron respeto y victoria,08 Nazas,Matutino,Inglés,70,10:10:00 a. m.,10:55:00 a. m.
+8,Pumas 09,09 Lomas,Matutino,Inglés,60,10:10:00 a. m.,10:55:00 a. m.
+9,CORCELES DEL SABER  ,09 Lomas,Vespertino,Inglés,41,10:10:00 a. m.,10:55:00 a. m.
+10,Guerreros Pinioleros,10 Santiago Papasquiaro,Matutino,Lengua y Comunicación,90,10:10:00 a. m.,10:55:00 a. m.
+11,Papas Kiali Papali,10 Santiago Papasquiaro,Vespertino,Lengua y Comunicación,90,10:10:00 a. m.,10:55:00 a. m.
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,Lengua y Comunicación,90,10:10:00 a. m.,10:55:00 a. m.
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,Lengua y Comunicación,70,10:10:00 a. m.,10:55:00 a. m.
+12,BAILEYI´S O´DAM,11 Tepehuanes,Matutino,Lengua y Comunicación,70,10:10:00 a. m.,10:55:00 a. m.
+14,Impacto 13 ,13 Tamazula,Matutino,Lengua y Comunicación,70,10:10:00 a. m.,10:55:00 a. m.
+15,LOS GUARDIANES DEL DESIERTO,14 San Juan De Guadalupe,Matutino,Lengua y Comunicación,100,10:10:00 a. m.,10:55:00 a. m.
+17,"Coba 16, Mente y Talento ",16 Tayoltita,Matutino,Lengua y Comunicación,60,10:10:00 a. m.,10:55:00 a. m.
+18,Tribu Invencible Mezquital,17 Mezquital,Matutino,Lengua y Comunicación,70,10:10:00 a. m.,10:55:00 a. m.
+19,O’dam Tasai,18 Antonio Amaro,Matutino,Lengua y Comunicación,100,10:10:00 a. m.,10:55:00 a. m.
+1,ALQUIMISTAS ,01 La Forestal,Matutino,Lengua y Comunicación,100,10:10:00 a. m.,10:55:00 a. m.
+20,JILGUEROS DEL ARROYO,19 Santa Clara,Matutino,Lengua y Comunicación,90,10:10:00 a. m.,10:55:00 a. m.
+20,JILGUEROS DEL ARROYO,19 Santa Clara,Matutino,Lengua y Comunicación,90,10:10:00 a. m.,10:55:00 a. m.
+22,Corceles de fuego ,22 Santa Ma. Del Oro,Matutino,Lengua y Comunicación,90,10:10:00 a. m.,10:55:00 a. m.
+23,Tusas mineras,23 Coneto de Comonfort,Matutino,Lengua y Comunicación,90,10:10:00 a. m.,10:55:00 a. m.
+24,Coyotes,24 Simón Bolívar,Matutino,Lengua y Comunicación,100,10:10:00 a. m.,10:55:00 a. m.
+25,ESCUADRÓN 27,27 Vicente Guerrero,Matutino,Lengua y Comunicación,80,10:10:00 a. m.,10:55:00 a. m.
+26,TUKURA,28 El Salto,Matutino,Lengua y Comunicación,90,10:10:00 a. m.,10:55:00 a. m.
+27,Furia Manzanera ,29 Canatlán,Matutino,Lengua y Comunicación,80,10:10:00 a. m.,10:55:00 a. m.
+28,VIGIAS DEL SABER ,31 La Ciudad,Matutino,Lengua y Comunicación,100,10:10:00 a. m.,10:55:00 a. m.
+29,LOBOS,32 Juana Villalobos,Matutino,Lengua y Comunicación,100,10:10:00 a. m.,10:55:00 a. m.
+2,Guardianes del Jardín ,02 Lerdo,Vespertino,Lengua y Comunicación,100,10:10:00 a. m.,10:55:00 a. m.
+30,Halcones,32 Juana Villalobos,Vespertino,Lengua y Comunicación,60,10:10:00 a. m.,10:55:00 a. m.
+31,Titanes,33 Pino Suárez,vespertino,Lengua y Comunicación,90,10:10:00 a. m.,10:55:00 a. m.
+32,SOMOS GIGANTES VILLAS,34 Villas Del Guadiana,Matutino,Lengua y Comunicación,100,10:10:00 a. m.,10:55:00 a. m.
+33,la variable rebelde ,35 Gómez Palacio,Vespertino,Lengua y Comunicación,50,10:10:00 a. m.,10:55:00 a. m.
+3,COBAED MADERO,03 Fco. I. Madero,Matutino,Lengua y Comunicación,100,10:10:00 a. m.,10:55:00 a. m.
+4,En proceso,05 Bermejillo,Matutino,Lengua y Comunicación,100,10:10:00 a. m.,10:55:00 a. m.
+5,ELITE DEL INTELECTO,06 Peñón Blanco,Matutino,Lengua y Comunicación,90,10:10:00 a. m.,10:55:00 a. m.
+7,Escuadron respeto y victoria,08 Nazas,Matutino,Lengua y Comunicación,70,10:10:00 a. m.,10:55:00 a. m.
+7,Escuadron respeto y victoria,08 Nazas,Matutino,Lengua y Comunicación,90,10:10:00 a. m.,10:55:00 a. m.
+8,Pumas 09,09 Lomas,Matutino,Lengua y Comunicación,90,10:10:00 a. m.,10:55:00 a. m.
+9,CORCELES DEL SABER  ,09 Lomas,Vespertino,Lengua y Comunicación,100,10:10:00 a. m.,10:55:00 a. m.
